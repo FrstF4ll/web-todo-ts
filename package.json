@@ -1,0 +1,19 @@
+{
+  "name": "web-todo-template",
+  "private": true,
+  "version": "1.1.10",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "check-types": "tsc",
+    "format": "biome check --write",
+    "lint": "biome lint"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.11"
+  }
+}
