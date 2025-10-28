@@ -1,13 +1,20 @@
 import './style.css'
 
+// Element null check
+function getRequiredElement<T extends HTMLElement>(selector: string): T {
+  const el = document.querySelector<T>(selector)
+  if (!el) throw new Error(`Element ${selector} not found`)
+  return el
+}
 // Get elements from HTML
-const toDoInput = document.querySelector<HTMLInputElement>('#todo-input')!
-const addButton = document.querySelector<HTMLButtonElement>('#add-todo-button')!
-const toDoList = document.querySelector<HTMLUListElement>('ul')!
+
+const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
+const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
+const toDoList = getRequiredElement<HTMLUListElement>('ul')
 
 const errorMsg = document.createElement('p')
 errorMsg.style.display = 'none'
-toDoInput.parentNode!.insertBefore(errorMsg, toDoInput)
+toDoInput.parentNode?.insertBefore(errorMsg, toDoInput)
 
 function addToList(e: KeyboardEvent): void {
   if (e.key === 'Enter') {
@@ -25,7 +32,7 @@ function addToList(e: KeyboardEvent): void {
 function addToListByClick(): void {
   const regex = /^\s*$/ // Match 0 or more whitespace
   if (!toDoInput.value || regex.test(toDoInput.value)) {
-errorMsg.style.display = 'block'
+    errorMsg.style.display = 'block'
     errorMsg.innerText = 'Error'
   } else {
     errorMsg.style.display = 'none'
