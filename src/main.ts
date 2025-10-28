@@ -24,7 +24,7 @@ function addToList(e: KeyboardEvent): void {
       errorMsg.innerText = 'Error'
     } else {
       errorMsg.style.display = 'none'
-      toDoList.innerHTML += `<li id="todo-elements">${toDoInput.value}</li>`
+      toDoList.innerHTML += `<li class="todo-elements">${toDoInput.value}</li>`
     }
   }
 }
@@ -36,7 +36,7 @@ function addToListByClick(): void {
     errorMsg.innerText = 'Error'
   } else {
     errorMsg.style.display = 'none'
-    toDoList.innerHTML += `<li id="todo-elements">${toDoInput.value}</li>`
+    toDoList.innerHTML += `<li class="todo-elements">${toDoInput.value}</li>`
   }
 }
 
