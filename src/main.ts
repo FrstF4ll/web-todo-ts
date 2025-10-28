@@ -10,14 +10,24 @@ errorMsg.innerText = 'Error'
 toDoInput.parentNode!.insertBefore(errorMsg, toDoInput)
 
 function addToList(e: KeyboardEvent): void {
-  if (e.key === 'Enter' || e.button === 'click') { 
+  if (e.key === 'Enter') {
     const regex = /^\s*$/ // Match 0 or more whitespace
     if (!toDoInput.value || regex.test(toDoInput.value)) {
+      console.log('error')
     } else {
       toDoList.innerHTML += `<li id="todo-elements">${toDoInput.value}</li>`
     }
   }
 }
 
-toDoInput.addEventListener('click', addToList)
-addButton.addEventListener('keydown', addToList)
+function addToListByClick(): void {
+  const regex = /^\s*$/ // Match 0 or more whitespace
+  if (!toDoInput.value || regex.test(toDoInput.value)) {
+    console.log('error')
+  } else {
+    toDoList.innerHTML += `<li id="todo-elements">${toDoInput.value}</li>`
+  }
+}
+
+toDoInput.addEventListener('keydown', addToList)
+addButton.addEventListener('click', addToListByClick)
