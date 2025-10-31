@@ -8,10 +8,13 @@ body {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.hidden{
-  display: none;
+h1 {
+  text-align: center;
 }
 
+.hidden {
+  display: none;
+}
 
 #list {
   display: flex;

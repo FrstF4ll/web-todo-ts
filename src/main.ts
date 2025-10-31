@@ -15,12 +15,11 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('#todo-elements')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 
-
 function addToList(e: GlobalBtnEvent): void {
   if (('key' in e && e.key === 'Enter') || ('button' in e && e.button === 0)) {
     if (!toDoInput.value.trim()) {
       errorMsg.classList.toggle('hidden', false)
-    } else{
+    } else {
       errorMsg.classList.toggle('hidden', true)
       toDoList.innerHTML += `<li>${toDoInput.value}</li>`
     }
