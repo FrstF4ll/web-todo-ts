@@ -1,11 +1,13 @@
 import './style.css'
-
+//Types
+type GlobalBtnEvent = KeyboardEvent | MouseEvent
 // Element null check
 function getRequiredElement<T extends HTMLElement>(selector: string): T {
   const el = document.querySelector<T>(selector)
   if (!el) throw new Error(`Element ${selector} not found`)
   return el
 }
+
 // Get elements from HTML
 
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
@@ -16,9 +18,8 @@ const errorMsg = document.createElement('p')
 errorMsg.style.display = 'none'
 toDoInput.parentNode?.insertBefore(errorMsg, toDoInput)
 
-function addToList(e: any): void {
-  
-  if (e.key === 'Enter' || e.button === 0) {
+function addToList(e: GlobalBtnEvent): void {
+  if (('key' in e && e.key === 'Enter') || ('button' in e && e.button === 0)) {
     const regex = /^\s*$/ // Match 0 or more whitespace
     if (!toDoInput.value || regex.test(toDoInput.value)) {
       errorMsg.style.display = 'block'
