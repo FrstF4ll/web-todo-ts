@@ -13,18 +13,15 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
 const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('#todo-elements')
+const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 
-const errorMsg = document.createElement('p')
-errorMsg.style.display = 'none'
-toDoInput.parentNode?.insertBefore(errorMsg, toDoInput)
 
 function addToList(e: GlobalBtnEvent): void {
   if (('key' in e && e.key === 'Enter') || ('button' in e && e.button === 0)) {
     if (!toDoInput.value.trim()) {
-      errorMsg.style.display = 'block'
-      errorMsg.innerText = 'Error'
-    } else {
-      errorMsg.style.display = 'none'
+      errorMsg.classList.toggle('hidden', false)
+    } else{
+      errorMsg.classList.toggle('hidden', true)
       toDoList.innerHTML += `<li>${toDoInput.value}</li>`
     }
   }

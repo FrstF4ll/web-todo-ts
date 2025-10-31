@@ -8,7 +8,11 @@ body {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-#list{
+.hidden{
+  display: none;
+}
+
+#list {
   display: flex;
   justify-content: center;
   flex-direction: column;
