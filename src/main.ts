@@ -16,8 +16,10 @@ const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 
 function addToList(e: GlobalBtnEvent): void {
-  if ((e instanceof KeyboardEvent && e.key === 'Enter') 
-    || e instanceof MouseEvent) {
+  if (
+    (e instanceof KeyboardEvent && e.key === 'Enter') ||
+    e instanceof MouseEvent
+  ) {
     if (!toDoInput.value.trim()) {
       errorMsg.classList.remove('hidden')
     } else {
