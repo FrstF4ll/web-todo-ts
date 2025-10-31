@@ -5,9 +5,20 @@
     <link rel="icon" type="image/svg+xml" href="/todo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Web todolist project</title>
+    <link rel="stylesheet" href="src/style.css">
   </head>
   <body>
+    <header>
     <h1>Web todolist app</h1>
+    <section id="user-input">
+        <label for="todo-input" id="todo-label">New Task</label>
+              <p id="error-msg" class="hidden">ERROR: Task description cannot be empty</p>
+                    <input id="todo-input" placeholder="Write here your task">
+        <button id="add-todo-button">Add to list</button>
+    </section>
+    </header>
+      <ul>
+      </ul>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
