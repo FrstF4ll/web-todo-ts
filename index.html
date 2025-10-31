@@ -5,14 +5,17 @@
     <link rel="icon" type="image/svg+xml" href="/todo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Web todolist project</title>
+    <link rel="stylesheet" href="src/style.css">
   </head>
   <body>
     <h1>Web todolist app</h1>
-    <label for="todo-input">New Task :</label>
-    <input id="todo-input" placeholder="Write here your task">
-    <button id="add-todo-button">Add to list</button>
-    <ul id="todo-elements">
-    </ul>
+    <div id="list">
+      <label for="todo-input">New Task :</label>
+      <input id="todo-input" placeholder="Write here your task">
+      <button id="add-todo-button">Add to list</button>
+      <ul id="todo-elements">
+      </ul>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

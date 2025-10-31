@@ -7,3 +7,12 @@ body {
 * {
   font-family: Helvetica, Arial, sans-serif;
 }
+
+#list{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1vw;
+  padding-left: 40vw;
+  padding-right: 40vw;
+}
