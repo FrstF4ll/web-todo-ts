@@ -12,7 +12,7 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
 const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
-const toDoList = getRequiredElement<HTMLUListElement>('ul')
+const toDoList = getRequiredElement<HTMLUListElement>('#todo-elements')
 
 const errorMsg = document.createElement('p')
 errorMsg.style.display = 'none'
@@ -25,7 +25,7 @@ function addToList(e: GlobalBtnEvent): void {
       errorMsg.innerText = 'Error'
     } else {
       errorMsg.style.display = 'none'
-      toDoList.innerHTML += `<li class="todo-elements">${toDoInput.value}</li>`
+      toDoList.innerHTML += `<li>${toDoInput.value}</li>`
     }
   }
 }
