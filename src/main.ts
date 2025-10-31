@@ -24,7 +24,7 @@ function addToList(e: GlobalBtnEvent): void {
       errorMsg.classList.add('hidden')
       const newTask = document.createElement('li')
       newTask.className = 'todo-elements'
-      newTask.textContent = toDoInput.value
+      newTask.textContent = toDoInput.value.trim()
       toDoList.appendChild(newTask)
       toDoInput.value = ''
     }
