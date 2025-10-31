@@ -16,8 +16,9 @@ const errorMsg = document.createElement('p')
 errorMsg.style.display = 'none'
 toDoInput.parentNode?.insertBefore(errorMsg, toDoInput)
 
-function addToList(e: KeyboardEvent): void {
-  if (e.key === 'Enter') {
+function addToList(e: any): void {
+  
+  if (e.key === 'Enter' || e.button === 0) {
     const regex = /^\s*$/ // Match 0 or more whitespace
     if (!toDoInput.value || regex.test(toDoInput.value)) {
       errorMsg.style.display = 'block'
@@ -29,16 +30,5 @@ function addToList(e: KeyboardEvent): void {
   }
 }
 
-function addToListByClick(): void {
-  const regex = /^\s*$/ // Match 0 or more whitespace
-  if (!toDoInput.value || regex.test(toDoInput.value)) {
-    errorMsg.style.display = 'block'
-    errorMsg.innerText = 'Error'
-  } else {
-    errorMsg.style.display = 'none'
-    toDoList.innerHTML += `<li class="todo-elements">${toDoInput.value}</li>`
-  }
-}
-
 toDoInput.addEventListener('keydown', addToList)
-addButton.addEventListener('click', addToListByClick)
+addButton.addEventListener('click', addToList)
