@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="src/style.css">
   </head>
   <body>
+    <header>
     <h1>Web todolist app</h1>
-    <div id="list">
-      <label for="todo-input" id="todo-label">New Task</label>
-          <p id="error-msg" class="hidden">Error</p>
-      <input id="todo-input" placeholder="Write here your task">
-      <button id="add-todo-button">Add to list</button>
-    </div>
+    <section id="user-input">
+        <label for="todo-input" id="todo-label">New Task</label>
+              <p id="error-msg" class="hidden">Error</p>
+                    <input id="todo-input" placeholder="Write here your task">
+        <button id="add-todo-button">Add to list</button>
+    </section>
+    </header>
       <ul id="todo-elements">
       </ul>
     <script type="module" src="/src/main.ts"></script>
