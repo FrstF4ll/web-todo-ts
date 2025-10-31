@@ -20,8 +20,7 @@ toDoInput.parentNode?.insertBefore(errorMsg, toDoInput)
 
 function addToList(e: GlobalBtnEvent): void {
   if (('key' in e && e.key === 'Enter') || ('button' in e && e.button === 0)) {
-    const regex = /^\s*$/ // Match 0 or more whitespace
-    if (!toDoInput.value || regex.test(toDoInput.value)) {
+    if (!toDoInput.value.trim()) {
       errorMsg.style.display = 'block'
       errorMsg.innerText = 'Error'
     } else {
