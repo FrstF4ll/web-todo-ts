@@ -12,7 +12,7 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
 const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
-const toDoList = getRequiredElement<HTMLUListElement>('#todo-elements')
+const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 
 function addToList(e: GlobalBtnEvent): void {
@@ -21,7 +21,11 @@ function addToList(e: GlobalBtnEvent): void {
       errorMsg.classList.toggle('hidden', false)
     } else {
       errorMsg.classList.toggle('hidden', true)
-      toDoList.innerHTML += `<li>${toDoInput.value}</li>`
+      const newTask = document.createElement('li')
+      newTask.id = 'todo-elements'
+      newTask.textContent = toDoInput.value
+      toDoList.appendChild(newTask)
+      toDoInput.value = ''
     }
   }
 }
