@@ -16,12 +16,12 @@ header {
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   row-gap: 1vh;
+}
 
-  h1 {
-    grid-row: 1;
-    grid-column: 2;
-    text-align: center;
-  }
+h1 {
+  grid-row: 1;
+  grid-column: 2;
+  text-align: center;
 }
 
 #user-input {
