@@ -12,11 +12,10 @@ body {
   display: none;
 }
 
+
 #list {
   display: flex;
-  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  gap: 1vw;
-  padding-left: 40vw;
-  padding-right: 40vw;
+  gap: 1vh;
 }
