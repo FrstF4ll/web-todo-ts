@@ -19,11 +19,11 @@ function addToList(e: GlobalBtnEvent): void {
   if ((e instanceof KeyboardEvent && e.key === 'Enter') 
     || e instanceof MouseEvent) {
     if (!toDoInput.value.trim()) {
-      errorMsg.classList.toggle('hidden', false)
+      errorMsg.classList.remove('hidden')
     } else {
-      errorMsg.classList.toggle('hidden', true)
+      errorMsg.classList.add('hidden')
       const newTask = document.createElement('li')
-      newTask.id = 'todo-elements'
+      newTask.className = 'todo-elements'
       newTask.textContent = toDoInput.value
       toDoList.appendChild(newTask)
       toDoInput.value = ''
