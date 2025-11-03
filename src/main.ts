@@ -13,31 +13,31 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const taskList: string[] = JSON.parse(localStorage.getItem('tasks') || '[]')
-const taskText = toDoInput.value.trim()
 
 //Rendering
-function renderTask(): void{
+function renderTask(taskText: string): void {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
   newTask.textContent = taskText
   toDoList.appendChild(newTask)
-  toDoInput.value = '' 
-    taskList.push(taskText);  
-  localStorage.setItem('tasks', JSON.stringify(taskList)); 
+  toDoInput.value = ''
+
+  // Storage update
+  taskList.push(taskText)
+  localStorage.setItem('tasks', JSON.stringify(taskList))
 }
 
-//Validation 
+//Validation
 function addToList(): void {
+  const taskText = toDoInput.value.trim()
   if (!taskText) {
     errorMsg.classList.remove('hidden')
     return
   }
   errorMsg.classList.add('hidden')
-  renderTask()
+  renderTask(taskText)
   return
 }
-
-
 
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
