@@ -1,8 +1,9 @@
-html,
-body {
+html {
   margin: 0;
   padding: 0;
-  height: 100%;
+}
+
+body {
   box-sizing: border-box;
   background-color: #117727e6;
   color: whitesmoke;

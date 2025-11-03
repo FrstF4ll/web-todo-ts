@@ -13,6 +13,7 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const taskList: string[] = JSON.parse(localStorage.getItem('tasks') || '[]')
+taskList.forEach(renderTask)
 
 //Rendering
 function renderTask(taskText: string): void {
