@@ -21,11 +21,6 @@ function renderTask(taskText: string): void {
   newTask.className = 'todo-elements'
   newTask.textContent = taskText
   toDoList.appendChild(newTask)
-  toDoInput.value = ''
-
-  // Storage update
-  taskList.push(taskText)
-  localStorage.setItem('tasks', JSON.stringify(taskList))
 }
 
 //Validation
@@ -36,7 +31,13 @@ function addToList(): void {
     return
   }
   errorMsg.classList.add('hidden')
+  
+  // Storage update
+  taskList.push(taskText)
+  localStorage.setItem('tasks', JSON.stringify(taskList))
+  
   renderTask(taskText)
+  toDoInput.value = ''
   return
 }
 
