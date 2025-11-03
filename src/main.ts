@@ -15,6 +15,7 @@ const TASKS_STORAGE_KEY = 'tasks'
 let taskList: string[] = []
 
 // Error handling, prevent app from crashing if invalid JSON data
+
 try {
   const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
   if (storedTasks) {
@@ -51,8 +52,11 @@ function addToList(): void {
   errorMsg.classList.add('hidden')
 
   // Storage update
+  function saveTasksToStorage(tasks: string[]): void {
+    localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks))
+  }
   taskList.push(taskText)
-  localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(taskList))
+  saveTasksToStorage(taskList)
 
   renderTask(taskText)
   toDoInput.value = ''
