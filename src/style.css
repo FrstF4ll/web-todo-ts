@@ -15,7 +15,7 @@ header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  row-gap: 1vh;
+  row-gap: 0.5rem;
 }
 
 h1 {
@@ -33,5 +33,5 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1vh;
+  gap: 0.5rem;
 }
