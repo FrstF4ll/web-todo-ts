@@ -12,23 +12,6 @@ body {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-ul {
-  /* flex layout */
-  display: flex;
-  flex-direction: column;
-  background-color: #7eac87fa;
-  min-height: 50vh;
-
-  /* border layout */
-  border-radius: 8px;
-  margin-left: 25vw;
-  margin-right: 25vw;
-}
-
-.hidden {
-  display: none;
-}
-
 header {
   /* grid layout */
   display: grid;
@@ -45,8 +28,34 @@ h1 {
   text-align: center;
 }
 
+ul {
+  /* flex layout */
+  display: flex;
+  flex-direction: column;
+  background-color: #7eac87fa;
+  min-height: 50vh;
+
+  /* border layout */
+  border-radius: 8px;
+  margin-left: 25vw;
+  margin-right: 25vw;
+
+  padding: 1rem;
+  gap: 0.5rem;
+}
+
+.hidden {
+  display: none;
+}
 .user-input-layout {
   gap: 0.5rem;
+}
+
+.todo-elements {
+  display: flex;
+  padding: 6px;
+  background-color: #627f28c7;
+  border-radius: 4px;
 }
 
 #user-input {
