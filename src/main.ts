@@ -19,7 +19,11 @@ try {
   const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
   if (storedTasks) {
     const parsed = JSON.parse(storedTasks)
-    if (Array.isArray(parsed)) taskList = parsed
+    if (
+      Array.isArray(parsed) &&
+      parsed.every((item) => typeof item === 'string')
+    )
+      taskList = parsed
     else throw new Error('Tasks data is not an array')
   }
 } catch (error) {
