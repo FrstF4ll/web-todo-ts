@@ -1,14 +1,12 @@
-html,
-body {
-  padding: 0;
+html, body {
   margin: 0;
+  padding: 0;
+  height: 100%;
   box-sizing: border-box;
+  background-color: #117727e6;
   color: whitesmoke;
 }
 
-body {
-  background-color: #117727e6;
-}
 * {
   font-family: Helvetica, Arial, sans-serif;
 }
