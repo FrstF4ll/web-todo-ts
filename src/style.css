@@ -2,6 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
   background-color: #23c045;
 }
 
@@ -24,6 +25,7 @@ ul {
 .hidden {
   display: none;
 }
+
 header {
   /* grid layout */
   display: grid;
@@ -40,6 +42,10 @@ h1 {
   text-align: center;
 }
 
+.user-input-layout {
+  gap: 0.5rem;
+}
+
 #user-input {
   grid-row: 2;
   grid-column: 2;
@@ -48,11 +54,20 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 1rem;
 
   background-color: #267335;
   border-radius: 24px;
   color: white;
-  padding: 0.5rem;
-  aspect-ratio: 1 / 1;
+  padding: 1rem;
+}
+
+#user-input > * {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+#error-msg {
+  white-space: nowrap;
 }

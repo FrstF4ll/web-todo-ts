@@ -11,10 +11,14 @@
   <header>
     <h1>Web todolist app</h1>
     <section id="user-input">
-          <label for="todo-input" id="todo-label">New Task</label>
-          <p id="error-msg" class="hidden" aria-live="polite">ERROR: Task description cannot be empty</p>
-          <input id="todo-input" placeholder="Write here your task">
-          <button id="add-todo-button">Add to list</button>
+          <div>
+            <label for="todo-input" id="todo-label">New Task</label>
+            <p id="error-msg" class="hidden" aria-live="polite">ERROR: Task cannot be empty</p>
+          </div>
+          <div class="user-input-layout">
+            <input id="todo-input" placeholder="Write here your task">
+            <button id="add-todo-button">Add to list</button>
+          </div>
       </section>
   </header>
   <ul>
