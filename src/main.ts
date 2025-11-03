@@ -28,7 +28,7 @@ function addToList(): void {
 }
 
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
-  if (e instanceof KeyboardEvent && e.key === 'Enter') {
+  if (e.key === 'Enter') {
     addToList()
   }
 })
