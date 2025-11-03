@@ -14,6 +14,7 @@ const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const taskList: string[] = JSON.parse(localStorage.getItem('tasks') || '[]')
 taskList.forEach(renderTask)
+const TASKS_STORAGE_KEY = 'tasks'
 
 //Rendering
 function renderTask(taskText: string): void {
@@ -31,11 +32,11 @@ function addToList(): void {
     return
   }
   errorMsg.classList.add('hidden')
-  
+
   // Storage update
   taskList.push(taskText)
-  localStorage.setItem('tasks', JSON.stringify(taskList))
-  
+  localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(taskList))
+
   renderTask(taskText)
   toDoInput.value = ''
   return
