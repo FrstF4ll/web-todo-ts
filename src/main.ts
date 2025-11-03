@@ -22,7 +22,7 @@ function addToList(): void {
   errorMsg.classList.add('hidden')
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
-  newTask.textContent = toDoInput.value.trim()
+  newTask.textContent = taskText
   toDoList.appendChild(newTask)
   toDoInput.value = ''
 }
