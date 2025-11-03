@@ -24,7 +24,8 @@ try {
       parsed.every((item) => typeof item === 'string')
     )
       taskList = parsed
-    else throw new Error('Tasks data is not an array')
+  } else {
+    throw new Error('Tasks data is not an array')
   }
 } catch (error) {
   console.error('Failed to load tasks from localStorage:', error)
