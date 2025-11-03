@@ -1,13 +1,18 @@
 html {
-  margin: 0;
-  padding: 0;
+  box-sizing: border-box;
   height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
 }
 
 body {
   margin: 0;
+  padding: 0; /* It's safer to reset padding too */
   height: 100%;
-  box-sizing: border-box;
   background-color: #117727e6;
   color: whitesmoke;
 }

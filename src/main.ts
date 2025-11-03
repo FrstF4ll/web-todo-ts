@@ -39,7 +39,6 @@ function addToList(): void {
 
   renderTask(taskText)
   toDoInput.value = ''
-  return
 }
 
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
