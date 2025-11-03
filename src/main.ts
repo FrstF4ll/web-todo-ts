@@ -18,7 +18,7 @@ let taskList: string[] = []
 try {
   const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
   if (storedTasks) {
-    const parsed = JSON.parse(storedTasks)
+    const parsed: unknown = JSON.parse(storedTasks)
     if (
       Array.isArray(parsed) &&
       parsed.every((item) => typeof item === 'string')
@@ -41,7 +41,6 @@ function renderTask(taskText: string): void {
   toDoList.appendChild(newTask)
 }
 
-//Validation
 function addToList(): void {
   const taskText = toDoInput.value.trim()
   if (!taskText) {
