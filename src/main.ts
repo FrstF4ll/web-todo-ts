@@ -7,14 +7,27 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 }
 
 // Get elements from HTML
-
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
 const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
-const taskList: string[] = JSON.parse(localStorage.getItem('tasks') || '[]')
-taskList.forEach(renderTask)
 const TASKS_STORAGE_KEY = 'tasks'
+let taskList: string[] = []
+
+// Error handling, prevent app from crashing if invalid JSON data
+try {
+  const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
+  if (storedTasks) {
+    const parsed = JSON.parse(storedTasks)
+    if (Array.isArray(parsed)) taskList = parsed
+    else throw new Error('Tasks data is not an array')
+  }
+} catch (error) {
+  console.error('Failed to load tasks from localStorage:', error)
+  taskList = []
+}
+
+taskList.forEach(renderTask)
 
 //Rendering
 function renderTask(taskText: string): void {
