@@ -5,6 +5,7 @@ body {
   box-sizing: border-box;
   color: whitesmoke;
 }
+
 body {
   background-color: #117727e6;
 }
@@ -16,15 +17,13 @@ ul {
   /* flex layout */
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: #97daa4b4;
   min-height: 50vh;
 
   /* border layout */
   border-radius: 8px;
   margin-left: 25vw;
   margin-right: 25vw;
-
-  background-color: #97daa4b4;
 }
 
 .hidden {
