@@ -44,6 +44,12 @@ function renderTask(taskText: string): void {
   newTask.className = 'todo-elements'
   newTask.textContent = taskText
   toDoList.appendChild(newTask)
+
+  //Checkbox
+  const checkbox = document.createElement('input')
+  checkbox.type = 'checkbox'
+  checkbox.className = 'checkbox'
+  newTask.appendChild(checkbox)
 }
 
 function addToList(): void {
