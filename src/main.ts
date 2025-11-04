@@ -58,7 +58,7 @@ function renderTask(task: Task): void {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
   // Unique id for each task
-  const uniqueId = `task-${Date.now()}-${Math.random()}`
+  const uniqueId = crypto.randomUUID()
 
   // Accessibility label
   const label = document.createElement('label')
