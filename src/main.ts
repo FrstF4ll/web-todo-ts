@@ -23,14 +23,17 @@ try {
     if (
       Array.isArray(parsed) &&
       parsed.every((item) => typeof item === 'string')
-    )
+    ) {
       taskList = parsed
-  } else {
-    throw new Error('Tasks data is not an array')
+    }
   }
 } catch (error) {
   console.error('Failed to load tasks from localStorage:', error)
   taskList = []
+}
+
+function saveTasksToStorage(tasks: string[]): void {
+  localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks))
 }
 
 taskList.forEach(renderTask)
@@ -52,9 +55,7 @@ function addToList(): void {
   errorMsg.classList.add('hidden')
 
   // Storage update
-  function saveTasksToStorage(tasks: string[]): void {
-    localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks))
-  }
+
   taskList.push(taskText)
   saveTasksToStorage(taskList)
 
