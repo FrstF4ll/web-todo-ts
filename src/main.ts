@@ -39,39 +39,45 @@ function saveTasksToStorage(tasks: string[]): void {
 taskList.forEach(renderTask)
 
 //Rendering
-function renderTask(taskText: string): void {
+function renderTask(userInput: string): void {
+  //List element
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
-  newTask.textContent = taskText
+  newTask.textContent = userInput
   toDoList.appendChild(newTask)
+  renderCheckbox(newTask)
+}
 
-  //Checkbox
+function renderCheckbox(userTask: any): void{
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.className = 'checkbox'
-  newTask.appendChild(checkbox)
+  userTask.appendChild(checkbox)
 }
 
-function addToList(): void {
+//Add to list
+function addToList(userInput: string): void {
+  taskList.push(userInput)
+  saveTasksToStorage(taskList)
+  renderTask(userInput)
+  toDoInput.value = ''
+}
+
+//Check if empty
+function isEmpty(): void {
   const taskText = toDoInput.value.trim()
+
   if (!taskText) {
     errorMsg.classList.remove('hidden')
-    return
+  } else {
+    errorMsg.classList.add('hidden') // optional: hide the message again
+    addToList(taskText)
   }
-  errorMsg.classList.add('hidden')
-
-  // Storage update
-
-  taskList.push(taskText)
-  saveTasksToStorage(taskList)
-
-  renderTask(taskText)
-  toDoInput.value = ''
 }
 
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
-    addToList()
+    isEmpty()
   }
 })
-addButton.addEventListener('click', addToList)
+addButton.addEventListener('click', isEmpty)
