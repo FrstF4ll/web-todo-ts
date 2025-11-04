@@ -7,11 +7,44 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 }
 
 // Get elements from HTML
-
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
 const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
+const TASKS_STORAGE_KEY = 'tasks'
+
+// Error handling, prevent app from crashing if invalid JSON data
+const taskList: string[] = (() => {
+  try {
+    const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
+    if (storedTasks) {
+      const parsed: unknown = JSON.parse(storedTasks)
+      if (
+        Array.isArray(parsed) &&
+        parsed.every((item) => typeof item === 'string')
+      ) {
+        return parsed
+      }
+    }
+  } catch (error) {
+    console.error('Failed to load tasks from localStorage:', error)
+  }
+  return []
+})()
+
+function saveTasksToStorage(tasks: string[]): void {
+  localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks))
+}
+
+taskList.forEach(renderTask)
+
+//Rendering
+function renderTask(taskText: string): void {
+  const newTask = document.createElement('li')
+  newTask.className = 'todo-elements'
+  newTask.textContent = taskText
+  toDoList.appendChild(newTask)
+}
 
 function addToList(): void {
   const taskText = toDoInput.value.trim()
@@ -20,10 +53,13 @@ function addToList(): void {
     return
   }
   errorMsg.classList.add('hidden')
-  const newTask = document.createElement('li')
-  newTask.className = 'todo-elements'
-  newTask.textContent = taskText
-  toDoList.appendChild(newTask)
+
+  // Storage update
+
+  taskList.push(taskText)
+  saveTasksToStorage(taskList)
+
+  renderTask(taskText)
   toDoInput.value = ''
 }
 
