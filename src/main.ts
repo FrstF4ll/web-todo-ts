@@ -82,21 +82,21 @@ function renderTask(task: Task): void {
   toDoList.appendChild(newTask)
 }
 
-// Check if input is empty
+// Check if empty
 function isEmpty(text: string): boolean {
-  if (!text.trim()) {
-    errorMsg.classList.remove('hidden')
-    return true
-  }
-  errorMsg.classList.add('hidden')
-  return false
+  return !text.trim()
 }
 
 // Add new task
 function addToList(userInput: string): void {
-  if (isEmpty(userInput)) return
+  const trimmedInput = userInput.trim()
+  if (isEmpty(trimmedInput)) {
+    errorMsg.classList.remove('hidden')
+    return
+  }
+  errorMsg.classList.add('hidden')
 
-  const newTask: Task = { name: userInput, status: false }
+  const newTask: Task = { name: trimmedInput, status: false }
   taskList.push(newTask)
   saveTasksToStorage(taskList)
   renderTask(newTask)
