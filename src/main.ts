@@ -82,11 +82,6 @@ function renderTask(task: Task): void {
   toDoList.appendChild(newTask)
 }
 
-// Check if empty
-function isEmpty(text: string): boolean {
-  return !text.trim()
-}
-
 // Add new task
 function addToList(userInput: string): void {
   const trimmedInput = userInput.trim()
