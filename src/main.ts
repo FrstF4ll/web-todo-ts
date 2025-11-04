@@ -90,7 +90,7 @@ function isEmpty(text: string): boolean {
 // Add new task
 function addToList(userInput: string): void {
   const trimmedInput = userInput.trim()
-  if (isEmpty(trimmedInput)) {
+  if (!trimmedInput) {
     errorMsg.classList.remove('hidden')
     return
   }
