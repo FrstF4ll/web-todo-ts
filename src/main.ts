@@ -12,25 +12,25 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const TASKS_STORAGE_KEY = 'tasks'
-let taskList: string[] = []
 
 // Error handling, prevent app from crashing if invalid JSON data
-
-try {
-  const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
-  if (storedTasks) {
-    const parsed: unknown = JSON.parse(storedTasks)
-    if (
-      Array.isArray(parsed) &&
-      parsed.every((item) => typeof item === 'string')
-    ) {
-      taskList = parsed
+const taskList: string[] = (() => {
+  try {
+    const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
+    if (storedTasks) {
+      const parsed: unknown = JSON.parse(storedTasks)
+      if (
+        Array.isArray(parsed) &&
+        parsed.every((item) => typeof item === 'string')
+      ) {
+        return parsed
+      }
     }
+  } catch (error) {
+    console.error('Failed to load tasks from localStorage:', error)
   }
-} catch (error) {
-  console.error('Failed to load tasks from localStorage:', error)
-  taskList = []
-}
+  return []
+})()
 
 function saveTasksToStorage(tasks: string[]): void {
   localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks))
