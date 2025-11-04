@@ -69,7 +69,7 @@ function renderTask(task: Task): void {
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.id = uniqueId
-  checkbox.className = 'checkbox'
+  checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
