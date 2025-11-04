@@ -64,7 +64,7 @@ ul {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 6px;
+  padding: 0.5rem;
   background-color: #627f28c7;
   border-radius: 4px;
 }

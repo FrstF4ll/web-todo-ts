@@ -28,13 +28,13 @@ const taskList: Task[] = (() => {
       const parsed: unknown = JSON.parse(storedTasks)
       if (
         Array.isArray(parsed) &&
-        parsed.every(
-          (item) =>
-            typeof item === 'object' &&
-            item !== null &&
-            'name' in item &&
-            'status' in item,
-        )
+        parsed.every((item): item is Task => {
+          if (typeof item !== 'object' || item === null) return false
+          const task = item as Record<string, unknown>
+          return (
+            typeof task.name === 'string' && typeof task.status === 'boolean'
+          )
+        })
       ) {
         return parsed as Task[]
       }
@@ -57,18 +57,27 @@ taskList.forEach(renderTask)
 function renderTask(task: Task): void {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
-  newTask.textContent = task.name
+  // Unique id for each task
+  const uniqueId = `task-${Date.now()}-${Math.random()}`
 
+  // Accessibility label
+  const label = document.createElement('label')
+  label.textContent = task.name
+  label.htmlFor = uniqueId
+
+  //Checkbox
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
-  checkbox.className = 'todo-elements_checkbox'
+  checkbox.id = uniqueId
+  checkbox.className = 'checkbox'
   checkbox.checked = task.status
-    checkbox.setAttribute('aria-label', task.name)
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
   })
 
+  //Add elements to DOM
+  newTask.appendChild(label)
   newTask.appendChild(checkbox)
   toDoList.appendChild(newTask)
 }
