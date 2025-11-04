@@ -1,4 +1,5 @@
 import './style.css'
+
 // Element null check
 function getRequiredElement<T extends HTMLElement>(selector: string): T {
   const el = document.querySelector<T>(selector)
@@ -6,24 +7,36 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
   return el
 }
 
-// Get elements from HTML
+// DOM
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
 const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const TASKS_STORAGE_KEY = 'tasks'
 
-// Error handling, prevent app from crashing if invalid JSON data
-const taskList: string[] = (() => {
+//Interface
+interface Task {
+  name: string
+  status: boolean
+}
+
+//Local storage loading with error check
+const taskList: Task[] = (() => {
   try {
     const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
     if (storedTasks) {
       const parsed: unknown = JSON.parse(storedTasks)
       if (
         Array.isArray(parsed) &&
-        parsed.every((item) => typeof item === 'string')
+        parsed.every(
+          (item) =>
+            typeof item === 'object' &&
+            item !== null &&
+            'name' in item &&
+            'status' in item,
+        )
       ) {
-        return parsed
+        return parsed as Task[]
       }
     }
   } catch (error) {
@@ -32,52 +45,57 @@ const taskList: string[] = (() => {
   return []
 })()
 
-function saveTasksToStorage(tasks: string[]): void {
+//Task saving to localStorage
+function saveTasksToStorage(tasks: Task[]): void {
   localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks))
 }
 
+//Task rendering
 taskList.forEach(renderTask)
 
-//Rendering
-function renderTask(userInput: string): void {
-  //List element
+// Rendering function
+function renderTask(task: Task): void {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
-  newTask.textContent = userInput
-  toDoList.appendChild(newTask)
-  renderCheckbox(newTask)
-}
+  newTask.textContent = task.name
 
-function renderCheckbox(userTask: any): void{
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.className = 'checkbox'
-  userTask.appendChild(checkbox)
+  checkbox.checked = task.status
+  checkbox.addEventListener('change', () => {
+    task.status = checkbox.checked
+    saveTasksToStorage(taskList)
+  })
+
+  newTask.appendChild(checkbox)
+  toDoList.appendChild(newTask)
 }
 
-//Add to list
+// Check if input is empty
+function isEmpty(text: string): boolean {
+  if (!text.trim()) {
+    errorMsg.classList.remove('hidden')
+    return true
+  }
+  errorMsg.classList.add('hidden')
+  return false
+}
+
+// Add new task
 function addToList(userInput: string): void {
-  taskList.push(userInput)
+  if (isEmpty(userInput)) return
+
+  const newTask: Task = { name: userInput, status: false }
+  taskList.push(newTask)
   saveTasksToStorage(taskList)
-  renderTask(userInput)
+  renderTask(newTask)
   toDoInput.value = ''
 }
 
-//Check if empty
-function isEmpty(): void {
-  const taskText = toDoInput.value.trim()
-
-  if (!taskText) {
-    errorMsg.classList.remove('hidden')
-  } else {
-    errorMsg.classList.add('hidden') // optional: hide the message again
-    addToList(taskText)
-  }
-}
-
+// Event listeners
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'Enter') {
-    isEmpty()
-  }
+  if (e.key === 'Enter') addToList(toDoInput.value)
 })
-addButton.addEventListener('click', isEmpty)
+
+addButton.addEventListener('click', () => addToList(toDoInput.value))
