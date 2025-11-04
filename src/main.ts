@@ -61,8 +61,9 @@ function renderTask(task: Task): void {
 
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
-  checkbox.className = 'checkbox'
+  checkbox.className = 'todo-elements_checkbox'
   checkbox.checked = task.status
+    checkbox.setAttribute('aria-label', task.name)
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
