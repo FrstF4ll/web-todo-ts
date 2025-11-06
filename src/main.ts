@@ -20,22 +20,25 @@ interface Task {
   status: boolean
 }
 
+
+//Check invalid JSON
+function isTask(item: unknown): item is Task {
+  if (typeof item !== 'object' || item === null) return false;
+  const task = item as Record<string, unknown>;
+  return (
+    typeof task.name === 'string' && typeof task.status === 'boolean'
+  );
+}
+
 //Local storage loading with error check
 const taskList: Task[] = (() => {
   try {
     const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
     if (storedTasks) {
       const parsed: unknown = JSON.parse(storedTasks)
-      if (
-        Array.isArray(parsed) &&
-        parsed.every((item): item is Task => {
-          if (typeof item !== 'object' || item === null) return false
-          const task = item as Record<string, unknown>
-          return (
-            typeof task.name === 'string' && typeof task.status === 'boolean'
-          )
-        })
-      ) {
+      if (Array.isArray(parsed) && parsed.every(isTask)) {
+  return parsed;
+} {
         return parsed as Task[]
       }
     }
