@@ -20,27 +20,23 @@ interface Task {
   status: boolean
 }
 
-
-//Check invalid JSON
+//Check invalid local storage data
 function isTask(item: unknown): item is Task {
-  if (typeof item !== 'object' || item === null) return false;
-  const task = item as Record<string, unknown>;
-  return (
-    typeof task.name === 'string' && typeof task.status === 'boolean'
-  );
+  if (typeof item !== 'object' || item === null) return false
+  const task = item as Record<string, unknown>
+  return typeof task.name === 'string' && typeof task.status === 'boolean'
 }
 
-//Local storage loading with error check
+//Get local storage data
 const taskList: Task[] = (() => {
   try {
     const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
     if (storedTasks) {
       const parsed: unknown = JSON.parse(storedTasks)
       if (Array.isArray(parsed) && parsed.every(isTask)) {
-  return parsed;
-} {
-        return parsed as Task[]
+        return parsed
       }
+      return parsed as Task[]
     }
   } catch (error) {
     console.error('Failed to load tasks from localStorage:', error)
@@ -63,10 +59,13 @@ function renderTask(task: Task): void {
   // Unique id for each task
   const uniqueId = crypto.randomUUID()
 
-  // Accessibility label
+   // Status label
   const label = document.createElement('label')
   label.textContent = task.name
   label.htmlFor = uniqueId
+  if (task.status) {
+    label.classList.add('completed')
+  }
 
   //Checkbox
   const checkbox = document.createElement('input')
@@ -77,6 +76,8 @@ function renderTask(task: Task): void {
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
+
+    
   })
 
   //Add elements to DOM

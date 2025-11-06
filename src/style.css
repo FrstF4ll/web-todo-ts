@@ -53,6 +53,11 @@ ul {
   gap: 0.5rem;
 }
 
+.todo-elements label.completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
 .hidden {
   display: none;
 }
