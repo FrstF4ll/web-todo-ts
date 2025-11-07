@@ -9,33 +9,53 @@ html {
   box-sizing: inherit;
 }
 
-body {
-  margin: 0;
-  padding: 0; /* It's safer to reset padding too */
-  height: 100%;
-  background-color: #117727e6;
-  color: whitesmoke;
+:root {
+  /*body*/
+  --body-text-color: whitesmoke;
+  --body-bg-color: #117727e6;
+
+  /*header*/
+  --header-max-height: 40vh;
+
+  /* list elements */
+  --list-min-height: 50vh;
+  --list-border-radius: 8px;
+  --list-margin-left: 25vw;
+  --list-bg-color: #7eac87fa;
+  --list-margin-right: 25vw;
+  --list-padding: 1rem;
+  --list-gap: 0.5rem;
+
+  /*todo items*/
+  --todo-item-bg-color: #627f28c7;
+  --todo-item-border-radius: 4px;
+  --todo-item-padding: 0.5rem;
+
+  /*input containers*/
+  --input-container-height: 9.375rem;
+  --input-container-width: 14.125rem;
+  --input-border-radius: 1.5rem;
+  --input-layout-gap: 0.5rem;
+  --input-gap: 1rem;
+  --input-padding: 1rem;
+
+  /*completed label*/
+  --label-text-color: black;
+
+  /*others*/
+  --no-margin: 0;
 }
 
 * {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-ul {
-  /* flex layout */
-  display: flex;
-  flex-direction: column;
-  background-color: #7eac87fa;
-  min-height: 50vh;
-
-  /* border layout */
-  border-radius: 8px;
-  margin-left: 25vw;
-  margin-right: 25vw;
-}
-
-.hidden {
-  display: none;
+body {
+  margin: var(--no-margin);
+  padding: 0; /* It's safer to reset padding too */
+  height: 100%;
+  background-color: var(--body-bg-color);
+  color: var(--body-text-color);
 }
 
 header {
@@ -45,7 +65,7 @@ header {
   grid-template-rows: 1fr 1fr;
   justify-items: center;
   align-items: center;
-  max-height: 40vh;
+  max-height: var(--header-max-height);
 }
 
 h1 {
@@ -54,8 +74,42 @@ h1 {
   text-align: center;
 }
 
+ul {
+  /* flex layout */
+  display: flex;
+  flex-direction: column;
+  background-color: var(--list-bg-color);
+  min-height: var(--list-min-height);
+
+  /* border layout */
+  border-radius: var(--list-border-radius);
+  margin-left: var(--list-margin-left);
+  margin-right: var(--list-margin-right);
+
+  padding: var(--list-padding);
+  gap: var(--list-gap);
+}
+
+.todo-elements label.completed {
+  text-decoration: line-through;
+  color: var(--label-text-color);
+  opacity: 0.7;
+}
+
+.hidden {
+  display: none;
+}
 .user-input-layout {
-  gap: 0.5rem;
+  gap: var(--input-layout-gap);
+}
+
+.todo-elements {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: var(--todo-item-padding);
+  background-color: var(--todo-item-bg-color);
+  border-radius: var(--todo-item-border-radius);
 }
 
 #user-input {
@@ -66,14 +120,14 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  height: 9.375rem;
-  width: 13.125rem;
+  gap: var(--input-gap);
+  height: var(--input-container-height);
+  width: var(--input-container-width);
 
   background-color: #47bf5f6d;
-  border-radius: 1.5rem;
+  border-radius: var(--input-border-radius);
   color: white;
-  padding: 1rem;
+  padding: var(--input-padding);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -85,5 +139,5 @@ h1 {
 
 #error-msg {
   white-space: nowrap;
-  margin: 0;
+  margin: var(--no-margin);
 }
