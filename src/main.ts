@@ -13,7 +13,6 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const TASKS_STORAGE_KEY = 'tasks'
-const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
 
 //Interface
 interface Task {
@@ -36,6 +35,7 @@ function isTask(item: unknown): item is Task {
 //Get local storage data
 const taskList: Task[] = (() => {
   try {
+    const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
     if (storedTasks) {
       const parsed: unknown = JSON.parse(storedTasks)
       if (Array.isArray(parsed) && parsed.every(isTask)) {
@@ -86,18 +86,25 @@ function renderTask(task: Task): void {
     label.classList.toggle('completed')
   })
 
+  // Delete button
   const deleteBtn = document.createElement('button')
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
   deleteBtn.textContent = 'X'
 
   deleteBtn.addEventListener('click', () => {
-    const taskIndex = taskList.findIndex((obj: Task) => obj.id === task.id)
+    const taskIndex = taskList.findIndex((obj) => obj.id === task.id)
     if (taskIndex > -1) {
       taskList.splice(taskIndex, 1)
     }
     saveTasksToStorage(taskList)
     newTask.remove()
+
+    const taskContent = document.createElement('div')
+    taskContent.append(checkbox, label)
+
+    newTask.append(taskContent, deleteBtn)
+    toDoList.appendChild(newTask)
   })
 
   //Add elements to DOM
