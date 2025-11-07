@@ -34,9 +34,9 @@ const taskList: Task[] = (() => {
     if (storedTasks) {
       const parsed: unknown = JSON.parse(storedTasks)
       if (Array.isArray(parsed) && parsed.every(isTask)) {
-        return parsed
+        return parsed as Task[]
       }
-      return parsed as Task[]
+      return []
     }
   } catch (error) {
     console.error('Failed to load tasks from localStorage:', error)
