@@ -26,7 +26,11 @@ interface Task {
 function isTask(item: unknown): item is Task {
   if (typeof item !== 'object' || item === null) return false
   const task = item as Record<string, unknown>
-  return typeof task.name === 'string' && typeof task.status === 'boolean'
+  return (
+    typeof task.name === 'string' &&
+    typeof task.status === 'boolean' &&
+    typeof task.id === 'string'
+  )
 }
 
 //Get local storage data
@@ -57,19 +61,18 @@ taskList.forEach(renderTask)
 function renderTask(task: Task): void {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
-  // Unique id for each task
-  const uniqueId = crypto.randomUUID()
 
   // Status label
   const label = document.createElement('label')
   label.textContent = task.name
-  label.htmlFor = uniqueId
+  label.htmlFor = task.id
 
   //Checkbox
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
+  checkbox.id = task.id
 
   if (task.status) {
     label.classList.add('completed')
@@ -83,10 +86,10 @@ function renderTask(task: Task): void {
     label.classList.toggle('completed')
   })
 
-  const deleteBtn = document.createElement('input')
+  const deleteBtn = document.createElement('button')
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
-  deleteBtn.value = 'X'
+  deleteBtn.textContent = 'X'
 
   deleteBtn.addEventListener('click', () => {
     const deleted = taskList.filter((obj: Task) => obj.id !== task.id)
