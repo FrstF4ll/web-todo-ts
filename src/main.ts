@@ -13,9 +13,11 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const TASKS_STORAGE_KEY = 'tasks'
+const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
 
 //Interface
 interface Task {
+  id: string
   name: string
   status: boolean
 }
@@ -30,7 +32,6 @@ function isTask(item: unknown): item is Task {
 //Get local storage data
 const taskList: Task[] = (() => {
   try {
-    const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
     if (storedTasks) {
       const parsed: unknown = JSON.parse(storedTasks)
       if (Array.isArray(parsed) && parsed.every(isTask)) {
@@ -67,7 +68,6 @@ function renderTask(task: Task): void {
   //Checkbox
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
-  checkbox.id = uniqueId
   checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
 
@@ -83,14 +83,27 @@ function renderTask(task: Task): void {
     label.classList.toggle('completed')
   })
 
+  const deleteBtn = document.createElement('input')
+  deleteBtn.type = 'button'
+  deleteBtn.className = 'delete-btn'
+  deleteBtn.value = 'X'
+
+  deleteBtn.addEventListener('click', () => {
+    const deleted = taskList.filter((obj: Task) => obj.id !== task.id)
+    saveTasksToStorage(deleted)
+    newTask.remove()
+  })
+
   //Add elements to DOM
+  toDoList.appendChild(newTask)
+  newTask.appendChild(deleteBtn)
   newTask.appendChild(label)
   newTask.appendChild(checkbox)
-  toDoList.appendChild(newTask)
 }
 
 // Add new task
 function addToList(userInput: string): void {
+  const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
   if (!trimmedInput) {
     errorMsg.classList.remove('hidden')
@@ -98,7 +111,7 @@ function addToList(userInput: string): void {
   }
   errorMsg.classList.add('hidden')
 
-  const newTask: Task = { name: trimmedInput, status: false }
+  const newTask: Task = { name: trimmedInput, status: false, id: uniqueId }
   taskList.push(newTask)
   saveTasksToStorage(taskList)
   renderTask(newTask)
