@@ -63,9 +63,6 @@ function renderTask(task: Task): void {
   const label = document.createElement('label')
   label.textContent = task.name
   label.htmlFor = uniqueId
-  if (task.status) {
-    label.classList.add('completed')
-  }
 
   //Checkbox
   const checkbox = document.createElement('input')
@@ -76,6 +73,11 @@ function renderTask(task: Task): void {
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
+    if (task.status) {
+      label.classList.add('completed')
+    } else {
+      label.classList.remove('completed')
+    }
   })
 
   //Add elements to DOM
