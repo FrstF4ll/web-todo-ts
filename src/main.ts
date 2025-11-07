@@ -92,8 +92,11 @@ function renderTask(task: Task): void {
   deleteBtn.textContent = 'X'
 
   deleteBtn.addEventListener('click', () => {
-    const deleted = taskList.filter((obj: Task) => obj.id !== task.id)
-    saveTasksToStorage(deleted)
+    const taskIndex = taskList.findIndex((obj: Task) => obj.id === task.id)
+    if (taskIndex > -1) {
+      taskList.splice(taskIndex, 1)
+    }
+    saveTasksToStorage(taskList)
     newTask.remove()
   })
 
