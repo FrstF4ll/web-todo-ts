@@ -70,8 +70,8 @@ ul {
   flex-direction: row;
   justify-content: space-between;
   padding: 0.5rem;
-  background-color: #627f28c7;
-  border-radius: 4px;
+  background-color: var(--todo-item-bg-color, #627f28c7);
+  border-radius: var(--border-radius-sm, 4px);
 }
 
 #user-input {
