@@ -70,14 +70,17 @@ function renderTask(task: Task): void {
   checkbox.id = uniqueId
   checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
+
+  if (task.status) {
+    label.classList.add('completed')
+  } else {
+    label.classList.remove('completed')
+  }
+
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
-    if (task.status) {
-      label.classList.add('completed')
-    } else {
-      label.classList.remove('completed')
-    }
+    label.classList.toggle('completed')
   })
 
   //Add elements to DOM
