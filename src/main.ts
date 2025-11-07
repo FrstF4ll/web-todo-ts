@@ -59,7 +59,7 @@ function renderTask(task: Task): void {
   // Unique id for each task
   const uniqueId = crypto.randomUUID()
 
-   // Status label
+  // Status label
   const label = document.createElement('label')
   label.textContent = task.name
   label.htmlFor = uniqueId
@@ -76,8 +76,6 @@ function renderTask(task: Task): void {
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
-
-    
   })
 
   //Add elements to DOM
@@ -102,9 +100,11 @@ function addToList(userInput: string): void {
   toDoInput.value = ''
 }
 
-// Event listeners
+//Event Listeners
+const addTaskHandler = () => addToList(toDoInput.value)
+
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'Enter') addToList(toDoInput.value)
+  if (e.key === 'Enter') addTaskHandler()
 })
 
-addButton.addEventListener('click', () => addToList(toDoInput.value))
+addButton.addEventListener('click', addTaskHandler)
