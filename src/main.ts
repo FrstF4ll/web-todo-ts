@@ -129,9 +129,9 @@ function renderTask(task: Task): void {
   const deleteBtn = createDeleteBtn(task, newTask)
 
   //Add elements to DOM
-  const taskContent = document.createElement('div')
-  taskContent.append(checkbox, label)
-  newTask.append(taskContent, deleteBtn)
+  const checkboxLabelWrapper = document.createElement('div')
+  checkboxLabelWrapper.append(checkbox, label)
+  newTask.append(checkboxLabelWrapper, deleteBtn)
   toDoList.appendChild(newTask)
 }
 
