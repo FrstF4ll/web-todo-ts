@@ -132,6 +132,11 @@ ul {
   border-radius: var(--todo-item-border-radius);
 }
 
+.todo-elements div {
+  display: flex;
+  gap: 0.25rem;
+}
+
 #delete-all {
   /*position*/
   grid-row: 1;
