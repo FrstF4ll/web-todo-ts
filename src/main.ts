@@ -131,7 +131,7 @@ function addToList(userInput: string): void {
 clearAllBtn.addEventListener('click', () => {
   taskList.length = 0
   saveTasksToStorage(taskList)
-  toDoList.innerHTML = ''
+  toDoList.replaceChildren()
 })
 //Event Listeners
 const addTaskHandler = () => addToList(toDoInput.value)

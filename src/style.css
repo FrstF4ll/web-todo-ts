@@ -23,10 +23,12 @@ html {
   --list-bg-color: #7eac87fa;
   --list-padding: 0.5rem;
   --list-gap: 0.5rem;
+  /* list layout */
+  --list-row-gap: 0.25rem;
 
   /*todo items*/
   --todo-item-bg-color: #627f28c7;
-  --todo-item-border-radius: 4px;
+  --todo-item-border-radius: 0.5rem;
   --todo-item-padding: 0.5rem;
 
   /*input containers*/
@@ -85,7 +87,7 @@ button:active {
   display: grid;
   grid-template-columns: 2fr 1fr 2fr 1fr 2fr;
   grid-template-rows: 1fr 8fr;
-  row-gap: 4px;
+  row-gap: var(--list-row-gap);
 }
 ul {
   grid-row: 2;
