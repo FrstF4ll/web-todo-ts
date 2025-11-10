@@ -81,6 +81,11 @@ h1 {
   text-align: center;
 }
 
+button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 ul {
   /* flex layout */
   display: flex;
@@ -130,6 +135,9 @@ ul {
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 #delete-all:hover {

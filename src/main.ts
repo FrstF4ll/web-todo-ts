@@ -12,6 +12,8 @@ const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
 const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
+const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
+
 const TASKS_STORAGE_KEY = 'tasks'
 
 //Interface
@@ -124,10 +126,18 @@ function addToList(userInput: string): void {
   renderTask(newTask)
   toDoInput.value = ''
 }
+// Delete all
+clearAllBtn.addEventListener('click', () => {
+  const allTasks = document.querySelectorAll('li')
+  taskList.splice(0, taskList.length)
+  saveTasksToStorage(taskList)
+  allTasks.forEach((obj) => {
+    obj.remove()
+  })
+})
 
 //Event Listeners
 const addTaskHandler = () => addToList(toDoInput.value)
-
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Enter') addTaskHandler()
 })
