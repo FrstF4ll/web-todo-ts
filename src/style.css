@@ -139,7 +139,7 @@ ul {
 
   /* padding and margin */
   margin-top: var(--spacing-sm);
-  padding-block: var(--danger-padding-vertical);
+  padding: var(--danger-padding-vertical) var(--spacing-sm);
   /*color and global style*/
   background-color: var(--danger-color);
   color: var(--danger-text-color);
