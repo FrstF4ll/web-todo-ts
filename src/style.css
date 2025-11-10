@@ -21,7 +21,7 @@ html {
   --list-min-height: 50vh;
   --list-border-radius: 8px;
   --list-bg-color: #7eac87fa;
-  --list-padding: 0.5rem;
+  --list-padding: 1.5rem 0.5rem;
   --list-gap: 0.5rem;
   /* list layout */
   --list-row-gap: 0.25rem;
