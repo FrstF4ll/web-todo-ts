@@ -128,16 +128,18 @@ function addToList(userInput: string): void {
   toDoInput.value = ''
 }
 // Delete all
-clearAllBtn.addEventListener('click', () => {
+function deleteAllTasks(): void {
   if (
-    taskList.length > 0 &&
-    window.confirm('Are you sure you want to delete all tasks?')
+    taskList.length === 0 ||
+    !window.confirm('Are you sure you want to delete all tasks?')
   ) {
-    taskList.length = 0
-    saveTasksToStorage(taskList)
-    toDoList.replaceChildren()
+    return
   }
-})
+  taskList.length = 0
+  saveTasksToStorage(taskList)
+  toDoList.replaceChildren()
+}
+clearAllBtn.addEventListener('click', deleteAllTasks)
 //Event Listeners
 const addTaskHandler = () => addToList(toDoInput.value)
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
