@@ -20,15 +20,15 @@ html {
   /* list elements */
   --list-min-height: 50vh;
   --list-border-radius: 8px;
-  --list-margin-left: 25vw;
   --list-bg-color: #7eac87fa;
-  --list-margin-right: 25vw;
-  --list-padding: 1rem;
+  --list-padding: 0.5rem;
   --list-gap: 0.5rem;
+  /* list layout */
+  --list-row-gap: 0.25rem;
 
   /*todo items*/
   --todo-item-bg-color: #627f28c7;
-  --todo-item-border-radius: 4px;
+  --todo-item-border-radius: 0.5rem;
   --todo-item-padding: 0.5rem;
 
   /*input containers*/
@@ -42,16 +42,21 @@ html {
   /*completed label*/
   --label-text-color: black;
 
-  /*others*/
-  --no-margin: 0;
+  /*delete all*/
+  --spacing-sm: 0.75rem;
+  --danger-color: #e74c3c; /* red for destructive actions */
+  --danger-hover-color: #c0392b; /* darker red on hover */
+  --danger-text-color: white;
+  --danger-padding-vertical: 0.25rem;
+  --border-radius-sm: 0.25rem;
 }
 
 * {
   font-family: Helvetica, Arial, sans-serif;
+  margin: 0;
 }
 
 body {
-  margin: var(--no-margin);
   padding: 0; /* It's safer to reset padding too */
   height: 100%;
   background-color: var(--body-bg-color);
@@ -74,7 +79,24 @@ h1 {
   text-align: center;
 }
 
+button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.todo-list {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 2fr) 1fr;
+  grid-template-rows: auto 1fr;
+  row-gap: var(--list-row-gap);
+}
+
+.todo-list > * {
+  grid-column: 2;
+}
+
 ul {
+  grid-row: 2;
   /* flex layout */
   display: flex;
   flex-direction: column;
@@ -83,8 +105,6 @@ ul {
 
   /* border layout */
   border-radius: var(--list-border-radius);
-  margin-left: var(--list-margin-left);
-  margin-right: var(--list-margin-right);
 
   padding: var(--list-padding);
   gap: var(--list-gap);
@@ -110,6 +130,32 @@ ul {
   padding: var(--todo-item-padding);
   background-color: var(--todo-item-bg-color);
   border-radius: var(--todo-item-border-radius);
+}
+
+#delete-all {
+  /*position*/
+  grid-row: 1;
+  justify-self: end;
+
+  /* padding and margin */
+  margin-top: var(--spacing-sm);
+  padding: var(--danger-padding-vertical) var(--spacing-sm);
+  /*color and global style*/
+  background-color: var(--danger-color);
+  color: var(--danger-text-color);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-weight: bold;
+
+  /*animation*/
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+#delete-all:hover {
+  background-color: var(--danger-hover-color);
 }
 
 #user-input {

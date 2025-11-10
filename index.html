@@ -1,28 +1,34 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/todo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web todolist project</title>
-    <link rel="stylesheet" href="src/style.css">
-  </head>
-  <body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/todo.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web todolist project</title>
+  <link rel="stylesheet" href="src/style.css">
+</head>
+
+<body>
   <header>
     <h1>Web todolist app</h1>
     <section id="user-input">
-          <div class="test">
-            <label for="todo-input" id="todo-label">New Task</label>
-            <p id="error-msg" class="hidden" aria-live="polite">ERROR: Task cannot be empty</p>
-          </div>
-          <div class="user-input-layout">
-            <input id="todo-input" placeholder="Write here your task">
-            <button id="add-todo-button">Add to list</button>
-          </div>
-      </section>
+      <div class="test">
+        <label for="todo-input" id="todo-label">New Task</label>
+        <p id="error-msg" class="hidden" aria-live="polite">ERROR: Task cannot be empty</p>
+      </div>
+      <div class="user-input-layout">
+        <input id="todo-input" placeholder="Write here your task">
+        <button id="add-todo-button">Add to list</button>
+      </div>
+    </section>
   </header>
-  <ul>
-  </ul>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+  <main class="todo-list">
+    <button id="delete-all">Clear tasks</button>
+    <ul>
+    </ul>
+  </main>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
