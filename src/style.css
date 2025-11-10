@@ -23,7 +23,7 @@ html {
   --list-margin-left: 25vw;
   --list-bg-color: #7eac87fa;
   --list-margin-right: 25vw;
-  --list-padding: 1rem;
+  --list-padding: 0.5rem;
   --list-gap: 0.5rem;
 
   /*todo items*/
@@ -42,6 +42,13 @@ html {
   /*completed label*/
   --label-text-color: black;
 
+  /*delete all*/
+  --spacing-sm: 0.75rem;
+  --danger-color: #e74c3c; /* red for destructive actions */
+  --danger-hover-color: #c0392b; /* darker red on hover */
+  --danger-text-color: white;
+  --danger-top-padding: 0.25rem;
+  --danger-bot-padding: 0.25rem;
   /*others*/
   --no-margin: 0;
 }
@@ -110,6 +117,23 @@ ul {
   padding: var(--todo-item-padding);
   background-color: var(--todo-item-bg-color);
   border-radius: var(--todo-item-border-radius);
+}
+
+#delete-all {
+  align-self: flex-end;
+  margin-bottom: var(--list-gap); /* dynamic spacing */
+  background-color: var(--danger-color);
+  color: var(--danger-text-color);
+  padding-top: var(--danger-top-padding);
+  padding-bottom: var(--danger-bot-padding);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#delete-all:hover {
+  background-color: var(--danger-hover-color);
 }
 
 #user-input {
