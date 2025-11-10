@@ -99,19 +99,13 @@ function renderTask(task: Task): void {
     }
     saveTasksToStorage(taskList)
     newTask.remove()
-
-    const taskContent = document.createElement('div')
-    taskContent.append(checkbox, label)
-
-    newTask.append(taskContent, deleteBtn)
-    toDoList.appendChild(newTask)
   })
 
   //Add elements to DOM
+  const taskContent = document.createElement('div')
+  taskContent.append(checkbox, label)
+  newTask.append(taskContent, deleteBtn)
   toDoList.appendChild(newTask)
-  newTask.appendChild(deleteBtn)
-  newTask.appendChild(label)
-  newTask.appendChild(checkbox)
 }
 
 // Add new task
