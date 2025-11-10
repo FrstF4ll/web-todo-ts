@@ -93,6 +93,7 @@ function renderTask(task: Task): void {
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
   deleteBtn.textContent = 'X'
+  deleteBtn.ariaLabel = `Delete task: ${task.name}`
 
   deleteBtn.addEventListener('click', () => {
     const taskIndex = taskList.findIndex((obj) => obj.id === task.id)
