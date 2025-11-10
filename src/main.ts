@@ -136,6 +136,7 @@ function renderTask(task: Task): void {
   toDoList.appendChild(newTask)
 }
 
+//Check user input
 function inputValidation(userInput: string): string {
   const trimmedInput = userInput.trim()
   if (!trimmedInput) {
@@ -145,7 +146,7 @@ function inputValidation(userInput: string): string {
   return trimmedInput
 }
 
-// Add new task
+// Insert data
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const taskName = inputValidation(userInput)
@@ -156,6 +157,7 @@ function addToList(userInput: string): void {
   renderTask(newTask)
   toDoInput.value = ''
 }
+
 // Delete all
 function deleteAllTasks(): void {
   if (taskList.length === 0) {
@@ -170,10 +172,10 @@ function deleteAllTasks(): void {
 }
 
 clearAllBtn.addEventListener('click', deleteAllTasks)
-//Event Listeners
 const addTaskHandler = () => addToList(toDoInput.value)
-toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
+const detectKey = (e: KeyboardEvent) => {
   if (e.key === 'Enter') addTaskHandler()
-})
+}
+toDoInput.addEventListener('keydown', detectKey)
 
 addButton.addEventListener('click', addTaskHandler)
