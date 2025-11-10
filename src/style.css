@@ -20,9 +20,7 @@ html {
   /* list elements */
   --list-min-height: 50vh;
   --list-border-radius: 8px;
-  --list-margin-left: 25vw;
   --list-bg-color: #7eac87fa;
-  --list-margin-right: 25vw;
   --list-padding: 0.5rem;
   --list-gap: 0.5rem;
 
@@ -49,16 +47,14 @@ html {
   --danger-text-color: white;
   --danger-top-padding: 0.25rem;
   --danger-bot-padding: 0.25rem;
-  /*others*/
-  --no-margin: 0;
 }
 
 * {
   font-family: Helvetica, Arial, sans-serif;
+  margin: 0;
 }
 
 body {
-  margin: var(--no-margin);
   padding: 0; /* It's safer to reset padding too */
   height: 100%;
   background-color: var(--body-bg-color);
@@ -86,7 +82,15 @@ button:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.todo-list {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr 2fr;
+  grid-template-rows: 1fr 8fr;
+  row-gap: 4px;
+}
 ul {
+  grid-row: 2;
+  grid-column: 2 / 5;
   /* flex layout */
   display: flex;
   flex-direction: column;
@@ -95,8 +99,6 @@ ul {
 
   /* border layout */
   border-radius: var(--list-border-radius);
-  margin-left: var(--list-margin-left);
-  margin-right: var(--list-margin-right);
 
   padding: var(--list-padding);
   gap: var(--list-gap);
@@ -125,16 +127,24 @@ ul {
 }
 
 #delete-all {
-  align-self: flex-end;
-  margin-bottom: var(--list-gap); /* dynamic spacing */
-  background-color: var(--danger-color);
-  color: var(--danger-text-color);
+  /*position*/
+  grid-row: 1;
+  grid-column: 4;
+  justify-self: flex-end;
+
+  /* padding and margin */
+  margin-top: var(--spacing-sm);
   padding-top: var(--danger-top-padding);
   padding-bottom: var(--danger-bot-padding);
+  /*color and global style*/
+  background-color: var(--danger-color);
+  color: var(--danger-text-color);
   border: none;
   border-radius: 4px;
-  cursor: pointer;
   font-weight: bold;
+
+  /*animation*/
+  cursor: pointer;
   transition:
     background-color 0.3s ease,
     transform 0.2s ease;
