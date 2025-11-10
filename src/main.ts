@@ -97,6 +97,7 @@ function createCheckbox(task: Task): HTMLInputElement {
   return checkbox
 }
 
+//Generate delete button
 function createDeleteBtn(
   task: Task,
   newTask: HTMLLIElement,
@@ -127,25 +128,29 @@ function renderTask(task: Task): void {
   const label = createLabel(task)
   const newTask = createNewTaskElements()
   const deleteBtn = createDeleteBtn(task, newTask)
-
-  //Add elements to DOM
   const checkboxLabelWrapper = document.createElement('div')
+
+  //Append elements
   checkboxLabelWrapper.append(checkbox, label)
   newTask.append(checkboxLabelWrapper, deleteBtn)
   toDoList.appendChild(newTask)
 }
 
-// Add new task
-function addToList(userInput: string): void {
-  const uniqueId = crypto.randomUUID()
+function inputValidation(userInput: string): string {
   const trimmedInput = userInput.trim()
   if (!trimmedInput) {
     errorMsg.classList.remove('hidden')
-    return
   }
   errorMsg.classList.add('hidden')
+  return trimmedInput
+}
 
-  const newTask: Task = { name: trimmedInput, status: false, id: uniqueId }
+// Add new task
+function addToList(userInput: string): void {
+  const uniqueId = crypto.randomUUID()
+  const taskName = inputValidation(userInput)
+
+  const newTask: Task = { name: taskName, status: false, id: uniqueId }
   taskList.push(newTask)
   saveTasksToStorage(taskList)
   renderTask(newTask)
