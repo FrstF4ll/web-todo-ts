@@ -136,22 +136,17 @@ function renderTask(task: Task): void {
   toDoList.appendChild(newTask)
 }
 
-//Check user input
-function inputValidation(userInput: string): string {
-  const trimmedInput = userInput.trim()
-  if (!trimmedInput) {
-    errorMsg.classList.remove('hidden')
-  }
-  errorMsg.classList.add('hidden')
-  return trimmedInput
-}
-
 // Insert data
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
-  const taskName = inputValidation(userInput)
+  const trimmedInput = userInput.trim()
+  if (!trimmedInput) {
+    errorMsg.classList.remove('hidden')
+    return
+  }
+  errorMsg.classList.add('hidden')
 
-  const newTask: Task = { name: taskName, status: false, id: uniqueId }
+  const newTask: Task = { name: trimmedInput, status: false, id: uniqueId }
   taskList.push(newTask)
   saveTasksToStorage(taskList)
   renderTask(newTask)
