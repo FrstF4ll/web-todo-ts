@@ -45,8 +45,7 @@ html {
   --danger-color: #e74c3c; /* red for destructive actions */
   --danger-hover-color: #c0392b; /* darker red on hover */
   --danger-text-color: white;
-  --danger-top-padding: 0.25rem;
-  --danger-bot-padding: 0.25rem;
+  --danger-padding-vertical: 0.25rem;
 }
 
 * {
@@ -134,8 +133,7 @@ ul {
 
   /* padding and margin */
   margin-top: var(--spacing-sm);
-  padding-top: var(--danger-top-padding);
-  padding-bottom: var(--danger-bot-padding);
+  padding-block: var(--danger-padding-vertical);
   /*color and global style*/
   background-color: var(--danger-color);
   color: var(--danger-text-color);
