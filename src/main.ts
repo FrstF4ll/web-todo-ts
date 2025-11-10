@@ -16,6 +16,7 @@ const TASKS_STORAGE_KEY = 'tasks'
 
 //Interface
 interface Task {
+  id: string
   name: string
   status: boolean
 }
@@ -24,7 +25,11 @@ interface Task {
 function isTask(item: unknown): item is Task {
   if (typeof item !== 'object' || item === null) return false
   const task = item as Record<string, unknown>
-  return typeof task.name === 'string' && typeof task.status === 'boolean'
+  return (
+    typeof task.name === 'string' &&
+    typeof task.status === 'boolean' &&
+    typeof task.id === 'string'
+  )
 }
 
 //Get local storage data
@@ -56,20 +61,18 @@ taskList.forEach(renderTask)
 function renderTask(task: Task): void {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
-  // Unique id for each task
-  const uniqueId = crypto.randomUUID()
 
   // Status label
   const label = document.createElement('label')
   label.textContent = task.name
-  label.htmlFor = uniqueId
+  label.htmlFor = task.id
 
   //Checkbox
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
-  checkbox.id = uniqueId
   checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
+  checkbox.id = task.id
 
   if (task.status) {
     label.classList.add('completed')
@@ -83,14 +86,37 @@ function renderTask(task: Task): void {
     label.classList.toggle('completed')
   })
 
+  // Delete button
+  const deleteBtn = document.createElement('button')
+  deleteBtn.type = 'button'
+  deleteBtn.className = 'delete-btn'
+  deleteBtn.textContent = 'X'
+
+  deleteBtn.addEventListener('click', () => {
+    const taskIndex = taskList.findIndex((obj) => obj.id === task.id)
+    if (taskIndex > -1) {
+      taskList.splice(taskIndex, 1)
+    }
+    saveTasksToStorage(taskList)
+    newTask.remove()
+
+    const taskContent = document.createElement('div')
+    taskContent.append(checkbox, label)
+
+    newTask.append(taskContent, deleteBtn)
+    toDoList.appendChild(newTask)
+  })
+
   //Add elements to DOM
+  toDoList.appendChild(newTask)
+  newTask.appendChild(deleteBtn)
   newTask.appendChild(label)
   newTask.appendChild(checkbox)
-  toDoList.appendChild(newTask)
 }
 
 // Add new task
 function addToList(userInput: string): void {
+  const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
   if (!trimmedInput) {
     errorMsg.classList.remove('hidden')
@@ -98,7 +124,7 @@ function addToList(userInput: string): void {
   }
   errorMsg.classList.add('hidden')
 
-  const newTask: Task = { name: trimmedInput, status: false }
+  const newTask: Task = { name: trimmedInput, status: false, id: uniqueId }
   taskList.push(newTask)
   saveTasksToStorage(taskList)
   renderTask(newTask)
