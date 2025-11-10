@@ -129,10 +129,10 @@ function addToList(userInput: string): void {
 }
 // Delete all
 function deleteAllTasks(): void {
-  if (
-    taskList.length === 0 ||
-    !window.confirm('Are you sure you want to delete all tasks?')
-  ) {
+  if (taskList.length === 0) {
+    return
+  }
+  if (!window.confirm('Are you sure you want to delete all tasks?')) {
     return
   }
   taskList.length = 0
