@@ -143,7 +143,7 @@ ul {
   background-color: var(--danger-color);
   color: var(--danger-text-color);
   border: none;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   font-weight: bold;
 
   /*animation*/
