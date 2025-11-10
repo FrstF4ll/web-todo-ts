@@ -86,7 +86,7 @@ button:active {
 .todo-list {
   display: grid;
   grid-template-columns: 1fr minmax(0, 2fr) 1fr;
-  grid-template-rows: 1fr 8fr;
+  grid-template-rows: auto 1fr;
   row-gap: var(--list-row-gap);
 }
 
