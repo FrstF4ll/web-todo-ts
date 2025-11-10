@@ -85,13 +85,17 @@ button:active {
 
 .todo-list {
   display: grid;
-  grid-template-columns: 2fr 1fr 2fr 1fr 2fr;
+  grid-template-columns: 1fr minmax(0, 2fr) 1fr;
   grid-template-rows: 1fr 8fr;
   row-gap: var(--list-row-gap);
 }
+
+.todo-list > * {
+  grid-column: 2;
+}
+
 ul {
   grid-row: 2;
-  grid-column: 2 / 5;
   /* flex layout */
   display: flex;
   flex-direction: column;
@@ -130,8 +134,7 @@ ul {
 #delete-all {
   /*position*/
   grid-row: 1;
-  grid-column: 4;
-  justify-self: flex-end;
+  justify-self: end;
 
   /* padding and margin */
   margin-top: var(--spacing-sm);
