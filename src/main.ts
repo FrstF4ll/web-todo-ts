@@ -129,14 +129,10 @@ function addToList(userInput: string): void {
 }
 // Delete all
 clearAllBtn.addEventListener('click', () => {
-  const allTasks = document.querySelectorAll('li')
-  taskList.splice(0, taskList.length)
+  taskList.length = 0
   saveTasksToStorage(taskList)
-  allTasks.forEach((obj) => {
-    obj.remove()
-  })
+  toDoList.innerHTML = ''
 })
-
 //Event Listeners
 const addTaskHandler = () => addToList(toDoInput.value)
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
