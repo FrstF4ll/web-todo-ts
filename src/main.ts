@@ -59,50 +59,74 @@ function saveTasksToStorage(tasks: Task[]): void {
 //Task rendering
 taskList.forEach(renderTask)
 
-// Rendering function
-function renderTask(task: Task): void {
+//Generate list elements
+function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
+  return newTask
+}
 
-  // Status label
+//Generate label
+function createLabel(task: Task): HTMLLabelElement {
   const label = document.createElement('label')
   label.textContent = task.name
   label.htmlFor = task.id
+  task.status
+    ? label.classList.add('completed')
+    : label.classList.remove('completed')
+  return label
+}
 
-  //Checkbox
+//Generate checkbox
+function createCheckbox(task: Task): HTMLInputElement {
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
   checkbox.id = task.id
 
-  if (task.status) {
-    label.classList.add('completed')
-  } else {
-    label.classList.remove('completed')
-  }
-
-  checkbox.addEventListener('change', () => {
+  //Check status of checkbox
+  function checkStatus(checkbox: HTMLInputElement, task: Task): void {
+    const label = createLabel(task)
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
     label.classList.toggle('completed')
-  })
+  }
 
-  // Delete button
+  checkbox.addEventListener('change', () => checkStatus(checkbox, task))
+  return checkbox
+}
+
+function createDeleteBtn(
+  task: Task,
+  newTask: HTMLLIElement,
+): HTMLButtonElement {
   const deleteBtn = document.createElement('button')
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
   deleteBtn.textContent = 'X'
   deleteBtn.ariaLabel = `Delete task: ${task.name}`
 
-  deleteBtn.addEventListener('click', () => {
+  function deleteAction(): void {
     const taskIndex = taskList.findIndex((obj) => obj.id === task.id)
     if (taskIndex > -1) {
       taskList.splice(taskIndex, 1)
     }
+
     saveTasksToStorage(taskList)
     newTask.remove()
-  })
+  }
+
+  deleteBtn.addEventListener('click', deleteAction)
+  return deleteBtn
+}
+
+// Rendering function
+function renderTask(task: Task): void {
+  const checkbox = createCheckbox(task)
+  const label = createLabel(task)
+  const newTask = createNewTaskElements()
+  const deleteBtn = createDeleteBtn(task, newTask)
 
   //Add elements to DOM
   const taskContent = document.createElement('div')
@@ -139,6 +163,7 @@ function deleteAllTasks(): void {
   saveTasksToStorage(taskList)
   toDoList.replaceChildren()
 }
+
 clearAllBtn.addEventListener('click', deleteAllTasks)
 //Event Listeners
 const addTaskHandler = () => addToList(toDoInput.value)
