@@ -129,9 +129,11 @@ function addToList(userInput: string): void {
 }
 // Delete all
 clearAllBtn.addEventListener('click', () => {
-  taskList.length = 0
-  saveTasksToStorage(taskList)
-  toDoList.replaceChildren()
+  if (taskList.length > 0 && window.confirm('Are you sure you want to delete all tasks?')) {
+    taskList.length = 0
+    saveTasksToStorage(taskList)
+    toDoList.replaceChildren()
+  }
 })
 //Event Listeners
 const addTaskHandler = () => addToList(toDoInput.value)
