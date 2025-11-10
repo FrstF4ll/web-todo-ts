@@ -48,6 +48,7 @@ html {
   --danger-hover-color: #c0392b; /* darker red on hover */
   --danger-text-color: white;
   --danger-padding-vertical: 0.25rem;
+  --border-radius-sm: 0.25rem;
 }
 
 * {
@@ -143,14 +144,12 @@ ul {
   background-color: var(--danger-color);
   color: var(--danger-text-color);
   border: none;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius-sm);
   font-weight: bold;
 
   /*animation*/
   cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #delete-all:hover {
