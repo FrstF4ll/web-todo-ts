@@ -11,6 +11,7 @@ interface Task {
   id: string
   name: string
   status: boolean
+  date: string
 }
 
 //Storage keys
@@ -117,19 +118,19 @@ function createDeleteBtn(
   return deleteBtn
 }
 
-// Create due dates
-function createDate(): HTMLSpanElement {
-  const dateUserInput = dateInput.value
-  const userDate = new Date(dateUserInput)
+// Generate due dates
+function createDate(task: Task): HTMLSpanElement {
+  const taskDate = task.date
+  const userDate = new Date(taskDate)
   const today = new Date()
-  if (userDate > today) {
+  if (userDate < today) {
   }
 
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
-  dueDate.dateTime = dateUserInput
-  if (dateUserInput) {
-    dueDate.textContent = dateUserInput
+  dueDate.dateTime = taskDate
+  if (taskDate) {
+    dueDate.textContent = taskDate
   } else {
     dueDate.textContent = 'No due date'
   }
@@ -142,7 +143,7 @@ function renderTask(task: Task): void {
   const label = createLabel(task)
   const newTask = createNewTaskElements()
   const deleteBtn = createDeleteBtn(task, newTask)
-  const dueDate = createDate()
+  const dueDate = createDate(task)
   const checkboxLabelWrapper = document.createElement('div')
   const dueDateDeleteWrapper = document.createElement('div')
 
@@ -169,7 +170,12 @@ function addToList(userInput: string): void {
   }
   hideError()
 
-  const newTask: Task = { name: trimmedInput, status: false, id: uniqueId }
+  const newTask: Task = {
+    name: trimmedInput,
+    status: false,
+    id: uniqueId,
+    date: dateInput.value,
+  }
   taskList.push(newTask)
   saveTasksToStorage(taskList)
   renderTask(newTask)
