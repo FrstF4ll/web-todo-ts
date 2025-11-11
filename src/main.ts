@@ -117,7 +117,11 @@ function createDeleteBtn(
 function createDate(): HTMLSpanElement {
   const dueDate = document.createElement('span')
   dueDate.className = 'due-date'
-  dueDate.textContent = dateInput.value
+  if (dateInput.value) {
+    dueDate.textContent = dateInput.value
+  } else {
+    dueDate.textContent = 'No due date'
+  }
   return dueDate
 }
 
