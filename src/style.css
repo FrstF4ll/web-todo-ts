@@ -132,7 +132,7 @@ ul {
   border-radius: var(--todo-item-border-radius);
 }
 
-.todo-elements div {
+.todo-elements p {
   display: flex;
   gap: 0.25rem;
 }

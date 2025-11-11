@@ -22,7 +22,7 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
-const dateInput = getRequiredElement<HTMLInputElement>('#date-input')
+const dateInput = getRequiredElement<HTMLInputElement>('#todo-date-input')
 
 //Check invalid local storage data
 function isTask(item: unknown): item is Task {
