@@ -24,6 +24,9 @@ const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
 const dateInput = getRequiredElement<HTMLInputElement>('#todo-date-input')
 
+// Show or hide error message
+const showError = () => errorMsg.classList.remove('hidden')
+const hideError = () => errorMsg.classList.add('hidden')
 //Check invalid local storage data
 function isTask(item: unknown): item is Task {
   if (typeof item !== 'object' || item === null) return false
@@ -113,9 +116,15 @@ function createDeleteBtn(
   deleteBtn.addEventListener('click', deleteAction)
   return deleteBtn
 }
+
 // Create due dates
 function createDate(): HTMLSpanElement {
   const dateUserInput = dateInput.value
+  const userDate = new Date(dateUserInput)
+  const today = new Date()
+  if (userDate > today) {
+  }
+
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
   dueDate.dateTime = dateUserInput
@@ -155,10 +164,10 @@ function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
   if (!trimmedInput) {
-    errorMsg.classList.remove('hidden')
+    showError()
     return
   }
-  errorMsg.classList.add('hidden')
+  hideError()
 
   const newTask: Task = { name: trimmedInput, status: false, id: uniqueId }
   taskList.push(newTask)
