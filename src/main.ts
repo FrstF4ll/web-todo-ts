@@ -84,18 +84,9 @@ function createCheckbox(task: Task): HTMLInputElement {
   checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
   checkbox.id = task.id
-
-  //Check status of checkbox
-  function checkStatus(checkbox: HTMLInputElement, task: Task): void {
-    const label = createLabel(task)
-    task.status = checkbox.checked
-    saveTasksToStorage(taskList)
-    label.classList.toggle('completed')
-  }
-
-  checkbox.addEventListener('change', () => checkStatus(checkbox, task))
   return checkbox
 }
+//Check status of checkbox
 
 //Generate delete button
 function createDeleteBtn(
@@ -129,6 +120,12 @@ function renderTask(task: Task): void {
   const newTask = createNewTaskElements()
   const deleteBtn = createDeleteBtn(task, newTask)
   const checkboxLabelWrapper = document.createElement('div')
+
+  checkbox.addEventListener('change', () => {
+    task.status = checkbox.checked
+    saveTasksToStorage(taskList)
+    label.classList.toggle('completed', checkbox.checked)
+  })
 
   //Append elements
   checkboxLabelWrapper.append(checkbox, label)
