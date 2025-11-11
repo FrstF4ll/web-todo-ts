@@ -6,6 +6,15 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
   if (!el) throw new Error(`Element ${selector} not found`)
   return el
 }
+//Interface
+interface Task {
+  id: string
+  name: string
+  status: boolean
+}
+
+//Storage keys
+const TASKS_STORAGE_KEY = 'tasks'
 
 // DOM
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
@@ -13,15 +22,7 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
-
-const TASKS_STORAGE_KEY = 'tasks'
-
-//Interface
-interface Task {
-  id: string
-  name: string
-  status: boolean
-}
+const dateInput = getRequiredElement<HTMLInputElement>('#date-input')
 
 //Check invalid local storage data
 function isTask(item: unknown): item is Task {
@@ -112,6 +113,13 @@ function createDeleteBtn(
   deleteBtn.addEventListener('click', deleteAction)
   return deleteBtn
 }
+// Create due dates
+function createDate(): HTMLSpanElement {
+  const dueDate = document.createElement('span')
+  dueDate.className = 'due-date'
+  dueDate.textContent = dateInput.value
+  return dueDate
+}
 
 // Rendering function
 function renderTask(task: Task): void {
@@ -119,7 +127,9 @@ function renderTask(task: Task): void {
   const label = createLabel(task)
   const newTask = createNewTaskElements()
   const deleteBtn = createDeleteBtn(task, newTask)
+  const dueDate = createDate()
   const checkboxLabelWrapper = document.createElement('div')
+  const dueDateDeleteWrapper = document.createElement('div')
 
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
@@ -128,8 +138,9 @@ function renderTask(task: Task): void {
   })
 
   //Append elements
+  dueDateDeleteWrapper.append(dueDate, deleteBtn)
   checkboxLabelWrapper.append(checkbox, label)
-  newTask.append(checkboxLabelWrapper, deleteBtn)
+  newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
   toDoList.appendChild(newTask)
 }
 
