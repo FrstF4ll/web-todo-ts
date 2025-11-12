@@ -125,7 +125,7 @@ function createDeleteBtn(
 }
 
 // Generate due dates
-function createDate(task: Task): HTMLSpanElement {
+function createDate(task: Task): HTMLTimeElement {
   const taskDate = task.date
   const userDate = new Date(taskDate)
   const today = new Date()
@@ -150,8 +150,8 @@ function renderTask(task: Task): void {
   const newTask = createNewTaskElements()
   const deleteBtn = createDeleteBtn(task, newTask)
   const dueDate = createDate(task)
-  const checkboxLabelWrapper = document.createElement('div')
-  const dueDateDeleteWrapper = document.createElement('div')
+  const checkboxLabelWrapper = document.createElement('p')
+  const dueDateDeleteWrapper = document.createElement('p')
 
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
