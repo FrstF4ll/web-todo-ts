@@ -26,8 +26,15 @@ const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
 const dateInput = getRequiredElement<HTMLInputElement>('#todo-date-input')
 
 // Show or hide error message
-const showError = () => errorMsg.classList.remove('hidden')
-const hideError = () => errorMsg.classList.add('hidden')
+const showError = (message: string) => {
+  errorMsg.classList.remove('hidden')
+  errorMsg.textContent = message
+}
+const hideError = () => {
+  errorMsg.classList.add('hidden')
+  errorMsg.textContent = ''
+}
+
 //Check invalid local storage data
 function isTask(item: unknown): item is Task {
   if (typeof item !== 'object' || item === null) return false
@@ -91,7 +98,6 @@ function createCheckbox(task: Task): HTMLInputElement {
   checkbox.id = task.id
   return checkbox
 }
-//Check status of checkbox
 
 //Generate delete button
 function createDeleteBtn(
@@ -164,8 +170,16 @@ function renderTask(task: Task): void {
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
+  const today = Date.now()
+  const selectedDate = new Date(dateInput.value).getTime()
+  console.log(today, selectedDate)
+  if (today > selectedDate) {
+    showError('Invalid date: date too early')
+    return
+  }
+
   if (!trimmedInput) {
-    showError()
+    showError('Invalid task name: Empty name')
     return
   }
   hideError()
