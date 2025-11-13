@@ -170,10 +170,18 @@ function renderTask(task: Task): void {
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
-  const today = Date.now()
-  const selectedDate = new Date(dateInput.value).getTime()
-  console.log(today, selectedDate)
-  if (today > selectedDate) {
+  function toMidnight(date: Date): number {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    ).getTime()
+  }
+
+  const todayMidnight = toMidnight(new Date())
+  const selectedMidnight = toMidnight(new Date(dateInput.value))
+
+  if (todayMidnight > selectedMidnight) {
     showError('Invalid date: date too early')
     return
   }
