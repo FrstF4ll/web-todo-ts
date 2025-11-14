@@ -21,7 +21,7 @@ html {
   --list-min-height: 50vh;
   --list-border-radius: 8px;
   --list-bg-color: #7eac87fa;
-  --list-padding: 0.5rem;
+  --list-padding: 1.5rem 0.5rem;
   --list-gap: 0.5rem;
   /* list layout */
   --list-row-gap: 0.25rem;
@@ -84,6 +84,15 @@ button:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.for-readers {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .todo-list {
   display: grid;
   grid-template-columns: 1fr minmax(0, 2fr) 1fr;
@@ -132,6 +141,11 @@ ul {
   border-radius: var(--todo-item-border-radius);
 }
 
+.todo-elements p {
+  display: flex;
+  gap: 0.25rem;
+}
+
 #delete-all {
   /*position*/
   grid-row: 1;
@@ -139,7 +153,7 @@ ul {
 
   /* padding and margin */
   margin-top: var(--spacing-sm);
-  padding: var(--danger-padding-vertical) var(--spacing-sm);
+  padding-block: var(--danger-padding-vertical);
   /*color and global style*/
   background-color: var(--danger-color);
   color: var(--danger-text-color);
