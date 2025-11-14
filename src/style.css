@@ -84,6 +84,15 @@ button:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.for-readers {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .todo-list {
   display: grid;
   grid-template-columns: 1fr minmax(0, 2fr) 1fr;
