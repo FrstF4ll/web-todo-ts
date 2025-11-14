@@ -177,7 +177,7 @@ function addToList(userInput: string): void {
   const todayMidnight = toMidnight(new Date())
   const selectedMidnight = toMidnight(new Date(dateInput.value))
 
-  if (todayMidnight > selectedMidnight) {
+  if (dateInput.value && todayMidnight > selectedMidnight) {
     showError('Invalid date: date too early')
     return
   }
