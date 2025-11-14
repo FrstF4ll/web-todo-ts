@@ -99,10 +99,7 @@ function createCheckbox(task: Task): HTMLInputElement {
 }
 
 //Generate delete button
-function createDeleteBtn(
-  task: Task,
-  newTask: HTMLLIElement,
-): HTMLButtonElement {
+function createDeleteBtn(task: Task): HTMLButtonElement {
   const deleteBtn = document.createElement('button')
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
@@ -116,7 +113,7 @@ function createDeleteBtn(
     }
 
     saveTasksToStorage(taskList)
-    newTask.remove()
+    deleteBtn.closest('.todo-elements')?.remove()
   }
 
   deleteBtn.addEventListener('click', deleteAction)
@@ -142,7 +139,7 @@ function renderTask(task: Task): void {
   const checkbox = createCheckbox(task)
   const label = createLabel(task)
   const newTask = createNewTaskElements()
-  const deleteBtn = createDeleteBtn(task, newTask)
+  const deleteBtn = createDeleteBtn(task)
   const dueDate = createDate(task)
   const checkboxLabelWrapper = document.createElement('p')
   const dueDateDeleteWrapper = document.createElement('p')
