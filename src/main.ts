@@ -42,7 +42,8 @@ function isTask(item: unknown): item is Task {
   return (
     typeof task.name === 'string' &&
     typeof task.status === 'boolean' &&
-    typeof task.id === 'string'
+    typeof task.id === 'string' &&
+    typeof task.date === 'string'
   )
 }
 
