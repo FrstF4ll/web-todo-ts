@@ -6,6 +6,16 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
   if (!el) throw new Error(`Element ${selector} not found`)
   return el
 }
+//Interface
+interface Task {
+  id: string
+  name: string
+  status: boolean
+  date: string
+}
+
+//Storage keys
+const TASKS_STORAGE_KEY = 'tasks'
 
 // DOM
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
@@ -13,14 +23,16 @@ const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
 const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
+const dateInput = getRequiredElement<HTMLInputElement>('#todo-date-input')
 
-const TASKS_STORAGE_KEY = 'tasks'
-
-//Interface
-interface Task {
-  id: string
-  name: string
-  status: boolean
+// Show or hide error message
+const showError = (message: string) => {
+  errorMsg.classList.remove('hidden')
+  errorMsg.textContent = message
+}
+const hideError = () => {
+  errorMsg.classList.add('hidden')
+  errorMsg.textContent = ''
 }
 
 //Check invalid local storage data
@@ -30,7 +42,8 @@ function isTask(item: unknown): item is Task {
   return (
     typeof task.name === 'string' &&
     typeof task.status === 'boolean' &&
-    typeof task.id === 'string'
+    typeof task.id === 'string' &&
+    typeof task.date === 'string'
   )
 }
 
@@ -59,74 +72,127 @@ function saveTasksToStorage(tasks: Task[]): void {
 //Task rendering
 taskList.forEach(renderTask)
 
-// Rendering function
-function renderTask(task: Task): void {
+//Generate list elements
+function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
+  return newTask
+}
 
-  // Status label
+//Generate label
+function createLabel(task: Task): HTMLLabelElement {
   const label = document.createElement('label')
   label.textContent = task.name
   label.htmlFor = task.id
+  label.classList.toggle('completed', task.status)
+  return label
+}
 
-  //Checkbox
+//Generate checkbox
+function createCheckbox(task: Task): HTMLInputElement {
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
   checkbox.id = task.id
+  return checkbox
+}
 
-  if (task.status) {
-    label.classList.add('completed')
-  } else {
-    label.classList.remove('completed')
-  }
-
-  checkbox.addEventListener('change', () => {
-    task.status = checkbox.checked
-    saveTasksToStorage(taskList)
-    label.classList.toggle('completed')
-  })
-
-  // Delete button
+//Generate delete button
+function createDeleteBtn(task: Task): HTMLButtonElement {
   const deleteBtn = document.createElement('button')
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
   deleteBtn.textContent = 'X'
   deleteBtn.ariaLabel = `Delete task: ${task.name}`
 
-  deleteBtn.addEventListener('click', () => {
+  function deleteAction(): void {
     const taskIndex = taskList.findIndex((obj) => obj.id === task.id)
     if (taskIndex > -1) {
       taskList.splice(taskIndex, 1)
     }
+
     saveTasksToStorage(taskList)
-    newTask.remove()
+    deleteBtn.closest('.todo-elements')?.remove()
+  }
+
+  deleteBtn.addEventListener('click', deleteAction)
+  return deleteBtn
+}
+
+// Generate due dates
+function createDate(task: Task): HTMLTimeElement {
+  const taskDate = task.date
+  const dueDate = document.createElement('time')
+  dueDate.className = 'due-date'
+  dueDate.dateTime = taskDate
+  if (taskDate) {
+    dueDate.textContent = taskDate
+  } else {
+    dueDate.textContent = 'No due date'
+  }
+  return dueDate
+}
+
+// Rendering function
+function renderTask(task: Task): void {
+  const checkbox = createCheckbox(task)
+  const label = createLabel(task)
+  const newTask = createNewTaskElements()
+  const deleteBtn = createDeleteBtn(task)
+  const dueDate = createDate(task)
+  const checkboxLabelWrapper = document.createElement('p')
+  const dueDateDeleteWrapper = document.createElement('p')
+
+  checkbox.addEventListener('change', () => {
+    task.status = checkbox.checked
+    saveTasksToStorage(taskList)
+    label.classList.toggle('completed', checkbox.checked)
   })
 
-  //Add elements to DOM
-  const taskContent = document.createElement('div')
-  taskContent.append(checkbox, label)
-  newTask.append(taskContent, deleteBtn)
+  //Append elements
+  dueDateDeleteWrapper.append(dueDate, deleteBtn)
+  checkboxLabelWrapper.append(checkbox, label)
+  newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
   toDoList.appendChild(newTask)
 }
 
-// Add new task
+//To midnight normalization
+function toMidnight(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+}
+
+// Insert data
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
-  if (!trimmedInput) {
-    errorMsg.classList.remove('hidden')
+
+  const todayMidnight = toMidnight(new Date())
+  const selectedMidnight = toMidnight(new Date(dateInput.value))
+
+  if (dateInput.value && todayMidnight > selectedMidnight) {
+    showError('Invalid date: date too early')
     return
   }
-  errorMsg.classList.add('hidden')
 
-  const newTask: Task = { name: trimmedInput, status: false, id: uniqueId }
+  if (!trimmedInput) {
+    showError('Invalid task name: Empty name')
+    return
+  }
+  hideError()
+
+  const newTask: Task = {
+    name: trimmedInput,
+    status: false,
+    id: uniqueId,
+    date: dateInput.value,
+  }
   taskList.push(newTask)
   saveTasksToStorage(taskList)
   renderTask(newTask)
   toDoInput.value = ''
 }
+
 // Delete all
 function deleteAllTasks(): void {
   if (taskList.length === 0) {
@@ -139,11 +205,12 @@ function deleteAllTasks(): void {
   saveTasksToStorage(taskList)
   toDoList.replaceChildren()
 }
+
 clearAllBtn.addEventListener('click', deleteAllTasks)
-//Event Listeners
 const addTaskHandler = () => addToList(toDoInput.value)
-toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
+const detectKey = (e: KeyboardEvent) => {
   if (e.key === 'Enter') addTaskHandler()
-})
+}
+toDoInput.addEventListener('keydown', detectKey)
 
 addButton.addEventListener('click', addTaskHandler)
