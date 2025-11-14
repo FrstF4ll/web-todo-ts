@@ -128,11 +128,6 @@ function createDeleteBtn(
 // Generate due dates
 function createDate(task: Task): HTMLTimeElement {
   const taskDate = task.date
-  const userDate = new Date(taskDate)
-  const today = new Date()
-  if (userDate < today) {
-  }
-
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
   dueDate.dateTime = taskDate
