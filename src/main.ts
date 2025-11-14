@@ -160,17 +160,15 @@ function renderTask(task: Task): void {
   toDoList.appendChild(newTask)
 }
 
+//To midnight normalization
+function toMidnight(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+}
+
 // Insert data
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
-  function toMidnight(date: Date): number {
-    return new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-    ).getTime()
-  }
 
   const todayMidnight = toMidnight(new Date())
   const selectedMidnight = toMidnight(new Date(dateInput.value))
