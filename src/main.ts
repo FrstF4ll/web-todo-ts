@@ -84,9 +84,7 @@ function createLabel(task: Task): HTMLLabelElement {
   const label = document.createElement('label')
   label.textContent = task.name
   label.htmlFor = task.id
-  task.status
-    ? label.classList.add('completed')
-    : label.classList.remove('completed')
+  label.classList.toggle('completed', task.status)
   return label
 }
 
