@@ -159,8 +159,15 @@ function renderTask(task: Task): void {
   toDoList.appendChild(newTask)
 }
 // Time calculation
-const MS_IN_DAY = 1000 * 60 * 60 * 24
-const DUE_SOON_DAYS_THRESHOLD = 4
+const msInDay = 1000 * 60 * 60 * 24
+const dueSoonDaysThreshold = 4
+
+const DueDateStatus = {
+  PastDue: 'due-date--past-due',
+  DueToday: 'due-date--due-today',
+  DueSoon: 'due-date--due-soon',
+  DueLater: 'due-date--due-later',
+} as const
 
 //To midnight normalization
 function toMidnight(date: Date): number {
@@ -173,7 +180,7 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
 
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dueDate.dateTime))
-  const dayDiff = (selectedDate - today) / MS_IN_DAY
+  const dayDiff = (selectedDate - today) / msInDay
 
   if (Number.isNaN(dayDiff)) {
     return
@@ -181,13 +188,13 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
 
   let statusClass: string
   if (dayDiff < 0) {
-    statusClass = 'due-date--past-due'
+    statusClass = DueDateStatus.PastDue
   } else if (dayDiff === 0) {
-    statusClass = 'due-date--due-today'
-  } else if (dayDiff <= DUE_SOON_DAYS_THRESHOLD) {
-    statusClass = 'due-date--due-soon'
+    statusClass = DueDateStatus.DueToday
+  } else if (dayDiff <= dueSoonDaysThreshold) {
+    statusClass = DueDateStatus.DueSoon
   } else {
-    statusClass = 'due-date--due-later'
+    statusClass = DueDateStatus.DueLater
   }
 
   dueDate.classList.add(statusClass)
