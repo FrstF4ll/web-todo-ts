@@ -1,4 +1,13 @@
 import './style.css'
+// Time calculation
+const dueSoonDaysThreshold = 4
+const msInDay = 1000 * 60 * 60 * 24
+const dueDateStatus = {
+  PastDue: 'due-date--past-due',
+  DueToday: 'due-date--due-today',
+  DueSoon: 'due-date--due-soon',
+  DueLater: 'due-date--due-later',
+}
 
 // Element null check
 function getRequiredElement<T extends HTMLElement>(selector: string): T {
@@ -158,16 +167,6 @@ function renderTask(task: Task): void {
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
   toDoList.appendChild(newTask)
 }
-// Time calculation
-const msInDay = 1000 * 60 * 60 * 24
-const dueSoonDaysThreshold = 4
-
-const DueDateStatus = {
-  PastDue: 'due-date--past-due',
-  DueToday: 'due-date--due-today',
-  DueSoon: 'due-date--due-soon',
-  DueLater: 'due-date--due-later',
-} as const
 
 //To midnight normalization
 function toMidnight(date: Date): number {
@@ -183,15 +182,15 @@ function getStatusClass(dateString: string): string | null {
   }
 
   if (dayDiff < 0) {
-    return DueDateStatus.PastDue
+    return dueDateStatus.PastDue
   }
   if (dayDiff === 0) {
-    return DueDateStatus.DueToday
+    return dueDateStatus.DueToday
   }
   if (dayDiff <= dueSoonDaysThreshold) {
-    return DueDateStatus.DueSoon
+    return dueDateStatus.DueSoon
   }
-  return DueDateStatus.DueLater
+  return dueDateStatus.DueLater
 }
 
 function dateColorSetUp(dueDate: HTMLTimeElement): void {
