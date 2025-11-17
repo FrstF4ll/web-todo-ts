@@ -126,11 +126,13 @@ function createDate(task: Task): HTMLTimeElement {
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
   dueDate.dateTime = taskDate
+  dateColorSetUp(dueDate)
   if (taskDate) {
     dueDate.textContent = taskDate
   } else {
     dueDate.textContent = 'No due date'
   }
+
   return dueDate
 }
 
@@ -161,19 +163,32 @@ function renderTask(task: Task): void {
 function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
+function dateColorSetUp(dueDate: HTMLTimeElement): void {
+  const today = toMidnight(new Date())
+  const selectedDate = toMidnight(new Date(dueDate.dateTime))
+  const dayDiff = (selectedDate - today) / (1000 * 60 * 60 * 24)
+  const dateColor = (c: string) => {
+    dueDate.style.backgroundColor = c
+  }
+  console.log(today, selectedDate, dayDiff)
+  dueDate.style.color = 'black'
+  if (dateInput.value) {
+    if (dayDiff < 0) {
+      dateColor('red')
+    } else if (dayDiff === 0) {
+      dateColor('orange')
+    } else if (dayDiff <= 4) {
+      dateColor('#EBDF07')
+    } else if (dayDiff >= 4) {
+      dateColor('#BEF500')
+    }
+  }
+}
 
 // Insert data
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
-
-  const todayMidnight = toMidnight(new Date())
-  const selectedMidnight = toMidnight(new Date(dateInput.value))
-
-  if (dateInput.value && todayMidnight > selectedMidnight) {
-    showError('Invalid date: date too early')
-    return
-  }
 
   if (!trimmedInput) {
     showError('Invalid task name: Empty name')
