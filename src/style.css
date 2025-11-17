@@ -55,8 +55,10 @@ html {
   --due-date-due-soon: #ebdf07;
   --due-date-due-later: #bef500;
   --due-date-text-color: black;
-}
 
+  /*overdue message */
+  --overdue-msg-size: 1.3rem;
+}
 * {
   font-family: Helvetica, Arial, sans-serif;
   margin: 0;
@@ -89,7 +91,12 @@ header {
 }
 
 #overdue-message {
-  color: var(--danger-color);
+  background-color: var(--danger-color);
+  color: var(--danger-text-color);
+  font-size: var(--overdue-msg-size);
+  margin-top: var(--spacing-sm);
+  padding-block: var(--danger-padding-vertical);
+  border-radius: var(--border-radius-sm);
 }
 button:active {
   transform: scale(0.95);
