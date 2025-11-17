@@ -1,4 +1,13 @@
 import './style.css'
+// Time calculation
+const dueSoonDaysThreshold = 4
+const msInDay = 1000 * 60 * 60 * 24
+const dueDateStatus = {
+  PastDue: 'due-date--past-due',
+  DueToday: 'due-date--due-today',
+  DueSoon: 'due-date--due-soon',
+  DueLater: 'due-date--due-later',
+}
 
 // Element null check
 function getRequiredElement<T extends HTMLElement>(selector: string): T {
@@ -128,9 +137,11 @@ function createDate(task: Task): HTMLTimeElement {
   dueDate.dateTime = taskDate
   if (taskDate) {
     dueDate.textContent = taskDate
+    dateColorSetUp(dueDate)
   } else {
     dueDate.textContent = 'No due date'
   }
+
   return dueDate
 }
 
@@ -161,15 +172,44 @@ function renderTask(task: Task): void {
 function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
+function getStatusClass(dateString: string): string | null {
+  const today = toMidnight(new Date())
+  const selectedDate = toMidnight(new Date(dateString))
+  const dayDiff = (selectedDate - today) / msInDay
+
+  if (Number.isNaN(dayDiff)) {
+    return null
+  }
+
+  if (dayDiff < 0) {
+    return dueDateStatus.PastDue
+  }
+  if (dayDiff === 0) {
+    return dueDateStatus.DueToday
+  }
+  if (dayDiff <= dueSoonDaysThreshold) {
+    return dueDateStatus.DueSoon
+  }
+  return dueDateStatus.DueLater
+}
+
+function dateColorSetUp(dueDate: HTMLTimeElement): void {
+  if (!dueDate.dateTime) {
+    return
+  }
+
+  const statusClass = getStatusClass(dueDate.dateTime)
+  if (statusClass) {
+    dueDate.classList.add(statusClass)
+  }
+}
 
 // Insert data
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
-
   const todayMidnight = toMidnight(new Date())
   const selectedMidnight = toMidnight(new Date(dateInput.value))
-
   if (dateInput.value && todayMidnight > selectedMidnight) {
     showError('Invalid date: date too early')
     return

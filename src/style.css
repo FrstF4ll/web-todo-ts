@@ -49,6 +49,12 @@ html {
   --danger-text-color: white;
   --danger-padding-vertical: 0.25rem;
   --border-radius-sm: 0.25rem;
+  /* due-date*/
+  --due-date-past-due: red;
+  --due-date-due-today: orange;
+  --due-date-due-soon: #ebdf07;
+  --due-date-due-later: #bef500;
+  --due-date-text-color: black;
 }
 
 * {
@@ -82,6 +88,27 @@ h1 {
 button:active {
   transform: scale(0.95);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.due-date {
+  .due-date {
+    color: var(--due-date-text-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+  }
+}
+
+.due-date--past-due {
+  background-color: var(--due-date-past-due);
+}
+.due-date--due-today {
+  background-color: var(--due-date-due-today);
+}
+.due-date--due-soon {
+  background-color: var(--due-date-due-soon);
+}
+.due-date--due-later {
+  background-color: var(--due-date-due-later);
 }
 
 .for-readers {
