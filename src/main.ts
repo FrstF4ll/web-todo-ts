@@ -189,6 +189,12 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
 function addToList(userInput: string): void {
   const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
+  const todayMidnight = toMidnight(new Date())
+  const selectedMidnight = toMidnight(new Date(dateInput.value))
+  if (dateInput.value && todayMidnight > selectedMidnight) {
+    showError('Invalid date: date too early')
+    return
+  }
 
   if (!trimmedInput) {
     showError('Invalid task name: Empty name')
