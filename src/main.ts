@@ -158,6 +158,9 @@ function renderTask(task: Task): void {
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
   toDoList.appendChild(newTask)
 }
+// Time calculation
+const MS_IN_DAY = 1000 * 60 * 60 * 24
+const DUE_SOON_DAYS_THRESHOLD = 4
 
 //To midnight normalization
 function toMidnight(date: Date): number {
@@ -168,9 +171,6 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
     return
   }
 
-  const MS_IN_DAY = 1000 * 60 * 60 * 24
-  const DUE_SOON_DAYS_THRESHOLD = 4
-
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dueDate.dateTime))
   const dayDiff = (selectedDate - today) / MS_IN_DAY
@@ -179,7 +179,7 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
     return
   }
 
-  let statusClass = ''
+  let statusClass: string
   if (dayDiff < 0) {
     statusClass = 'due-date--past-due'
   } else if (dayDiff === 0) {
@@ -190,10 +190,7 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
     statusClass = 'due-date--due-later'
   }
 
-  if (statusClass) {
-    dueDate.classList.add(statusClass)
-    // The base text color should be set in CSS on the .due-date class
-  }
+  dueDate.classList.add(statusClass)
 }
 
 // Insert data

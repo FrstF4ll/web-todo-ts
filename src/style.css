@@ -91,7 +91,7 @@ button:active {
 }
 
 .due-date {
-  color: black;
+  color: var(--due-date-text-color);
 }
 
 .due-date--past-due {
