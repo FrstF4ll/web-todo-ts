@@ -167,21 +167,28 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dueDate.dateTime))
   const MS_TO_DAYS = 1000 * 60 * 60 * 24
-  const dayDiff = (selectedDate - today) / MS_TO_DAYS
   const dateColor = (c: string) => {
     dueDate.style.backgroundColor = c
   }
+  const dueColorsOptions = {
+    pastDue: 'red',
+    dueToday: 'orange',
+    dueSoon: '#EBDF07',
+    dueLater: '#BEF500',
+  }
+
+  const dayDiff = (selectedDate - today) / MS_TO_DAYS
   console.log(today, selectedDate, dayDiff)
   dueDate.style.color = 'black'
-  if (dueDate.dateTime && !isNaN(dayDiff)) {
+  if (dueDate.dateTime && !Number.isNaN(dayDiff)) {
     if (dayDiff < 0) {
-      dateColor('red')
+      dateColor(dueColorsOptions.pastDue)
     } else if (dayDiff === 0) {
-      dateColor('orange')
+      dateColor(dueColorsOptions.dueToday)
     } else if (dayDiff <= 4) {
-      dateColor('#EBDF07')
+      dateColor(dueColorsOptions.dueSoon)
     } else {
-      dateColor('#BEF500')
+      dateColor(dueColorsOptions.dueLater)
     }
   }
 }
