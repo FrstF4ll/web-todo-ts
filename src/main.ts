@@ -172,7 +172,8 @@ function renderTask(task: Task): void {
 function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
-function getStatusClass(dateString: string): string | null {
+
+function timeVerification(dateString: string): string | null {
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dateString))
   const dayDiff = (selectedDate - today) / msInDay
@@ -198,9 +199,9 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
     return
   }
 
-  const statusClass = getStatusClass(dueDate.dateTime)
-  if (statusClass) {
-    dueDate.classList.add(statusClass)
+  const verifiedTime = timeVerification(dueDate.dateTime)
+  if (verifiedTime) {
+    dueDate.classList.add(verifiedTime)
   }
 }
 

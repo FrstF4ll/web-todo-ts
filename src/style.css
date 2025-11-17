@@ -44,7 +44,7 @@ html {
 
   /*delete all*/
   --spacing-sm: 0.75rem;
-  --danger-color: #e74c3c; /* red for destructive actions */
+  --danger-color: #e74c3c;
   --danger-hover-color: #c0392b; /* darker red on hover */
   --danger-text-color: white;
   --danger-padding-vertical: 0.25rem;
@@ -79,12 +79,18 @@ header {
   max-height: var(--header-max-height);
 }
 
-h1 {
+main {
   grid-row: 1;
   grid-column: 2;
   text-align: center;
+  background-color: var(--list-bg-color);
+  border-radius: var(--input-border-radius);
+  padding: var(--list-padding);
 }
 
+#overdue-message {
+  color: var(--danger-color);
+}
 button:active {
   transform: scale(0.95);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
