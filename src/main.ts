@@ -172,14 +172,14 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
   }
   console.log(today, selectedDate, dayDiff)
   dueDate.style.color = 'black'
-  if (dateInput.value) {
+  if (dueDate.dateTime && !isNaN(dayDiff)) {
     if (dayDiff < 0) {
       dateColor('red')
     } else if (dayDiff === 0) {
       dateColor('orange')
     } else if (dayDiff <= 4) {
       dateColor('#EBDF07')
-    } else if (dayDiff >= 4) {
+    } else {
       dateColor('#BEF500')
     }
   }
