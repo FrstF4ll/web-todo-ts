@@ -97,11 +97,9 @@ button:active {
 }
 
 .due-date {
-  .due-date {
-    color: var(--due-date-text-color);
-    padding: 0.2rem 0.5rem;
-    border-radius: var(--border-radius-sm);
-  }
+  color: var(--due-date-text-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--border-radius-sm);
 }
 
 .due-date--past-due {
