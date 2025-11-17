@@ -164,32 +164,35 @@ function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 function dateColorSetUp(dueDate: HTMLTimeElement): void {
-  const today = toMidnight(new Date())
-  const selectedDate = toMidnight(new Date(dueDate.dateTime))
-  const MS_TO_DAYS = 1000 * 60 * 60 * 24
-  const dateColor = (c: string) => {
-    dueDate.style.backgroundColor = c
-  }
-  const dueColorsOptions = {
-    pastDue: 'red',
-    dueToday: 'orange',
-    dueSoon: '#EBDF07',
-    dueLater: '#BEF500',
+  if (!dueDate.dateTime) {
+    return
   }
 
-  const dayDiff = (selectedDate - today) / MS_TO_DAYS
-  console.log(today, selectedDate, dayDiff)
-  dueDate.style.color = 'black'
-  if (dueDate.dateTime && !Number.isNaN(dayDiff)) {
-    if (dayDiff < 0) {
-      dateColor(dueColorsOptions.pastDue)
-    } else if (dayDiff === 0) {
-      dateColor(dueColorsOptions.dueToday)
-    } else if (dayDiff <= 4) {
-      dateColor(dueColorsOptions.dueSoon)
-    } else {
-      dateColor(dueColorsOptions.dueLater)
-    }
+  const MS_IN_DAY = 1000 * 60 * 60 * 24
+  const DUE_SOON_DAYS_THRESHOLD = 4
+
+  const today = toMidnight(new Date())
+  const selectedDate = toMidnight(new Date(dueDate.dateTime))
+  const dayDiff = (selectedDate - today) / MS_IN_DAY
+
+  if (Number.isNaN(dayDiff)) {
+    return
+  }
+
+  let statusClass = ''
+  if (dayDiff < 0) {
+    statusClass = 'due-date--past-due'
+  } else if (dayDiff === 0) {
+    statusClass = 'due-date--due-today'
+  } else if (dayDiff <= DUE_SOON_DAYS_THRESHOLD) {
+    statusClass = 'due-date--due-soon'
+  } else {
+    statusClass = 'due-date--due-later'
+  }
+
+  if (statusClass) {
+    dueDate.classList.add(statusClass)
+    // The base text color should be set in CSS on the .due-date class
   }
 }
 
