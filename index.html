@@ -10,8 +10,11 @@
 </head>
 
 <body>
-  <header>
-    <h1>Web todolist app</h1>
+  <main id="title">
+    <header>
+      <h1>Web todolist app</h1>
+      <h2 id="overdue-message" class="hidden">You have overdued tasks !</h2>
+    </header>
     <section id="user-input">
       <div class="test">
         <label for="todo-input" id="todo-label">New Task</label>
@@ -24,12 +27,12 @@
         <label for="todo-date-input" class="for-readers">Due date</label>
       </div>
     </section>
-  </header>
-  <main class="todo-list">
+  </main>
+  <section class="todo-list">
     <button id="delete-all">Clear tasks</button>
     <ul>
     </ul>
-  </main>
+  </section>
   <script type="module" src="/src/main.ts"></script>
 </body>
 

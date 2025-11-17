@@ -33,7 +33,7 @@ const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
 const dateInput = getRequiredElement<HTMLInputElement>('#todo-date-input')
-
+const overdueMsg = getRequiredElement<HTMLHeadingElement>('#overdue-message')
 // Show or hide error message
 const showError = (message: string) => {
   errorMsg.classList.remove('hidden')
@@ -81,6 +81,12 @@ function saveTasksToStorage(tasks: Task[]): void {
 //Task rendering
 taskList.forEach(renderTask)
 
+function isOverdue() {
+  const overduedTasks = document.querySelectorAll('.due-date--past-due')
+  overdueMsg.classList.toggle('hidden', overduedTasks.length === 0)
+}
+isOverdue()
+
 //Generate list elements
 function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement('li')
@@ -125,7 +131,10 @@ function createDeleteBtn(task: Task): HTMLButtonElement {
     deleteBtn.closest('.todo-elements')?.remove()
   }
 
-  deleteBtn.addEventListener('click', deleteAction)
+  deleteBtn.addEventListener('click', () => {
+    deleteAction()
+    isOverdue()
+  })
   return deleteBtn
 }
 
@@ -154,7 +163,6 @@ function renderTask(task: Task): void {
   const dueDate = createDate(task)
   const checkboxLabelWrapper = document.createElement('p')
   const dueDateDeleteWrapper = document.createElement('p')
-
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
@@ -172,7 +180,8 @@ function renderTask(task: Task): void {
 function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
-function getStatusClass(dateString: string): string | null {
+
+function timeVerification(dateString: string): string | null {
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dateString))
   const dayDiff = (selectedDate - today) / msInDay
@@ -198,9 +207,9 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
     return
   }
 
-  const statusClass = getStatusClass(dueDate.dateTime)
-  if (statusClass) {
-    dueDate.classList.add(statusClass)
+  const verifiedTime = timeVerification(dueDate.dateTime)
+  if (verifiedTime) {
+    dueDate.classList.add(verifiedTime)
   }
 }
 
