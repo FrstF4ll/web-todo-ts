@@ -166,7 +166,8 @@ function toMidnight(date: Date): number {
 function dateColorSetUp(dueDate: HTMLTimeElement): void {
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dueDate.dateTime))
-  const dayDiff = (selectedDate - today) / (1000 * 60 * 60 * 24)
+  const MS_TO_DAYS = 1000 * 60 * 60 * 24
+  const dayDiff = (selectedDate - today) / MS_TO_DAYS
   const dateColor = (c: string) => {
     dueDate.style.backgroundColor = c
   }
