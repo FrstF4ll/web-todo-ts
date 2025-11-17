@@ -126,9 +126,9 @@ function createDate(task: Task): HTMLTimeElement {
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
   dueDate.dateTime = taskDate
-  dateColorSetUp(dueDate)
   if (taskDate) {
     dueDate.textContent = taskDate
+    dateColorSetUp(dueDate)
   } else {
     dueDate.textContent = 'No due date'
   }
