@@ -173,31 +173,36 @@ const DueDateStatus = {
 function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
+function getStatusClass(dateString: string): string | null {
+  const today = toMidnight(new Date())
+  const selectedDate = toMidnight(new Date(dateString))
+  const dayDiff = (selectedDate - today) / msInDay
+
+  if (Number.isNaN(dayDiff)) {
+    return null
+  }
+
+  if (dayDiff < 0) {
+    return DueDateStatus.PastDue
+  }
+  if (dayDiff === 0) {
+    return DueDateStatus.DueToday
+  }
+  if (dayDiff <= dueSoonDaysThreshold) {
+    return DueDateStatus.DueSoon
+  }
+  return DueDateStatus.DueLater
+}
+
 function dateColorSetUp(dueDate: HTMLTimeElement): void {
   if (!dueDate.dateTime) {
     return
   }
 
-  const today = toMidnight(new Date())
-  const selectedDate = toMidnight(new Date(dueDate.dateTime))
-  const dayDiff = (selectedDate - today) / msInDay
-
-  if (Number.isNaN(dayDiff)) {
-    return
+  const statusClass = getStatusClass(dueDate.dateTime)
+  if (statusClass) {
+    dueDate.classList.add(statusClass)
   }
-
-  let statusClass: string
-  if (dayDiff < 0) {
-    statusClass = DueDateStatus.PastDue
-  } else if (dayDiff === 0) {
-    statusClass = DueDateStatus.DueToday
-  } else if (dayDiff <= dueSoonDaysThreshold) {
-    statusClass = DueDateStatus.DueSoon
-  } else {
-    statusClass = DueDateStatus.DueLater
-  }
-
-  dueDate.classList.add(statusClass)
 }
 
 // Insert data
