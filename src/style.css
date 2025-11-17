@@ -91,7 +91,11 @@ button:active {
 }
 
 .due-date {
-  color: var(--due-date-text-color);
+  .due-date {
+    color: var(--due-date-text-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+  }
 }
 
 .due-date--past-due {
@@ -186,9 +190,7 @@ ul {
 
   /*animation*/
   cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #delete-all:hover {
