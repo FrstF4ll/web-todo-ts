@@ -18,13 +18,19 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 //Interface
 interface Task {
   id: string
-  name: string
-  status: boolean
-  date: string
+  title: string
+  content: string
+  due_date: string
+  done: boolean
 }
 
-//Storage keys
-const TASKS_STORAGE_KEY = 'tasks'
+// Type
+type TaskCreation = Omit<Task, 'id'>
+
+// API endpoints
+const TODOS_API_ENDPOINT = 'todos'
+const CATEGORIES_API_ENDPOINT = 'categories'
+const CATEGORIES_TODO_API_ENDPOINT = 'categories_todos'
 
 // DOM
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
@@ -44,42 +50,39 @@ const hideError = () => {
   errorMsg.textContent = ''
 }
 
-//Check invalid local storage data
+//Check type of data, prevent invalid types
 function isTask(item: unknown): item is Task {
   if (typeof item !== 'object' || item === null) return false
   const task = item as Record<string, unknown>
   return (
-    typeof task.name === 'string' &&
-    typeof task.status === 'boolean' &&
     typeof task.id === 'string' &&
-    typeof task.date === 'string'
+    typeof task.title === 'string' &&
+    typeof task.content === 'string' &&
+    typeof task.due_date === 'string' &&
+    typeof task.done === 'boolean'
   )
 }
 
-//Get local storage data
-const taskList: Task[] = (() => {
+//Get API data
+async function getTasks(getData: string) {
+  const todoUrl = `https://api.todos.in.jt-lab.ch/${getData}`
   try {
-    const storedTasks = localStorage.getItem(TASKS_STORAGE_KEY)
-    if (storedTasks) {
-      const parsed: unknown = JSON.parse(storedTasks)
-      if (Array.isArray(parsed) && parsed.every(isTask)) {
-        return parsed as Task[]
-      }
-      return []
+    const response = await fetch(todoUrl)
+    if (!response.ok) {
+      throw new Error(`HTTP error, status :${response.status}`)
     }
+    const fetchedData = await response.json()
+    if (Array.isArray(fetchedData) && fetchedData.every(isTask)) {
+      return fetchedData as Task[]
+    }
+    return []
   } catch (error) {
-    console.error('Failed to load tasks from localStorage:', error)
+    console.error('Failed to fetch data', error)
   }
   return []
-})()
-
-//Task saving to localStorage
-function saveTasksToStorage(tasks: Task[]): void {
-  localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks))
 }
 
-//Task rendering
-taskList.forEach(renderTask)
+console.log(getTasks('todos'))
 
 function isOverdue() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
@@ -95,51 +98,36 @@ function createNewTaskElements(): HTMLLIElement {
 }
 
 //Generate label
-function createLabel(task: Task): HTMLLabelElement {
+function createLabel(task: TaskCreation): HTMLLabelElement {
   const label = document.createElement('label')
   label.textContent = task.name
-  label.htmlFor = task.id
   label.classList.toggle('completed', task.status)
   return label
 }
 
 //Generate checkbox
-function createCheckbox(task: Task): HTMLInputElement {
+function createCheckbox(task: TaskCreation): HTMLInputElement {
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.status
-  checkbox.id = task.id
   return checkbox
 }
 
 //Generate delete button
-function createDeleteBtn(task: Task): HTMLButtonElement {
+function createDeleteBtn(task: TaskCreation): HTMLButtonElement {
   const deleteBtn = document.createElement('button')
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
   deleteBtn.textContent = 'X'
   deleteBtn.ariaLabel = `Delete task: ${task.name}`
+  //Implement deletion in API here
 
-  function deleteAction(): void {
-    const taskIndex = taskList.findIndex((obj) => obj.id === task.id)
-    if (taskIndex > -1) {
-      taskList.splice(taskIndex, 1)
-    }
-
-    saveTasksToStorage(taskList)
-    deleteBtn.closest('.todo-elements')?.remove()
-  }
-
-  deleteBtn.addEventListener('click', () => {
-    deleteAction()
-    isOverdue()
-  })
   return deleteBtn
 }
 
 // Generate due dates
-function createDate(task: Task): HTMLTimeElement {
+function createDate(task: TaskCreation): HTMLTimeElement {
   const taskDate = task.date
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
@@ -155,7 +143,7 @@ function createDate(task: Task): HTMLTimeElement {
 }
 
 // Rendering function
-function renderTask(task: Task): void {
+function renderTask(task: TaskCreation): void {
   const checkbox = createCheckbox(task)
   const label = createLabel(task)
   const newTask = createNewTaskElements()
@@ -181,7 +169,8 @@ function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 
-function timeVerification(dateString: string): string | null {
+//Dynamic color switch depending on due dates
+function dueColor(dateString: string): string | null {
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dateString))
   const dayDiff = (selectedDate - today) / msInDay
@@ -207,7 +196,7 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
     return
   }
 
-  const verifiedTime = timeVerification(dueDate.dateTime)
+  const verifiedTime = dueColor(dueDate.dateTime)
   if (verifiedTime) {
     dueDate.classList.add(verifiedTime)
   }
@@ -215,10 +204,11 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
 
 // Insert data
 function addToList(userInput: string): void {
-  const uniqueId = crypto.randomUUID()
   const trimmedInput = userInput.trim()
   const todayMidnight = toMidnight(new Date())
   const selectedMidnight = toMidnight(new Date(dateInput.value))
+
+  //Check later for eventual flaw in the logics
   if (dateInput.value && todayMidnight > selectedMidnight) {
     showError('Invalid date: date too early')
     return
@@ -230,29 +220,12 @@ function addToList(userInput: string): void {
   }
   hideError()
 
-  const newTask: Task = {
-    name: trimmedInput,
-    status: false,
-    id: uniqueId,
-    date: dateInput.value,
-  }
-  taskList.push(newTask)
-  saveTasksToStorage(taskList)
-  renderTask(newTask)
-  toDoInput.value = ''
+  // POST API Methods
 }
 
 // Delete all
 function deleteAllTasks(): void {
-  if (taskList.length === 0) {
-    return
-  }
-  if (!window.confirm('Are you sure you want to delete all tasks?')) {
-    return
-  }
-  taskList.length = 0
-  saveTasksToStorage(taskList)
-  toDoList.replaceChildren()
+  //DELETE(ALL) API  METHODS
 }
 
 clearAllBtn.addEventListener('click', deleteAllTasks)
