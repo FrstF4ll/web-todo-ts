@@ -33,7 +33,7 @@ const toDoList = getRequiredElement<HTMLUListElement>('ul')
 const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
 const dateInput = getRequiredElement<HTMLInputElement>('#todo-date-input')
-
+const overdueMsg = getRequiredElement<HTMLHeadingElement>('#overdue-message')
 // Show or hide error message
 const showError = (message: string) => {
   errorMsg.classList.remove('hidden')
@@ -81,6 +81,16 @@ function saveTasksToStorage(tasks: Task[]): void {
 //Task rendering
 taskList.forEach(renderTask)
 
+function isOverdue() {
+  const overduedTasks = document.querySelectorAll('.due-date--past-due')
+  if (overduedTasks.length !== 0) {
+    overdueMsg.classList.remove('hidden')
+  } else if (overduedTasks.length === 0) {
+    overdueMsg.classList.add('hidden')
+  }
+}
+isOverdue()
+
 //Generate list elements
 function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement('li')
@@ -125,7 +135,10 @@ function createDeleteBtn(task: Task): HTMLButtonElement {
     deleteBtn.closest('.todo-elements')?.remove()
   }
 
-  deleteBtn.addEventListener('click', deleteAction)
+  deleteBtn.addEventListener('click', () => {
+    deleteAction()
+    isOverdue()
+  })
   return deleteBtn
 }
 
@@ -154,7 +167,6 @@ function renderTask(task: Task): void {
   const dueDate = createDate(task)
   const checkboxLabelWrapper = document.createElement('p')
   const dueDateDeleteWrapper = document.createElement('p')
-
   checkbox.addEventListener('change', () => {
     task.status = checkbox.checked
     saveTasksToStorage(taskList)
