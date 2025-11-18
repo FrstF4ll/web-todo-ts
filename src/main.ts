@@ -83,11 +83,7 @@ taskList.forEach(renderTask)
 
 function isOverdue() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
-  if (overduedTasks.length !== 0) {
-    overdueMsg.classList.remove('hidden')
-  } else if (overduedTasks.length === 0) {
-    overdueMsg.classList.add('hidden')
-  }
+  overdueMsg.classList.toggle('hidden', overduedTasks.length === 0)
 }
 isOverdue()
 
