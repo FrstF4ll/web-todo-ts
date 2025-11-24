@@ -202,23 +202,6 @@ function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 
-function checkDataInsertion(): boolean {
-  const todayMidnight = toMidnight(new Date())
-  const selectedMidnight = toMidnight(new Date(dateInput.value))
-  const trimmedInput = toDoInput.value.trim()
-  //Check later for eventual flaw in the logics
-  if (dateInput.value && todayMidnight > selectedMidnight) {
-    showError('Invalid date: date too early')
-    return false
-  }
-  if (!trimmedInput) {
-    showError('Invalid task name: Empty name')
-    return false
-  }
-  hideError()
-  return true
-}
-
 // Create the task on the dom
 function createTask(task: clientTask): void {
   const checkbox = createCheckbox(task)
@@ -243,10 +226,26 @@ function createTask(task: clientTask): void {
 
 // Check data
 function addToList(task: clientTask): void {
+  const trimmed = task.title.trim()
+  const selectedDate = dateInput.value
+  const todayMidnight = toMidnight(new Date())
+  const selectedMidnight = toMidnight(new Date(selectedDate))
+
+  if (selectedDate && todayMidnight > selectedMidnight) {
+    showError('Invalid date: date too early')
+    return
+  }
+  if (trimmed.length === 0) {
+    showError('Invalid task name: Empty name')
+    return
+  }
+
+  hideError()
+
   const newTask: clientTask = {
-    title: task.title,
+    title: trimmed,
     content: task.content,
-    due_date: task.due_date,
+    due_date: selectedDate,
     done: task.done,
   }
   postData(API_URL_TODOS, newTask)
