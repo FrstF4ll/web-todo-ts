@@ -16,21 +16,22 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
   return el
 }
 //Interface
-interface Task {
-  id: string
+
+interface clientTask {
   title: string
   content: string
   due_date: string
   done: boolean
 }
 
-// Type
-type TaskCreation = Omit<Task, 'id'>
+interface Task extends clientTask {
+  id: string
+}
 
 // API endpoints
-const TODOS_API_ENDPOINT = 'todos'
-const CATEGORIES_API_ENDPOINT = 'categories'
-const CATEGORIES_TODO_API_ENDPOINT = 'categories_todos'
+const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
+// const CATEGORIES_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories'
+// const CATEGORIES_TODO_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories_todos'
 
 // DOM
 const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
@@ -40,6 +41,7 @@ const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
 const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
 const dateInput = getRequiredElement<HTMLInputElement>('#todo-date-input')
 const overdueMsg = getRequiredElement<HTMLHeadingElement>('#overdue-message')
+
 // Show or hide error message
 const showError = (message: string) => {
   errorMsg.classList.remove('hidden')
@@ -50,8 +52,8 @@ const hideError = () => {
   errorMsg.textContent = ''
 }
 
-//Check type of data, prevent invalid types
-function isTask(item: unknown): item is Task {
+//Data type check
+function isTask(item: unknown): item is clientTask {
   if (typeof item !== 'object' || item === null) return false
   const task = item as Record<string, unknown>
   return (
@@ -63,27 +65,80 @@ function isTask(item: unknown): item is Task {
   )
 }
 
+//API error handling
+function handleApiError(response: Response) {
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error, status : ${response.status}. Details: ${response.statusText}`,
+    )
+  }
+}
+
 //Get API data
-async function getTasks(getData: string) {
-  const todoUrl = `https://api.todos.in.jt-lab.ch/${getData}`
+async function getData<T>(apiURL: string): Promise<T[]> {
   try {
-    const response = await fetch(todoUrl)
-    if (!response.ok) {
-      throw new Error(`HTTP error, status :${response.status}`)
-    }
+    const response = await fetch(apiURL, {
+      method: 'GET',
+    })
+    await handleApiError(response)
     const fetchedData = await response.json()
-    if (Array.isArray(fetchedData) && fetchedData.every(isTask)) {
-      return fetchedData as Task[]
+    if (Array.isArray(fetchedData)) {
+      const validTasks = fetchedData.filter((item) => isTask(item))
+      return validTasks as T[]
     }
-    return []
   } catch (error) {
     console.error('Failed to fetch data', error)
   }
-  return []
+  return [] as T[]
 }
 
-console.log(getTasks('todos'))
+//Post request
 
+async function postData<C, T>(apiURL: string, newDatas: C): Promise<T> {
+  try {
+    const response = await fetch(apiURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newDatas),
+    })
+    await handleApiError(response)
+    const createdData: unknown = await response.json()
+    return createdData as T
+  } catch (error) {
+    console.error(`Data failed to post to ${apiURL}:`, error)
+    throw error
+  }
+}
+
+//Patch request
+async function patchData<C, R>(
+  apiURL: string,
+  taskId: string,
+  updatedDatas: C,
+): Promise<R> {
+  const completeURL = `${apiURL}/${taskId}`
+  try {
+    const response = await fetch(completeURL, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedDatas),
+    })
+    await handleApiError(response)
+    const updatedResource: unknown = await response.json()
+    return updatedResource as R
+  } catch (error) {
+    console.error(`Patch failed for task ${taskId} at ${completeURL}:`, error)
+    throw error
+  }
+}
+
+getData(API_URL_TODOS)
+
+//Not API
 function isOverdue() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
   overdueMsg.classList.toggle('hidden', overduedTasks.length === 0)
@@ -98,37 +153,37 @@ function createNewTaskElements(): HTMLLIElement {
 }
 
 //Generate label
-function createLabel(task: TaskCreation): HTMLLabelElement {
+function createLabel(task: clientTask): HTMLLabelElement {
   const label = document.createElement('label')
-  label.textContent = task.name
-  label.classList.toggle('completed', task.status)
+  label.textContent = task.title
+  label.classList.toggle('completed', task.done)
   return label
 }
 
 //Generate checkbox
-function createCheckbox(task: TaskCreation): HTMLInputElement {
+function createCheckbox(task: clientTask): HTMLInputElement {
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.className = 'todo-elements__checkbox'
-  checkbox.checked = task.status
+  checkbox.checked = task.done
   return checkbox
 }
 
 //Generate delete button
-function createDeleteBtn(task: TaskCreation): HTMLButtonElement {
+function createDeleteBtn(task: clientTask): HTMLButtonElement {
   const deleteBtn = document.createElement('button')
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
   deleteBtn.textContent = 'X'
-  deleteBtn.ariaLabel = `Delete task: ${task.name}`
+  deleteBtn.ariaLabel = `Delete task: ${task.title}`
   //Implement deletion in API here
 
   return deleteBtn
 }
 
 // Generate due dates
-function createDate(task: TaskCreation): HTMLTimeElement {
-  const taskDate = task.date
+function createDate(task: clientTask): HTMLTimeElement {
+  const taskDate = task.due_date
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
   dueDate.dateTime = taskDate
@@ -142,8 +197,30 @@ function createDate(task: TaskCreation): HTMLTimeElement {
   return dueDate
 }
 
-// Rendering function
-function renderTask(task: TaskCreation): void {
+//To midnight normalization
+function toMidnight(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+}
+
+function checkDataInsertion(): boolean {
+  const todayMidnight = toMidnight(new Date())
+  const selectedMidnight = toMidnight(new Date(dateInput.value))
+  const trimmedInput = toDoInput.value.trim()
+  //Check later for eventual flaw in the logics
+  if (dateInput.value && todayMidnight > selectedMidnight) {
+    showError('Invalid date: date too early')
+    return false
+  }
+  if (!trimmedInput) {
+    showError('Invalid task name: Empty name')
+    return false
+  }
+  hideError()
+  return true
+}
+
+// Create the task on the dom
+function createTask(task: clientTask): void {
   const checkbox = createCheckbox(task)
   const label = createLabel(task)
   const newTask = createNewTaskElements()
@@ -151,9 +228,9 @@ function renderTask(task: TaskCreation): void {
   const dueDate = createDate(task)
   const checkboxLabelWrapper = document.createElement('p')
   const dueDateDeleteWrapper = document.createElement('p')
+
   checkbox.addEventListener('change', () => {
-    task.status = checkbox.checked
-    saveTasksToStorage(taskList)
+    task.done = checkbox.checked
     label.classList.toggle('completed', checkbox.checked)
   })
 
@@ -164,9 +241,15 @@ function renderTask(task: TaskCreation): void {
   toDoList.appendChild(newTask)
 }
 
-//To midnight normalization
-function toMidnight(date: Date): number {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+// Check data
+function addToList(task: clientTask): void {
+  const newTask: clientTask = {
+    title: task.title,
+    content: task.content,
+    due_date: task.due_date,
+    done: task.done,
+  }
+  postData(API_URL_TODOS, newTask)
 }
 
 //Dynamic color switch depending on due dates
@@ -202,34 +285,13 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
   }
 }
 
-// Insert data
-function addToList(userInput: string): void {
-  const trimmedInput = userInput.trim()
-  const todayMidnight = toMidnight(new Date())
-  const selectedMidnight = toMidnight(new Date(dateInput.value))
-
-  //Check later for eventual flaw in the logics
-  if (dateInput.value && todayMidnight > selectedMidnight) {
-    showError('Invalid date: date too early')
-    return
-  }
-
-  if (!trimmedInput) {
-    showError('Invalid task name: Empty name')
-    return
-  }
-  hideError()
-
-  // POST API Methods
-}
-
 // Delete all
 function deleteAllTasks(): void {
   //DELETE(ALL) API  METHODS
 }
 
 clearAllBtn.addEventListener('click', deleteAllTasks)
-const addTaskHandler = () => addToList(toDoInput.value)
+const addTaskHandler = () => addToList()
 const detectKey = (e: KeyboardEvent) => {
   if (e.key === 'Enter') addTaskHandler()
 }
