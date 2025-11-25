@@ -19,8 +19,7 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 
 interface clientTask {
   title: string
-  content: string
-  due_date: string
+  due_date: string | null
   done: boolean
 }
 
@@ -53,24 +52,26 @@ const hideError = () => {
 }
 
 //Data type check
-function isTask(item: unknown): item is clientTask {
-  if (typeof item !== 'object' || item === null) return false
-  const task = item as Record<string, unknown>
-  return (
-    typeof task.id === 'string' &&
-    typeof task.title === 'string' &&
-    typeof task.content === 'string' &&
-    typeof task.due_date === 'string' &&
-    typeof task.done === 'boolean'
-  )
-}
+// function isTask(item: unknown): item is Task {
+//   if (typeof item !== 'object' || item === null) return false
+//   const task = item as Record<string, unknown>
+//   return (
+//     typeof task.id === 'string' &&
+//     typeof task.title === 'string' &&
+//     typeof task.due_date === 'string' || typeof task.due_date === null &&
+//     typeof task.done === 'boolean'
+//   )
+// }
 
 //API error handling
-function handleApiError(response: Response) {
+async function handleApiError(response: Response): Promise<void> {
   if (!response.ok) {
-    throw new Error(
-      `HTTP error, status : ${response.status}. Details: ${response.statusText}`,
-    )
+    let errorDetails = `HTTP Error ${response.status}: ${response.statusText}.`
+    try {
+      const errorBody = await response.json()
+      errorDetails += ` Server Message: ${JSON.stringify(errorBody)}`
+    } catch (e) {}
+    throw new Error(errorDetails)
   }
 }
 
@@ -80,21 +81,29 @@ async function getData<T>(apiURL: string): Promise<T[]> {
     const response = await fetch(apiURL, {
       method: 'GET',
     })
+
     await handleApiError(response)
+
+    if (response.status === 204) {
+      return [] as T[]
+    }
     const fetchedData = await response.json()
     if (Array.isArray(fetchedData)) {
-      const validTasks = fetchedData.filter((item) => isTask(item))
-      return validTasks as T[]
+      return fetchedData as T[]
     }
+    console.warn(`API at ${apiURL} returned data, but it was not an array`)
+    return [] as T[]
   } catch (error) {
     console.error('Failed to fetch data', error)
+    throw error
   }
-  return [] as T[]
 }
 
 //Post request
-
-async function postData<C, T>(apiURL: string, newDatas: C): Promise<T> {
+async function postData<Task>(
+  apiURL: string,
+  newDatas: clientTask,
+): Promise<Task | null> {
   try {
     const response = await fetch(apiURL, {
       method: 'POST',
@@ -104,10 +113,18 @@ async function postData<C, T>(apiURL: string, newDatas: C): Promise<T> {
       body: JSON.stringify(newDatas),
     })
     await handleApiError(response)
-    const createdData: unknown = await response.json()
-    return createdData as T
+
+    if (response.status === 204) {
+      return null
+    }
+    const text = await response.text()
+    if (!text) {
+      return null
+    }
+    const createdData: unknown = JSON.parse(text)
+    return createdData as Task
   } catch (error) {
-    console.error(`Data failed to post to ${apiURL}:`, error)
+    console.error(`Data failed to post to ${apiURL}: `, error)
     throw error
   }
 }
@@ -115,10 +132,10 @@ async function postData<C, T>(apiURL: string, newDatas: C): Promise<T> {
 //Patch request
 async function patchData<C, R>(
   apiURL: string,
-  taskId: string,
+  currentTask: string,
   updatedDatas: C,
-): Promise<R> {
-  const completeURL = `${apiURL}/${taskId}`
+): Promise<R | null> {
+  const completeURL = `${apiURL}/${currentTask}`
   try {
     const response = await fetch(completeURL, {
       method: 'PATCH',
@@ -128,15 +145,20 @@ async function patchData<C, R>(
       body: JSON.stringify(updatedDatas),
     })
     await handleApiError(response)
+    if (response.status === 204) {
+      return null as R
+    }
+
     const updatedResource: unknown = await response.json()
     return updatedResource as R
   } catch (error) {
-    console.error(`Patch failed for task ${taskId} at ${completeURL}:`, error)
+    console.error(
+      `Patch failed for task ${currentTask} at ${completeURL}:`,
+      error,
+    )
     throw error
   }
 }
-
-getData(API_URL_TODOS)
 
 //Not API
 function isOverdue() {
@@ -186,8 +208,8 @@ function createDate(task: clientTask): HTMLTimeElement {
   const taskDate = task.due_date
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
-  dueDate.dateTime = taskDate
   if (taskDate) {
+    dueDate.dateTime = taskDate
     dueDate.textContent = taskDate
     dateColorSetUp(dueDate)
   } else {
@@ -201,6 +223,7 @@ function createDate(task: clientTask): HTMLTimeElement {
 function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
+// Render task from database
 
 // Create the task on the dom
 function createTask(task: clientTask): void {
@@ -212,10 +235,13 @@ function createTask(task: clientTask): void {
   const checkboxLabelWrapper = document.createElement('p')
   const dueDateDeleteWrapper = document.createElement('p')
 
-  checkbox.addEventListener('change', () => {
-    task.done = checkbox.checked
-    label.classList.toggle('completed', checkbox.checked)
-  })
+  //  checkbox.addEventListener('change', () => {
+  //  const isDone = checkbox.checked
+  // const updatePayload = { done: isDone }
+  // patchData(API_URL_TODOS, , updatePayload)
+  //label.classList.toggle('completed', isDone)
+  // task.done = isDone
+  // })
 
   //Append elements
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
@@ -224,12 +250,11 @@ function createTask(task: clientTask): void {
   toDoList.appendChild(newTask)
 }
 
-// Check data
-function addToList(task: clientTask): void {
-  const trimmed = task.title.trim()
+async function addToList(): Promise<void> {
+  const trimmed = toDoInput.value.trim()
   const selectedDate = dateInput.value
-  const todayMidnight = toMidnight(new Date())
   const selectedMidnight = toMidnight(new Date(selectedDate))
+  const todayMidnight = toMidnight(new Date())
 
   if (selectedDate && todayMidnight > selectedMidnight) {
     showError('Invalid date: date too early')
@@ -241,14 +266,27 @@ function addToList(task: clientTask): void {
   }
 
   hideError()
-
   const newTask: clientTask = {
     title: trimmed,
-    content: task.content,
-    due_date: selectedDate,
-    done: task.done,
+    due_date: selectedDate || null,
+    done: false,
   }
-  postData(API_URL_TODOS, newTask)
+  try {
+    createTask(newTask)
+    const fullTask = await postData<Task>(API_URL_TODOS, newTask)
+
+    if (fullTask) {
+      createTask(fullTask)
+    } else {
+      console.warn('Successfully posted but no content in return')
+    }
+  } catch (error) {
+    console.error('Task creation failed:', error)
+    showError('Failed to create task. Check API status or console for details')
+    return
+  }
+  toDoInput.value = ''
+  dateInput.value = ''
 }
 
 //Dynamic color switch depending on due dates
@@ -284,16 +322,23 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
   }
 }
 
+// Get all
+getData<Task>(API_URL_TODOS).then((tasks: Task[]) =>
+  tasks.forEach((task) => {
+    createTask(task)
+  }),
+)
+
 // Delete all
 function deleteAllTasks(): void {
   //DELETE(ALL) API  METHODS
 }
 
-clearAllBtn.addEventListener('click', deleteAllTasks)
 const addTaskHandler = () => addToList()
 const detectKey = (e: KeyboardEvent) => {
   if (e.key === 'Enter') addTaskHandler()
 }
-toDoInput.addEventListener('keydown', detectKey)
 
+toDoInput.addEventListener('keydown', detectKey)
+clearAllBtn.addEventListener('click', deleteAllTasks)
 addButton.addEventListener('click', addTaskHandler)
