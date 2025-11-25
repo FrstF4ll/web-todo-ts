@@ -88,6 +88,7 @@ async function getData<T>(apiURL: string): Promise<T[]> {
       return [] as T[]
     }
     const fetchedData = await response.json()
+
     if (Array.isArray(fetchedData)) {
       return fetchedData as T[]
     }
@@ -102,7 +103,7 @@ async function getData<T>(apiURL: string): Promise<T[]> {
 //Post request
 async function postData<Task>(
   apiURL: string,
-  newDatas: clientTask,
+  newDatas: clientTask | Task,
 ): Promise<Task | null> {
   try {
     const response = await fetch(apiURL, {
@@ -132,10 +133,10 @@ async function postData<Task>(
 //Patch request
 async function patchData<C, R>(
   apiURL: string,
-  currentTask: string,
+  id: string,
   updatedDatas: C,
 ): Promise<R | null> {
-  const completeURL = `${apiURL}/${currentTask}`
+  const completeURL = `${apiURL}?${id}`
   try {
     const response = await fetch(completeURL, {
       method: 'PATCH',
@@ -152,14 +153,31 @@ async function patchData<C, R>(
     const updatedResource: unknown = await response.json()
     return updatedResource as R
   } catch (error) {
-    console.error(
-      `Patch failed for task ${currentTask} at ${completeURL}:`,
-      error,
-    )
+    console.error(`Patch failed for task ${id} at ${completeURL}:`, error)
     throw error
   }
 }
 
+//Delete request
+async function deleteData(apiURL: string, id: string): Promise<void> {
+  const completeURL = `${apiURL}?${id}`
+  try {
+    const response = await fetch(completeURL, {
+      method: 'DELETE',
+    })
+    await handleApiError(response)
+  } catch (error) {
+    console.error(`Delete failed for task ${id} at ${completeURL}:`, error)
+    throw error
+  }
+}
+
+await getData<Task>(API_URL_TODOS).then((tasks: Task[]) => {
+  tasks.forEach((el) => {
+    createTask(el)
+    return
+  })
+})
 //Not API
 function isOverdue() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
@@ -191,6 +209,13 @@ function createCheckbox(task: clientTask): HTMLInputElement {
   return checkbox
 }
 
+function deleteAllTask() {
+  getData<Task>(API_URL_TODOS).then((tasks: Task[]) =>
+    tasks.forEach((task) => {
+      deleteData(API_URL_TODOS, task.id)
+    }),
+  )
+}
 //Generate delete button
 function createDeleteBtn(task: clientTask): HTMLButtonElement {
   const deleteBtn = document.createElement('button')
@@ -199,7 +224,6 @@ function createDeleteBtn(task: clientTask): HTMLButtonElement {
   deleteBtn.textContent = 'X'
   deleteBtn.ariaLabel = `Delete task: ${task.title}`
   //Implement deletion in API here
-
   return deleteBtn
 }
 
@@ -223,10 +247,16 @@ function createDate(task: clientTask): HTMLTimeElement {
 function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
-// Render task from database
+// Patch tasks
+function patchTasks(label: HTMLLabelElement, task: Task, status: boolean) {
+  const updatePayload = { done: status }
+  patchData(API_URL_TODOS, task.id, updatePayload)
+  label.classList.toggle('completed', status)
+  task.done = status
+}
 
 // Create the task on the dom
-function createTask(task: clientTask): void {
+function createTask(task: Task): void {
   const checkbox = createCheckbox(task)
   const label = createLabel(task)
   const newTask = createNewTaskElements()
@@ -234,14 +264,7 @@ function createTask(task: clientTask): void {
   const dueDate = createDate(task)
   const checkboxLabelWrapper = document.createElement('p')
   const dueDateDeleteWrapper = document.createElement('p')
-
-  //  checkbox.addEventListener('change', () => {
-  //  const isDone = checkbox.checked
-  // const updatePayload = { done: isDone }
-  // patchData(API_URL_TODOS, , updatePayload)
-  //label.classList.toggle('completed', isDone)
-  // task.done = isDone
-  // })
+  newTask.id = task.id
 
   //Append elements
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
@@ -266,25 +289,25 @@ async function addToList(): Promise<void> {
   }
 
   hideError()
+
   const newTask: clientTask = {
     title: trimmed,
     due_date: selectedDate || null,
     done: false,
   }
-  try {
-    createTask(newTask)
-    const fullTask = await postData<Task>(API_URL_TODOS, newTask)
 
-    if (fullTask) {
-      createTask(fullTask)
-    } else {
-      console.warn('Successfully posted but no content in return')
-    }
-  } catch (error) {
-    console.error('Task creation failed:', error)
-    showError('Failed to create task. Check API status or console for details')
-    return
-  }
+  await postData<Task>(API_URL_TODOS, newTask)
+
+  getData<Task>(API_URL_TODOS).then((tasks: Task[]) => {
+    tasks.forEach((el: Task) => {
+      const createdElement = document.getElementById(el.id)
+      if (!createdElement) {
+        createTask(el)
+      }
+      return
+    })
+  })
+
   toDoInput.value = ''
   dateInput.value = ''
 }
@@ -322,23 +345,12 @@ function dateColorSetUp(dueDate: HTMLTimeElement): void {
   }
 }
 
-// Get all
-getData<Task>(API_URL_TODOS).then((tasks: Task[]) =>
-  tasks.forEach((task) => {
-    createTask(task)
-  }),
-)
-
 // Delete all
-function deleteAllTasks(): void {
-  //DELETE(ALL) API  METHODS
-}
-
 const addTaskHandler = () => addToList()
 const detectKey = (e: KeyboardEvent) => {
   if (e.key === 'Enter') addTaskHandler()
 }
 
 toDoInput.addEventListener('keydown', detectKey)
-clearAllBtn.addEventListener('click', deleteAllTasks)
+clearAllBtn.addEventListener('click', deleteAllTask)
 addButton.addEventListener('click', addTaskHandler)
