@@ -210,11 +210,17 @@ function createCheckbox(task: clientTask): HTMLInputElement {
 }
 
 function deleteAllTask() {
-  getData<Task>(API_URL_TODOS).then((tasks: Task[]) =>
-    tasks.forEach((task) => {
-      deleteData(API_URL_TODOS, task.id)
-    }),
-  )
+  getData<Task>(API_URL_TODOS).then((tasks: Task[]) => {
+    const getDOMTasks = document.querySelectorAll('li')
+    document.querySelectorAll('.task').forEach((el) => {
+      el.remove()
+      return
+    })
+    tasks.forEach((el) => {
+      deleteData(API_URL_TODOS, el.id)
+      return
+    })
+  })
 }
 //Generate delete button
 function createDeleteBtn(task: clientTask): HTMLButtonElement {
