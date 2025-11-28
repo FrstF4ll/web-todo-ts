@@ -24,7 +24,7 @@ interface clientTask {
 }
 
 interface Task extends clientTask {
-  id: string
+  id: number
 }
 
 // API endpoints
@@ -70,7 +70,7 @@ async function handleApiError(response: Response): Promise<void> {
     try {
       const errorBody = await response.json()
       errorDetails += ` Server Message: ${JSON.stringify(errorBody)}`
-    } catch (e) {}
+    } catch (e) { }
     throw new Error(errorDetails)
   }
 }
@@ -133,7 +133,7 @@ async function postData<Task>(
 //Patch request
 async function patchData<C, R>(
   apiURL: string,
-  id: string,
+  id: number,
   updatedDatas: C,
 ): Promise<R | null> {
   const completeURL = `${apiURL}?${id}`
@@ -159,7 +159,7 @@ async function patchData<C, R>(
 }
 
 //Delete request
-async function deleteData(apiURL: string, id: string): Promise<void> {
+async function deleteData(apiURL: string, id: number): Promise<void> {
   const completeURL = `${apiURL}?${id}`
   try {
     const response = await fetch(completeURL, {
@@ -266,6 +266,16 @@ function patchTasks(label: HTMLLabelElement, task: Task, status: boolean) {
   task.done = status
 }
 
+
+
+function deleteSingleElement(taskId: number): void {
+  const taskElement = document.getElementById(`${taskId}`)
+  if (taskElement) {
+    taskElement.remove()
+    deleteData(API_URL_TODOS, taskId)
+  }
+}
+
 // Create the task on the dom
 function createTask(task: Task): void {
   const checkbox = createCheckbox(task)
@@ -275,13 +285,15 @@ function createTask(task: Task): void {
   const dueDate = createDate(task)
   const checkboxLabelWrapper = document.createElement('p')
   const dueDateDeleteWrapper = document.createElement('p')
-  newTask.id = task.id
+  newTask.id = task.id.toString()
 
   //Append elements
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
   checkboxLabelWrapper.append(checkbox, label)
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
   toDoList.appendChild(newTask)
+
+  deleteBtn.addEventListener('click', () => deleteSingleElement(task.id))
 }
 
 async function addToList(): Promise<void> {
@@ -311,7 +323,7 @@ async function addToList(): Promise<void> {
 
   getData<Task>(API_URL_TODOS).then((tasks: Task[]) => {
     tasks.forEach((el: Task) => {
-      const createdElement = document.getElementById(el.id)
+      const createdElement = document.getElementById(`${el.id}`)
       if (!createdElement) {
         createTask(el)
       }
