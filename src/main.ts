@@ -70,7 +70,7 @@ async function handleApiError(response: Response): Promise<void> {
     try {
       const errorBody = await response.json()
       errorDetails += ` Server Message: ${JSON.stringify(errorBody)}`
-    } catch (e) { }
+    } catch (e) {}
     throw new Error(errorDetails)
   }
 }
@@ -160,7 +160,7 @@ async function patchData<C, R>(
 
 //Delete request
 async function deleteData(apiURL: string, id: number): Promise<void> {
-  const completeURL = `${apiURL}?${id}`
+  const completeURL = `${apiURL}?id=eq.${id}`
   try {
     const response = await fetch(completeURL, {
       method: 'DELETE',
@@ -266,13 +266,15 @@ function patchTasks(label: HTMLLabelElement, task: Task, status: boolean) {
   task.done = status
 }
 
-
-
 function deleteSingleElement(taskId: number): void {
   const taskElement = document.getElementById(`${taskId}`)
+  console.log(taskElement)
   if (taskElement) {
-    taskElement.remove()
-    deleteData(API_URL_TODOS, taskId)
+    const taskElementId = Number(taskElement.id)
+    if (taskElementId === taskId) {
+      taskElement.remove()
+      deleteData(API_URL_TODOS, taskId)
+    }
   }
 }
 
@@ -292,10 +294,8 @@ function createTask(task: Task): void {
   checkboxLabelWrapper.append(checkbox, label)
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
   toDoList.appendChild(newTask)
-
   deleteBtn.addEventListener('click', () => deleteSingleElement(task.id))
 }
-
 async function addToList(): Promise<void> {
   const trimmed = toDoInput.value.trim()
   const selectedDate = dateInput.value
