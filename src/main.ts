@@ -51,18 +51,6 @@ const hideError = () => {
   errorMsg.textContent = ''
 }
 
-//Data type check
-// function isTask(item: unknown): item is Task {
-//   if (typeof item !== 'object' || item === null) return false
-//   const task = item as Record<string, unknown>
-//   return (
-//     typeof task.id === 'string' &&
-//     typeof task.title === 'string' &&
-//     typeof task.due_date === 'string' || typeof task.due_date === null &&
-//     typeof task.done === 'boolean'
-//   )
-// }
-
 //API error handling
 async function handleApiError(response: Response): Promise<void> {
   if (!response.ok) {
@@ -90,7 +78,6 @@ async function getData<T>(apiURL: string): Promise<T[]> {
       return [] as T[]
     }
     const fetchedData = await response.json()
-
     if (Array.isArray(fetchedData)) {
       return fetchedData as T[]
     }
@@ -103,10 +90,10 @@ async function getData<T>(apiURL: string): Promise<T[]> {
 }
 
 //Post request
-async function postData<Task>(
+async function postData<T>(
   apiURL: string,
   newDatas: ClientTask | Task,
-): Promise<Task | null> {
+): Promise<T | null> {
   try {
     const response = await fetch(apiURL, {
       method: 'POST',
@@ -125,7 +112,7 @@ async function postData<Task>(
       return null
     }
     const createdData: unknown = JSON.parse(text)
-    return createdData as Task
+    return createdData as T
   } catch (error) {
     console.error(`Data failed to post to ${apiURL}: `, error)
     throw error
