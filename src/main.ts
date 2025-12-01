@@ -70,7 +70,9 @@ async function handleApiError(response: Response): Promise<void> {
     try {
       const errorBody = await response.json()
       errorDetails += ` Server Message: ${JSON.stringify(errorBody)}`
-    } catch (e) {}
+    } catch (parseError) {
+      console.error(`Query failed : ${parseError}`)
+    }
     throw new Error(errorDetails)
   }
 }
