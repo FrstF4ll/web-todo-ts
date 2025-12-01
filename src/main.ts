@@ -210,9 +210,10 @@ function createNewTaskElements(): HTMLLIElement {
 }
 
 //Generate label
-function createLabel(task: ClientTask): HTMLLabelElement {
+function createLabel(task: Task): HTMLLabelElement {
   const label = document.createElement('label')
   label.textContent = task.title
+  label.htmlFor = task.id.toString()
   label.classList.toggle('completed', task.done)
   return label
 }
