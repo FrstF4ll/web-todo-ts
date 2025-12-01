@@ -92,7 +92,7 @@ async function getData<T>(apiURL: string): Promise<T[]> {
 //Post request
 async function postData<T>(
   apiURL: string,
-  newDatas: ClientTask | Task,
+  newDatas: ClientTask,
 ): Promise<T | null> {
   try {
     const response = await fetch(apiURL, {
@@ -263,8 +263,8 @@ function createDate(task: ClientTask): HTMLTimeElement {
 function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
-// Patch tasks
 
+// Patch tasks
 function deleteSingleElement(taskId: number): void {
   const taskElement = document.getElementById(`${taskId}`)
   if (taskElement) {
