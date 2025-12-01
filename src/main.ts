@@ -161,7 +161,7 @@ async function patchData<C, R>(
 }
 
 //Delete request
-async function deleteData(apiURL: string, id: number | void): Promise<void> {
+async function deleteData(apiURL: string, id: number): Promise<void> {
   const completeURL = `${apiURL}?id=eq.${id}`
   try {
     const response = await fetch(completeURL, {
