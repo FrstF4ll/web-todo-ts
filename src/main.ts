@@ -17,13 +17,13 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 }
 //Interface
 
-interface clientTask {
+interface ClientTask {
   title: string
   due_date: string | null
   done: boolean
 }
 
-interface Task extends clientTask {
+interface Task extends ClientTask {
   id: number
 }
 
@@ -105,7 +105,7 @@ async function getData<T>(apiURL: string): Promise<T[]> {
 //Post request
 async function postData<Task>(
   apiURL: string,
-  newDatas: clientTask | Task,
+  newDatas: ClientTask | Task,
 ): Promise<Task | null> {
   try {
     const response = await fetch(apiURL, {
@@ -208,7 +208,7 @@ function createNewTaskElements(): HTMLLIElement {
 }
 
 //Generate label
-function createLabel(task: clientTask): HTMLLabelElement {
+function createLabel(task: ClientTask): HTMLLabelElement {
   const label = document.createElement('label')
   label.textContent = task.title
   label.classList.toggle('completed', task.done)
@@ -216,7 +216,7 @@ function createLabel(task: clientTask): HTMLLabelElement {
 }
 
 //Generate checkbox
-function createCheckbox(task: clientTask): HTMLInputElement {
+function createCheckbox(task: ClientTask): HTMLInputElement {
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
   checkbox.className = 'todo-elements_checkbox'
@@ -242,7 +242,7 @@ async function deleteAllTask() {
 }
 
 //Generate delete button
-function createDeleteBtn(task: clientTask): HTMLButtonElement {
+function createDeleteBtn(task: ClientTask): HTMLButtonElement {
   const deleteBtn = document.createElement('button')
   deleteBtn.type = 'button'
   deleteBtn.className = 'delete-btn'
@@ -253,7 +253,7 @@ function createDeleteBtn(task: clientTask): HTMLButtonElement {
 }
 
 // Generate due dates
-function createDate(task: clientTask): HTMLTimeElement {
+function createDate(task: ClientTask): HTMLTimeElement {
   const taskDate = task.due_date
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
@@ -332,7 +332,7 @@ async function addToList(): Promise<void> {
 
   hideError()
 
-  const newTask: clientTask = {
+  const newTask: ClientTask = {
     title: trimmed,
     due_date: selectedDate || null,
     done: false,
