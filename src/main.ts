@@ -136,7 +136,7 @@ async function patchData<C, R>(
   id: number,
   updatedDatas: C,
 ): Promise<R | null> {
-  const completeURL = `${apiURL}?${id}`
+  const completeURL = `${apiURL}?id=eq.${id}`
   try {
     const response = await fetch(completeURL, {
       method: 'PATCH',
@@ -204,7 +204,7 @@ function createLabel(task: clientTask): HTMLLabelElement {
 function createCheckbox(task: clientTask): HTMLInputElement {
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
-  checkbox.className = 'todo-elements__checkbox'
+  checkbox.className = 'todo-elements_checkbox'
   checkbox.checked = task.done
   return checkbox
 }
@@ -259,16 +259,9 @@ function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 // Patch tasks
-function patchTasks(label: HTMLLabelElement, task: Task, status: boolean) {
-  const updatePayload = { done: status }
-  patchData(API_URL_TODOS, task.id, updatePayload)
-  label.classList.toggle('completed', status)
-  task.done = status
-}
 
 function deleteSingleElement(taskId: number): void {
   const taskElement = document.getElementById(`${taskId}`)
-  console.log(taskElement)
   if (taskElement) {
     const taskElementId = Number(taskElement.id)
     if (taskElementId === taskId) {
@@ -295,7 +288,17 @@ function createTask(task: Task): void {
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
   toDoList.appendChild(newTask)
   deleteBtn.addEventListener('click', () => deleteSingleElement(task.id))
+  checkbox.addEventListener('change', () => {
+    task.done = checkbox.checked
+    if (task.done === true) {
+      label.classList.add('completed')
+    } else if (task.done === false) {
+      label.classList.remove('completed')
+    }
+    patchData(API_URL_TODOS, task.id, { done: checkbox.checked })
+  })
 }
+
 async function addToList(): Promise<void> {
   const trimmed = toDoInput.value.trim()
   const selectedDate = dateInput.value
