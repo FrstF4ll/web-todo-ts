@@ -222,7 +222,7 @@ function createLabel(task: Task): HTMLLabelElement {
 function createCheckbox(task: ClientTask): HTMLInputElement {
   const checkbox = document.createElement('input')
   checkbox.type = 'checkbox'
-  checkbox.className = 'todo-elements_checkbox'
+  checkbox.className = 'todo-elements__checkbox'
   checkbox.checked = task.done
   return checkbox
 }
