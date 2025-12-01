@@ -310,11 +310,7 @@ function createTask(task: Task): void {
   deleteBtn.addEventListener('click', () => deleteSingleElement(task.id))
   checkbox.addEventListener('change', () => {
     task.done = checkbox.checked
-    if (task.done === true) {
-      label.classList.add('completed')
-    } else if (task.done === false) {
-      label.classList.remove('completed')
-    }
+    label.classList.toggle('completed', task.done)
     patchData(API_URL_TODOS, task.id, { done: checkbox.checked })
   })
 }
