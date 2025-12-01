@@ -239,7 +239,6 @@ function createDeleteBtn(task: ClientTask): HTMLButtonElement {
   deleteBtn.className = 'delete-btn'
   deleteBtn.textContent = 'X'
   deleteBtn.ariaLabel = `Delete task: ${task.title}`
-  //Implement deletion in API here
   return deleteBtn
 }
 
