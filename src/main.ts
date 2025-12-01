@@ -286,8 +286,8 @@ function createTask(task: Task): void {
   const checkboxLabelWrapper = document.createElement('p')
   const dueDateDeleteWrapper = document.createElement('p')
   newTask.id = task.id.toString()
-  checkbox.id = newTask.id
-  label.htmlFor = newTask.id
+  checkbox.id = `checkbox-${newTask.id}`
+  label.htmlFor = checkbox.id
 
   //Append elements
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
