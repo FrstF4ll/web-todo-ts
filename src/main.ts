@@ -173,7 +173,7 @@ async function deleteData(apiURL: string, id: number): Promise<void> {
     throw error
   }
 }
-
+// Delete request
 async function deleteAllData(apiURL: string): Promise<void> {
   const completeURL = `${apiURL}`
   try {
@@ -186,13 +186,15 @@ async function deleteAllData(apiURL: string): Promise<void> {
     throw error
   }
 }
+// Loading tasks
+try {
+  const tasks = await getData<Task>(API_URL_TODOS)
+  tasks.forEach(createTask)
+} catch (error) {
+  console.error('Failed to load initial tasks:', error)
+  showError('Could not load tasks. Check console for details')
+}
 
-await getData<Task>(API_URL_TODOS).then((tasks: Task[]) => {
-  tasks.forEach((el) => {
-    createTask(el)
-    return
-  })
-})
 //Not API
 function isOverdue() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
