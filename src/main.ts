@@ -341,9 +341,9 @@ async function addToList(): Promise<void> {
     done: false,
   }
 
-  await postData<Task>(API_URL_TODOS, newTask)
-
-  getData<Task>(API_URL_TODOS).then((tasks: Task[]) => {
+  try {
+    await postData<Task>(API_URL_TODOS, newTask)
+    const tasks = await getData<Task>(API_URL_TODOS)
     tasks.forEach((el: Task) => {
       const createdElement = document.getElementById(`${el.id}`)
       if (!createdElement) {
@@ -351,7 +351,10 @@ async function addToList(): Promise<void> {
       }
       return
     })
-  })
+  } catch (error) {
+    showError('Data not posted as intended')
+    console.error('Failed to send data: ', error)
+  }
 
   toDoInput.value = ''
   dateInput.value = ''
