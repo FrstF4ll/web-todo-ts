@@ -9,12 +9,6 @@ const dueDateStatus = {
   DueLater: 'due-date--due-later',
 }
 
-// Element null check
-function getRequiredElement<T extends HTMLElement>(selector: string): T {
-  const el = document.querySelector<T>(selector)
-  if (!el) throw new Error(`Element ${selector} not found`)
-  return el
-}
 //Interface
 
 interface ClientTask {
@@ -27,29 +21,20 @@ interface Task extends ClientTask {
   id: number
 }
 
+// DOM import
+import { toDoInput } from "./dom"
+import { addButton } from "./dom"
+import { toDoList } from "./dom"
+import { clearAllBtn } from "./dom"
+import { dateInput } from "./dom"
+import { overdueMsg } from "./dom"
+import { hideError } from './dom'
+import { showError } from './dom'
+
 // API endpoints
 const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
 // const CATEGORIES_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories'
 // const CATEGORIES_TODO_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories_todos'
-
-// DOM
-const toDoInput = getRequiredElement<HTMLInputElement>('#todo-input')
-const addButton = getRequiredElement<HTMLButtonElement>('#add-todo-button')
-const toDoList = getRequiredElement<HTMLUListElement>('ul')
-const errorMsg = getRequiredElement<HTMLParagraphElement>('#error-msg')
-const clearAllBtn = getRequiredElement<HTMLButtonElement>('#delete-all')
-const dateInput = getRequiredElement<HTMLInputElement>('#todo-date-input')
-const overdueMsg = getRequiredElement<HTMLHeadingElement>('#overdue-message')
-
-// Show or hide error message
-const showError = (message: string) => {
-  errorMsg.classList.remove('hidden')
-  errorMsg.textContent = message
-}
-const hideError = () => {
-  errorMsg.classList.add('hidden')
-  errorMsg.textContent = ''
-}
 
 //API error handling
 async function handleApiError(response: Response): Promise<void> {
