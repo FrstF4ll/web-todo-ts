@@ -161,8 +161,21 @@ async function patchData<C, R>(
 }
 
 //Delete request
-async function deleteData(apiURL: string, id: number): Promise<void> {
+async function deleteData(apiURL: string, id: number | void): Promise<void> {
   const completeURL = `${apiURL}?id=eq.${id}`
+  try {
+    const response = await fetch(completeURL, {
+      method: 'DELETE',
+    })
+    await handleApiError(response)
+  } catch (error) {
+    console.error(`Delete failed for task ${id} at ${completeURL}:`, error)
+    throw error
+  }
+}
+
+async function deleteAllData(apiURL: string): Promise<void> {
+  const completeURL = `${apiURL}`
   try {
     const response = await fetch(completeURL, {
       method: 'DELETE',
@@ -221,11 +234,7 @@ function deleteAllTask() {
       el.remove()
       return
     })
-
-    tasks.forEach((el) => {
-      deleteData(API_URL_TODOS, el.id)
-      return
-    })
+    deleteAllData(API_URL_TODOS)
   })
 }
 
