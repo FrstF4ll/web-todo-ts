@@ -182,7 +182,7 @@ async function deleteAllData(apiURL: string): Promise<void> {
     })
     await handleApiError(response)
   } catch (error) {
-    console.error(`Delete failed for task ${id} at ${completeURL}:`, error)
+    console.error(`Delete failed at ${completeURL}:`, error)
     throw error
   }
 }
@@ -225,7 +225,7 @@ function createCheckbox(task: clientTask): HTMLInputElement {
 }
 
 function deleteAllTask() {
-  getData<Task>(API_URL_TODOS).then((tasks: Task[]) => {
+  getData<Task>(API_URL_TODOS).then(() => {
     if (!window.confirm('Are you sure you want to delete all tasks?')) {
       return
     }
