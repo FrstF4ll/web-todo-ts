@@ -224,18 +224,21 @@ function createCheckbox(task: clientTask): HTMLInputElement {
   return checkbox
 }
 
-function deleteAllTask() {
-  getData<Task>(API_URL_TODOS).then(() => {
+async function deleteAllTask() {
+  try {
+    const tasks = await getData<Task>(API_URL_TODOS)
+    if (tasks.length === 0) {
+      return
+    }
     if (!window.confirm('Are you sure you want to delete all tasks?')) {
       return
     }
-    const getDOMTasks = document.querySelectorAll('li')
-    getDOMTasks.forEach((el) => {
-      el.remove()
-      return
-    })
     deleteAllData(API_URL_TODOS)
-  })
+    toDoList.innerHTML = ''
+  } catch (error) {
+    console.error('Failed to delete Tasks : ', error)
+    showError('Failed to delete all Tasks, check console for details.')
+  }
 }
 
 //Generate delete button
