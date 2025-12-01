@@ -228,15 +228,16 @@ function createCheckbox(task: ClientTask): HTMLInputElement {
 
 async function deleteAllTask() {
   try {
-    const tasks = await getData<Task>(API_URL_TODOS)
-    if (tasks.length === 0) {
+    if (toDoList.children.length === 0) {
+      showError('Todo-list already clean.')
       return
     }
     if (!window.confirm('Are you sure you want to delete all tasks?')) {
       return
     }
-    deleteAllData(API_URL_TODOS)
+    await deleteAllData(API_URL_TODOS)
     toDoList.innerHTML = ''
+    showError('All tasks successfully deleted')
   } catch (error) {
     console.error('Failed to delete Tasks : ', error)
     showError('Failed to delete all Tasks, check console for details.')
