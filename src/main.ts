@@ -11,28 +11,30 @@ const dueDateStatus = {
 
 //Interface
 
-interface ClientTask {
+export interface ClientTask {
   title: string
   due_date: string | null
   done: boolean
 }
 
-interface Task extends ClientTask {
+export interface Task extends ClientTask {
   id: number
 }
 
 // DOM import
-import { toDoInput } from "./dom"
-import { addButton } from "./dom"
-import { toDoList } from "./dom"
-import { clearAllBtn } from "./dom"
-import { dateInput } from "./dom"
-import { overdueMsg } from "./dom"
-import { hideError } from './dom'
-import { showError } from './dom'
+import {
+  addButton,
+  clearAllBtn,
+  dateInput,
+  hideError,
+  overdueMsg,
+  showError,
+  toDoInput,
+  toDoList,
+} from './dom'
 
 // API endpoints
-const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
+export const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
 // const CATEGORIES_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories'
 // const CATEGORIES_TODO_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories_todos'
 
@@ -105,7 +107,7 @@ async function postData<T>(
 }
 
 //Patch request
-async function patchData<C, R>(
+export async function patchData<C, R>(
   apiURL: string,
   id: number,
   updatedDatas: C,
@@ -174,31 +176,6 @@ function isOverdue() {
 }
 isOverdue()
 
-//Generate list elements
-function createNewTaskElements(): HTMLLIElement {
-  const newTask = document.createElement('li')
-  newTask.className = 'todo-elements'
-  return newTask
-}
-
-//Generate label
-function createLabel(task: Task): HTMLLabelElement {
-  const label = document.createElement('label')
-  label.textContent = task.title
-  label.htmlFor = task.id.toString()
-  label.classList.toggle('completed', task.done)
-  return label
-}
-
-//Generate checkbox
-function createCheckbox(task: ClientTask): HTMLInputElement {
-  const checkbox = document.createElement('input')
-  checkbox.type = 'checkbox'
-  checkbox.className = 'todo-elements__checkbox'
-  checkbox.checked = task.done
-  return checkbox
-}
-
 async function deleteAllTask() {
   try {
     if (toDoList.children.length === 0) {
@@ -217,18 +194,24 @@ async function deleteAllTask() {
   }
 }
 
-//Generate delete button
-function createDeleteBtn(task: ClientTask): HTMLButtonElement {
-  const deleteBtn = document.createElement('button')
-  deleteBtn.type = 'button'
-  deleteBtn.className = 'delete-btn'
-  deleteBtn.textContent = 'X'
-  deleteBtn.ariaLabel = `Delete task: ${task.title}`
-  return deleteBtn
+//To midnight normalization
+function toMidnight(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 
+// Patch tasks
+export function deleteSingleElement(taskId: number): void {
+  const taskElement = document.getElementById(`${taskId}`)
+  if (taskElement) {
+    const taskElementId = Number(taskElement.id)
+    if (taskElementId === taskId) {
+      taskElement.remove()
+      deleteData(API_URL_TODOS, taskId)
+    }
+  }
+}
 // Generate due dates
-function createDate(task: ClientTask): HTMLTimeElement {
+export function createDate(task: ClientTask): HTMLTimeElement {
   const taskDate = task.due_date
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
@@ -243,24 +226,13 @@ function createDate(task: ClientTask): HTMLTimeElement {
   return dueDate
 }
 
-//To midnight normalization
-function toMidnight(date: Date): number {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
-}
+import {
+  createCheckbox,
+  createDeleteBtn,
+  createLabel,
+  createNewTaskElements,
+} from './render'
 
-// Patch tasks
-function deleteSingleElement(taskId: number): void {
-  const taskElement = document.getElementById(`${taskId}`)
-  if (taskElement) {
-    const taskElementId = Number(taskElement.id)
-    if (taskElementId === taskId) {
-      taskElement.remove()
-      deleteData(API_URL_TODOS, taskId)
-    }
-  }
-}
-
-// Create the task on the dom
 function createTask(task: Task): void {
   const checkbox = createCheckbox(task)
   const label = createLabel(task)
@@ -350,7 +322,7 @@ function dueColor(dateString: string): string | null {
   return dueDateStatus.DueLater
 }
 
-function dateColorSetUp(dueDate: HTMLTimeElement): void {
+export function dateColorSetUp(dueDate: HTMLTimeElement): void {
   if (!dueDate.dateTime) {
     return
   }
