@@ -1,5 +1,5 @@
 // Interface Import
-import type { ClientTask, Task } from './main'
+import type { ClientTask, Task } from './interface'
 
 //Generate list elements
 export function createNewTaskElements(): HTMLLIElement {

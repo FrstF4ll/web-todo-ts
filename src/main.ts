@@ -9,18 +9,6 @@ const dueDateStatus = {
   DueLater: 'due-date--due-later',
 }
 
-//Interface
-
-export interface ClientTask {
-  title: string
-  due_date: string | null
-  done: boolean
-}
-
-export interface Task extends ClientTask {
-  id: number
-}
-
 // DOM import
 import {
   addButton,
@@ -32,6 +20,7 @@ import {
   toDoInput,
   toDoList,
 } from './dom'
+import type { ClientTask, Task } from './interface'
 
 // API endpoints
 export const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
