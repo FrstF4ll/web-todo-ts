@@ -149,6 +149,7 @@ async function deleteAllData(apiURL: string): Promise<void> {
     throw error
   }
 }
+
 // Loading tasks
 try {
   const tasks = await getData<Task>(API_URL_TODOS)
@@ -188,17 +189,6 @@ function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 
-// Patch tasks
-export function deleteSingleElement(taskId: number): void {
-  const taskElement = document.getElementById(`${taskId}`)
-  if (taskElement) {
-    const taskElementId = Number(taskElement.id)
-    if (taskElementId === taskId) {
-      taskElement.remove()
-      deleteData(API_URL_TODOS, taskId)
-    }
-  }
-}
 // Generate due dates
 export function createDate(task: ClientTask): HTMLTimeElement {
   const taskDate = task.due_date
@@ -234,17 +224,30 @@ function createTask(task: Task): void {
   checkbox.id = `checkbox-${newTask.id}`
   label.htmlFor = checkbox.id
 
+  const deleteSingleElement = (taskId: number): void => {
+    const taskElement = document.getElementById(`${taskId}`)
+    if (taskElement) {
+      const taskElementId = Number(taskElement.id)
+      if (taskElementId === taskId) {
+        taskElement.remove()
+        deleteData(API_URL_TODOS, taskId)
+      }
+    }
+  }
+
+  const checkboxStatusHandler = () => {
+    task.done = checkbox.checked
+    label.classList.toggle('completed', task.done)
+    patchData(API_URL_TODOS, task.id, { done: checkbox.checked })
+  }
+
   //Append elements
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
   checkboxLabelWrapper.append(checkbox, label)
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
   toDoList.appendChild(newTask)
   deleteBtn.addEventListener('click', () => deleteSingleElement(task.id))
-  checkbox.addEventListener('change', () => {
-    task.done = checkbox.checked
-    label.classList.toggle('completed', task.done)
-    patchData(API_URL_TODOS, task.id, { done: checkbox.checked })
-  })
+  checkbox.addEventListener('change', () => checkboxStatusHandler())
 }
 
 async function addToList(): Promise<void> {
