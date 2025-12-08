@@ -16,8 +16,9 @@ import type { ClientTask, Task } from './interface'
 import { createDate } from './render'
 // Time calculation
 import { toMidnight } from './utils'
+
 // API endpoints
-export const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
+const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
 // const CATEGORIES_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories'
 // const CATEGORIES_TODO_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories_todos'
 
