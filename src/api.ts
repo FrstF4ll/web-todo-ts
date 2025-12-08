@@ -23,9 +23,6 @@ export async function getData<T>(apiURL: string): Promise<T[]> {
 
     await handleApiError(response)
 
-    if (response.status === 204) {
-      return [] as T[]
-    }
     const fetchedData = await response.json()
     if (Array.isArray(fetchedData)) {
       return fetchedData as T[]
