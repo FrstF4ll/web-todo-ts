@@ -98,8 +98,8 @@ function createTask(task: Task): void {
 }
 
 async function addToList(): Promise<void> {
-  const trimmed = toDoInput.value.trim()
   const selectedDate = dateInput.value
+
   const selectedMidnight = toMidnight(new Date(selectedDate))
   const todayMidnight = toMidnight(new Date())
 
@@ -107,6 +107,8 @@ async function addToList(): Promise<void> {
     showError('Invalid date: date too early')
     return
   }
+
+  const trimmed = toDoInput.value.trim()
   if (trimmed.length === 0) {
     showError('Invalid task name: Empty name')
     return
