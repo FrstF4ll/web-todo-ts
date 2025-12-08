@@ -2,16 +2,18 @@
 export function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
+
+const dueSoonDaysThreshold = 4
+const msInDay = 1000 * 60 * 60 * 24
+const dueDateStatus = {
+  PastDue: 'due-date--past-due',
+  DueToday: 'due-date--due-today',
+  DueSoon: 'due-date--due-soon',
+  DueLater: 'due-date--due-later',
+}
+
 //Dynamic color switch depending on due dates
 function dueColor(dateString: string): string | null {
-  const dueSoonDaysThreshold = 4
-  const msInDay = 1000 * 60 * 60 * 24
-  const dueDateStatus = {
-    PastDue: 'due-date--past-due',
-    DueToday: 'due-date--due-today',
-    DueSoon: 'due-date--due-soon',
-    DueLater: 'due-date--due-later',
-  }
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dateString))
   const dayDiff = (selectedDate - today) / msInDay
