@@ -83,11 +83,6 @@ function createTask(task: Task): void {
 
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
 
-  const deleteSingleElement = (taskId: number): void => {
-    document.getElementById(`${taskId}`)?.remove()
-    deleteData(API_URL_TODOS, taskId)
-  }
-
   const checkboxStatusHandler = () => {
     task.done = checkbox.checked
     label.classList.toggle('completed', task.done)
@@ -95,7 +90,10 @@ function createTask(task: Task): void {
   }
 
   //Append elements
-  deleteBtn.addEventListener('click', () => deleteSingleElement(task.id))
+  deleteBtn.addEventListener('click', () => {
+    newTask.remove()
+    deleteData(API_URL_TODOS, task.id)
+  })
   checkbox.addEventListener('change', () => checkboxStatusHandler())
   toDoList.appendChild(newTask)
 }
