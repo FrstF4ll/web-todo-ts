@@ -13,7 +13,6 @@ export function createNewTaskElements(): HTMLLIElement {
 export function createLabel(task: Task): HTMLLabelElement {
   const label = document.createElement('label')
   label.textContent = task.title
-  label.htmlFor = task.id.toString()
   label.classList.toggle('completed', task.done)
   return label
 }
