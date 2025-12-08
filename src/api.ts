@@ -41,27 +41,18 @@ export async function getData<T>(apiURL: string): Promise<T[]> {
 //Post request
 export async function postData<T>(
   apiURL: string,
-  newDatas: ClientTask,
-): Promise<T | null> {
+  newData: ClientTask,
+): Promise<T> {
   try {
     const response = await fetch(apiURL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newDatas),
+      body: JSON.stringify(newData),
     })
     await handleApiError(response)
-
-    if (response.status === 204) {
-      return null
-    }
-    const text = await response.text()
-    if (!text) {
-      return null
-    }
-    const createdData: unknown = JSON.parse(text)
-    return createdData as T
+    return (await response.json) as T
   } catch (error) {
     console.error(`Data failed to post to ${apiURL}: `, error)
     throw error
