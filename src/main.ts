@@ -84,9 +84,14 @@ function createTask(task: Task): void {
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
 
   //Append elements
-  deleteBtn.addEventListener('click', () => {
-    newTask.remove()
-    deleteData(API_URL_TODOS, task.id)
+  deleteBtn.addEventListener('click', async () => {
+    try {
+      await deleteData(API_URL_TODOS, task.id)
+      newTask.remove()
+    } catch (error) {
+      console.error(`Failed to delete task ${task.id}:`, error)
+      showError('Failed to delete task. Please try again.')
+    }
   })
 
   checkbox.addEventListener('change', () => {
