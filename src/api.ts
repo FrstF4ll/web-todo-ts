@@ -45,11 +45,12 @@ export async function postData<T>(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Prefer: 'return=representation',
       },
       body: JSON.stringify(newData),
     })
     await handleApiError(response)
-    return (await response.json) as T
+    return (await response.json()) as T
   } catch (error) {
     console.error(`Data failed to post to ${apiURL}: `, error)
     throw error
