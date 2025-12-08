@@ -49,8 +49,10 @@ export async function postData<T>(
       },
       body: JSON.stringify(newData),
     })
+
     await handleApiError(response)
-    return (await response.json()) as T
+    const responseArr = (await response.json()) as T[]
+    return responseArr[0]
   } catch (error) {
     console.error(`Data failed to post to ${apiURL}: `, error)
     throw error

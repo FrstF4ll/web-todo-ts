@@ -123,15 +123,8 @@ async function addToList(): Promise<void> {
   }
 
   try {
-    await postData<Task>(API_URL_TODOS, newTask)
-    const tasks = await getData<Task>(API_URL_TODOS)
-    tasks.forEach((el: Task) => {
-      const createdElement = document.getElementById(`${el.id}`)
-      if (!createdElement) {
-        createTask(el)
-      }
-      return
-    })
+    const postResponse = await postData<Task>(API_URL_TODOS, newTask)
+    createTask(postResponse)
   } catch (error) {
     showError('Data not posted as intended')
     console.error('Failed to send data: ', error)
