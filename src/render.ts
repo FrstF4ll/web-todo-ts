@@ -38,7 +38,7 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
 
 // Generate due dates
 export function createDate(task: ClientTask): HTMLTimeElement {
-  const taskDate = task.dueDate
+  const taskDate = task.due_date
   const dueDate = document.createElement('time')
   dueDate.className = 'due-date'
   if (taskDate) {

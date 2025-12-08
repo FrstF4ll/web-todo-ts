@@ -124,7 +124,7 @@ async function addToList(): Promise<void> {
 
   const newTask: ClientTask = {
     title: trimmed,
-    dueDate: selectedDate || null,
+    due_date: selectedDate || null,
     done: false,
   }
 
