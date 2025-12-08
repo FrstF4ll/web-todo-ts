@@ -52,7 +52,15 @@ export async function postData<T>(
 
     await handleApiError(response)
     const responseArr = (await response.json()) as T[]
-    return responseArr[0]
+    if (responseArr.length > 1) {
+      console.warn(
+        'POST-ERROR: Expected one object but got two. Check for duplication.',
+        responseArr,
+      )
+      return responseArr as T
+    }
+    const singleObject = responseArr[0]
+    return singleObject as T
   } catch (error) {
     console.error(`Data failed to post to ${apiURL}: `, error)
     throw error
