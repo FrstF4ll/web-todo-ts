@@ -13,8 +13,9 @@ import {
   toDoList,
 } from './dom'
 import type { ClientTask, Task } from './interface'
+import { createDate } from './render'
 // Time calculation
-import { dateColorSetUp, toMidnight } from './utils'
+import { toMidnight } from './utils'
 // API endpoints
 export const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
 // const CATEGORIES_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories'
@@ -52,22 +53,6 @@ async function deleteAllTask() {
     console.error('Failed to delete Tasks : ', error)
     showError('Failed to delete all Tasks, check console for details.')
   }
-}
-
-// Generate due dates
-export function createDate(task: ClientTask): HTMLTimeElement {
-  const taskDate = task.due_date
-  const dueDate = document.createElement('time')
-  dueDate.className = 'due-date'
-  if (taskDate) {
-    dueDate.dateTime = taskDate
-    dueDate.textContent = taskDate
-    dateColorSetUp(dueDate)
-  } else {
-    dueDate.textContent = 'No due date'
-  }
-
-  return dueDate
 }
 
 import {
