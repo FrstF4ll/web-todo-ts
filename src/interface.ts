@@ -2,7 +2,7 @@
 
 export interface ClientTask {
   title: string
-  due_date: string | null
+  dueDate: string | null
   done: boolean
 }
 
