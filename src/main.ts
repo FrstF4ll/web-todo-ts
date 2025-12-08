@@ -63,26 +63,29 @@ import {
 } from './render'
 
 function createTask(task: Task): void {
-  const checkbox = createCheckbox(task)
-  const label = createLabel(task)
   const newTask = createNewTaskElements()
-  const deleteBtn = createDeleteBtn(task)
-  const dueDate = createDate(task)
-  const checkboxLabelWrapper = document.createElement('p')
-  const dueDateDeleteWrapper = document.createElement('p')
   newTask.id = task.id.toString()
+
+  const checkbox = createCheckbox(task)
   checkbox.id = `checkbox-${newTask.id}`
+
+  const label = createLabel(task)
   label.htmlFor = checkbox.id
 
+  const checkboxLabelWrapper = document.createElement('p')
+  checkboxLabelWrapper.append(checkbox, label)
+
+  const dueDate = createDate(task)
+  const deleteBtn = createDeleteBtn(task)
+
+  const dueDateDeleteWrapper = document.createElement('p')
+  dueDateDeleteWrapper.append(dueDate, deleteBtn)
+
+  newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
+
   const deleteSingleElement = (taskId: number): void => {
-    const taskElement = document.getElementById(`${taskId}`)
-    if (taskElement) {
-      const taskElementId = Number(taskElement.id)
-      if (taskElementId === taskId) {
-        taskElement.remove()
-        deleteData(API_URL_TODOS, taskId)
-      }
-    }
+    document.getElementById(`${taskId}`)?.remove()
+    deleteData(API_URL_TODOS, taskId)
   }
 
   const checkboxStatusHandler = () => {
@@ -92,12 +95,9 @@ function createTask(task: Task): void {
   }
 
   //Append elements
-  dueDateDeleteWrapper.append(dueDate, deleteBtn)
-  checkboxLabelWrapper.append(checkbox, label)
-  newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
-  toDoList.appendChild(newTask)
   deleteBtn.addEventListener('click', () => deleteSingleElement(task.id))
   checkbox.addEventListener('change', () => checkboxStatusHandler())
+  toDoList.appendChild(newTask)
 }
 
 async function addToList(): Promise<void> {
