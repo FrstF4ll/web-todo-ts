@@ -13,15 +13,15 @@ import {
   toDoList,
 } from './dom'
 import type { ClientTask, Task } from './interface'
-import { createDate } from './render'
-// Time calculation
-import { toMidnight } from './utils'
 import {
   createCheckbox,
+  createDate,
   createDeleteBtn,
   createLabel,
   createNewTaskElements,
 } from './render'
+// Time calculation
+import { toMidnight } from './utils'
 
 // API endpoints
 const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
@@ -61,8 +61,6 @@ async function deleteAllTask() {
     showError('Failed to delete all Tasks, check console for details.')
   }
 }
-
-
 
 function createTask(task: Task): void {
   const newTask = createNewTaskElements()

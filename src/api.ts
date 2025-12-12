@@ -53,14 +53,16 @@ export async function postData<T>(
     await handleApiError(response)
     const responseArr = (await response.json()) as T[]
     if (!Array.isArray(responseArr)) {
-      console.error('POST-ERROR: Returned data is not an Array')
-    } else if (responseArr.length > 1) {
+      throw new Error('POST-ERROR: Returned data is not an Array')
+    }
+    if (responseArr.length === 0) {
+      throw new Error('POST-ERROR: Expected one object but got none.')
+    }
+    if (responseArr.length > 1) {
       console.warn(
-        'POST-ERROR: Expected one object but got two. Check for duplication.',
+        'POST-WARN: Expected one object but got more. Using the first one.',
         responseArr,
       )
-    } else if (responseArr.length < 0) {
-      console.error('POST-ERROR: Expected one object but got none.')
     }
     return responseArr[0] as T
   } catch (error) {
