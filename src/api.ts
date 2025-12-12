@@ -1,5 +1,10 @@
 import type { ClientTask } from './interface'
 
+// API endpoints
+export const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
+// const CATEGORIES_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories'
+// const CATEGORIES_TODO_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories_todos'
+
 //API error handling
 async function handleApiError(response: Response): Promise<void> {
   if (!response.ok) {

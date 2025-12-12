@@ -1,4 +1,7 @@
 // Interface Import
+
+import { API_URL_TODOS, deleteData, patchData } from './api'
+import { showError, toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
 import { dateColorSetUp } from './utils'
 
@@ -51,4 +54,53 @@ export function createDate(task: ClientTask): HTMLTimeElement {
   }
 
   return dueDate
+}
+
+export function createTask(task: Task): void {
+  const newTask = createNewTaskElements()
+  newTask.id = task.id.toString()
+
+  const checkbox = createCheckbox(task)
+  checkbox.id = `checkbox-${newTask.id}`
+
+  const label = createLabel(task, checkbox.id)
+
+  const checkboxLabelWrapper = document.createElement('p')
+  checkboxLabelWrapper.append(checkbox, label)
+
+  const dueDate = createDate(task)
+  const deleteBtn = createDeleteBtn(task)
+
+  const dueDateDeleteWrapper = document.createElement('p')
+  dueDateDeleteWrapper.append(dueDate, deleteBtn)
+
+  newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
+
+  // Event listeners
+  deleteBtn.addEventListener('click', async () => {
+    try {
+      await deleteData(API_URL_TODOS, task.id)
+      newTask.remove()
+    } catch (error) {
+      console.error(`Failed to delete task ${task.id}:`, error)
+      showError('Failed to delete task. Please try again.')
+    }
+  })
+
+  checkbox.addEventListener('change', async () => {
+    const originalDoneState = task.done
+    task.done = checkbox.checked
+    label.classList.toggle('completed', task.done)
+    try {
+      await patchData(API_URL_TODOS, task.id, { done: task.done })
+    } catch (error) {
+      // Revert UI on failure to keep it consistent with the server state
+      task.done = originalDoneState
+      checkbox.checked = originalDoneState
+      label.classList.toggle('completed', task.done)
+      console.error(`Failed to update task ${task.id}:`, error)
+      showError('Failed to update task. Please try again.')
+    }
+  })
+  toDoList.appendChild(newTask)
 }
