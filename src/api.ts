@@ -98,7 +98,7 @@ export async function patchData<C, R>(
   }
 }
 
-//Delete request
+//Delete query
 export async function deleteData(apiURL: string, id: number): Promise<void> {
   const completeURL = `${apiURL}?id=eq.${id}`
   try {
@@ -112,7 +112,7 @@ export async function deleteData(apiURL: string, id: number): Promise<void> {
   }
 }
 
-// Delete request
+// Delete all tasks
 export async function deleteAllData(apiURL: string): Promise<void> {
   try {
     const response = await fetch(apiURL, {
