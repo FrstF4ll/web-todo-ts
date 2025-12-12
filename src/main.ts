@@ -16,6 +16,12 @@ import type { ClientTask, Task } from './interface'
 import { createDate } from './render'
 // Time calculation
 import { toMidnight } from './utils'
+import {
+  createCheckbox,
+  createDeleteBtn,
+  createLabel,
+  createNewTaskElements,
+} from './render'
 
 // API endpoints
 const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
@@ -56,12 +62,7 @@ async function deleteAllTask() {
   }
 }
 
-import {
-  createCheckbox,
-  createDeleteBtn,
-  createLabel,
-  createNewTaskElements,
-} from './render'
+
 
 function createTask(task: Task): void {
   const newTask = createNewTaskElements()
