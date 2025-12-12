@@ -69,8 +69,7 @@ function createTask(task: Task): void {
   const checkbox = createCheckbox(task)
   checkbox.id = `checkbox-${newTask.id}`
 
-  const label = createLabel(task)
-  label.htmlFor = checkbox.id
+  const label = createLabel(task, checkbox.id)
 
   const checkboxLabelWrapper = document.createElement('p')
   checkboxLabelWrapper.append(checkbox, label)

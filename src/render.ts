@@ -10,9 +10,10 @@ export function createNewTaskElements(): HTMLLIElement {
 }
 
 //Generate label
-export function createLabel(task: Task): HTMLLabelElement {
+export function createLabel(task: Task, checkboxId: string): HTMLLabelElement {
   const label = document.createElement('label')
   label.textContent = task.title
+  label.htmlFor = checkboxId
   label.classList.toggle('completed', task.done)
   return label
 }
