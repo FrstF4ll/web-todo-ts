@@ -85,7 +85,9 @@ export async function patchData<C, R>(
       body: JSON.stringify(updatedDatas),
     })
     await handleApiError(response)
-
+    if (response.status === 204) {
+      return null
+    }
     const updatedResource: unknown = await response.json()
     return updatedResource as R
   } catch (error) {
