@@ -82,7 +82,7 @@ function createTask(task: Task): void {
 
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
 
-  //Append elements
+  // Event listeners
   deleteBtn.addEventListener('click', async () => {
     try {
       await deleteData(API_URL_TODOS, task.id)
