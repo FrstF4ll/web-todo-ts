@@ -95,10 +95,20 @@ function createTask(task: Task): void {
     }
   })
 
-  checkbox.addEventListener('change', () => {
+  checkbox.addEventListener('change', async () => {
+    const originalDoneState = task.done
     task.done = checkbox.checked
     label.classList.toggle('completed', task.done)
-    patchData(API_URL_TODOS, task.id, { done: checkbox.checked })
+    try {
+      await patchData(API_URL_TODOS, task.id, { done: task.done })
+    } catch (error) {
+      // Revert UI on failure to keep it consistent with the server state
+      task.done = originalDoneState
+      checkbox.checked = originalDoneState
+      label.classList.toggle('completed', task.done)
+      console.error(`Failed to update task ${task.id}:`, error)
+      showError('Failed to update task. Please try again.')
+    }
   })
   toDoList.appendChild(newTask)
 }
