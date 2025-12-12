@@ -89,11 +89,9 @@ async function addToList(): Promise<void> {
 }
 
 // Delete all
-const addTaskHandler = () => addToList()
-const detectKey = (e: KeyboardEvent) => {
-  if (e.key === 'Enter') addTaskHandler()
-}
 
-toDoInput.addEventListener('keydown', detectKey)
+toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Enter') addToList()
+})
 clearAllBtn.addEventListener('click', deleteAllTask)
-addButton.addEventListener('click', addTaskHandler)
+addButton.addEventListener('click', () => addToList())
