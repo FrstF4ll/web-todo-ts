@@ -1,6 +1,6 @@
 import './style.css'
 
-import { API_URL_TODOS, deleteAllData, getData, postData } from './api'
+import { API_URL_TODOS, getData, postData } from './api'
 // DOM import
 import {
   addButton,
@@ -10,8 +10,8 @@ import {
   overdueMsg,
   showError,
   toDoInput,
-  toDoList,
 } from './dom'
+import { deleteAllTask } from './events'
 import type { ClientTask, Task } from './interface'
 import { createTask } from './render'
 // Time calculation
@@ -32,24 +32,6 @@ function isOverdue() {
   overdueMsg.classList.toggle('hidden', overduedTasks.length === 0)
 }
 isOverdue()
-
-async function deleteAllTask() {
-  try {
-    if (toDoList.children.length === 0) {
-      showError('Todo-list already clean.')
-      return
-    }
-    if (!window.confirm('Are you sure you want to delete all tasks?')) {
-      return
-    }
-    await deleteAllData(API_URL_TODOS)
-    toDoList.innerHTML = ''
-    showError('All tasks successfully deleted')
-  } catch (error) {
-    console.error('Failed to delete Tasks : ', error)
-    showError('Failed to delete all Tasks, check console for details.')
-  }
-}
 
 async function addToList(): Promise<void> {
   const selectedDate = dateInput.value
