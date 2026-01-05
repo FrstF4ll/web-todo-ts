@@ -55,7 +55,7 @@ export function createDate(task: ClientTask): HTMLTimeElement {
   return dueDate
 }
 
-export function createTask(task: Task): void {
+function createTaskElements(task: Task): HTMLLIElement {
   const newTask = createNewTaskElements()
   newTask.id = task.id.toString()
 
@@ -63,23 +63,30 @@ export function createTask(task: Task): void {
   checkbox.id = `checkbox-${newTask.id}`
 
   const label = createLabel(task, checkbox.id)
-
   const checkboxLabelWrapper = document.createElement('p')
   checkboxLabelWrapper.append(checkbox, label)
 
   const dueDate = createDate(task)
   const deleteBtn = createDeleteBtn(task)
-
   const dueDateDeleteWrapper = document.createElement('p')
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
 
   newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
+  return newTask
+}
 
-  // Event listeners
+// Event Listeners
+function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
+  const deleteBtn = element.querySelector('.delete-btn') as HTMLButtonElement
+  const checkbox = element.querySelector(
+    '.todo-elements__checkbox',
+  ) as HTMLInputElement
+  const label = element.querySelector('label') as HTMLLabelElement
+
   deleteBtn.addEventListener('click', async () => {
     try {
       await deleteData(API_URL_TODOS, task.id)
-      newTask.remove()
+      element.remove()
       updateOverdueMessageDisplay()
     } catch (error) {
       console.error(`Failed to delete task ${task.id}:`, error)
@@ -102,5 +109,10 @@ export function createTask(task: Task): void {
       showStatusMessage('Failed to update task. Please try again.')
     }
   })
-  toDoList.appendChild(newTask)
+}
+
+export function createTask(task: Task): void {
+  const element = createTaskElements(task)
+  attachTaskEventListeners(task, element)
+  toDoList.appendChild(element)
 }
