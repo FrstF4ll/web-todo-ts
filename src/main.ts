@@ -6,9 +6,9 @@ import {
   addButton,
   clearAllBtn,
   dateInput,
-  hideError,
+  hideStatusMessage,
   overdueMsg,
-  showError,
+  showStatusMessage,
   toDoInput,
 } from './dom'
 import { deleteAllTask } from './events'
@@ -23,7 +23,7 @@ try {
   tasks.forEach(createTask)
 } catch (error) {
   console.error('Failed to load initial tasks:', error)
-  showError('Could not load tasks. Check console for details')
+  showStatusMessage('Could not load tasks. Check console for details')
 }
 
 //Not API
@@ -40,17 +40,17 @@ async function addToList(): Promise<void> {
   const todayMidnight = toMidnight(new Date())
 
   if (selectedDate && todayMidnight > selectedMidnight) {
-    showError('Invalid date: date too early')
+    showStatusMessage('Invalid date: date too early')
     return
   }
 
   const trimmed = toDoInput.value.trim()
   if (trimmed.length === 0) {
-    showError('Invalid task name: Empty name')
+    showStatusMessage('Invalid task name: Empty name')
     return
   }
 
-  hideError()
+  hideStatusMessage()
 
   const newTask: ClientTask = {
     title: trimmed,
@@ -62,7 +62,7 @@ async function addToList(): Promise<void> {
     const postResponse = await postData<Task>(API_URL_TODOS, newTask)
     createTask(postResponse)
   } catch (error) {
-    showError('Data not posted as intended')
+    showStatusMessage('Data not posted as intended')
     console.error('Failed to send data: ', error)
   }
 

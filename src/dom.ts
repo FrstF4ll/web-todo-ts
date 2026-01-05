@@ -18,11 +18,11 @@ export const dateInput =
 export const overdueMsg =
   getRequiredElement<HTMLHeadingElement>('#overdue-message')
 // Show or hide error message
-export const showError = (message: string) => {
+export const showStatusMessage = (message: string) => {
   errorMsg.classList.remove('hidden')
   errorMsg.textContent = message
 }
-export const hideError = () => {
+export const hideStatusMessage = () => {
   errorMsg.classList.add('hidden')
   errorMsg.textContent = ''
 }

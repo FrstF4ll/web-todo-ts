@@ -1,7 +1,7 @@
 // Interface Import
 
 import { API_URL_TODOS, deleteData, patchData } from './api'
-import { showError, toDoList } from './dom'
+import { showStatusMessage, toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
 import { dateColorSetUp } from './utils'
 
@@ -83,7 +83,7 @@ export function createTask(task: Task): void {
       newTask.remove()
     } catch (error) {
       console.error(`Failed to delete task ${task.id}:`, error)
-      showError('Failed to delete task. Please try again.')
+      showStatusMessage('Failed to delete task. Please try again.')
     }
   })
 
@@ -99,7 +99,7 @@ export function createTask(task: Task): void {
       checkbox.checked = originalDoneState
       label.classList.toggle('completed', task.done)
       console.error(`Failed to update task ${task.id}:`, error)
-      showError('Failed to update task. Please try again.')
+      showStatusMessage('Failed to update task. Please try again.')
     }
   })
   toDoList.appendChild(newTask)

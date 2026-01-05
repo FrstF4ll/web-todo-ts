@@ -1,9 +1,9 @@
 import { API_URL_TODOS, deleteAllData } from './api'
-import { showError, toDoList } from './dom'
+import { showStatusMessage, toDoList } from './dom'
 export async function deleteAllTask() {
   try {
     if (toDoList.children.length === 0) {
-      showError('Todo-list already clean.')
+      showStatusMessage('Todo-list already clean.')
       return
     }
     if (!window.confirm('Are you sure you want to delete all tasks?')) {
@@ -11,9 +11,9 @@ export async function deleteAllTask() {
     }
     await deleteAllData(API_URL_TODOS)
     toDoList.innerHTML = ''
-    showError('All tasks successfully deleted')
+    showStatusMessage('All tasks successfully deleted')
   } catch (error) {
     console.error('Failed to delete Tasks : ', error)
-    showError('Failed to delete all Tasks, check console for details.')
+    showStatusMessage('Failed to delete all Tasks, check console for details.')
   }
 }
