@@ -56,6 +56,12 @@ export async function postData<T>(
     })
 
     await handleApiError(response)
+    if (response.status === 204) {
+      throw new Error(
+        'POST-ERROR: Data successfully posted but nothing returned',
+      )
+    }
+
     const responseArr = (await response.json()) as T[]
     if (!Array.isArray(responseArr)) {
       throw new Error('POST-ERROR: Returned data is not an Array')
