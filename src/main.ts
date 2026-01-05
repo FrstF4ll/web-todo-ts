@@ -27,11 +27,11 @@ try {
 }
 
 //Not API
-function isOverdue() {
+function updateOverdueMessageDisplay() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
   overdueMsg.classList.toggle('hidden', overduedTasks.length === 0)
 }
-isOverdue()
+updateOverdueMessageDisplay()
 
 async function addToList(): Promise<void> {
   const selectedDate = dateInput.value
