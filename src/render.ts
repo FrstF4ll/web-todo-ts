@@ -3,9 +3,8 @@
 import { API_URL_TODOS, deleteData, patchData } from './api'
 import { showStatusMessage, toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
-import { dateColorSetUp } from './utils'
+import { dateColorSetUp, updateOverdueMessageDisplay } from './utils'
 
-//Generate list elements
 export function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement('li')
   newTask.className = 'todo-elements'
@@ -81,6 +80,7 @@ export function createTask(task: Task): void {
     try {
       await deleteData(API_URL_TODOS, task.id)
       newTask.remove()
+      updateOverdueMessageDisplay()
     } catch (error) {
       console.error(`Failed to delete task ${task.id}:`, error)
       showStatusMessage('Failed to delete task. Please try again.')

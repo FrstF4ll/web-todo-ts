@@ -7,7 +7,6 @@ import {
   clearAllBtn,
   dateInput,
   hideStatusMessage,
-  overdueMsg,
   showStatusMessage,
   toDoInput,
 } from './dom'
@@ -15,9 +14,10 @@ import { deleteAllTask } from './events'
 import type { ClientTask, Task } from './interface'
 import { createTask } from './render'
 // Time calculation
-import { toMidnight } from './utils'
+import { toMidnight, updateOverdueMessageDisplay } from './utils'
 
 // Loading tasks
+
 try {
   const tasks = await getData<Task>(API_URL_TODOS)
   tasks.forEach(createTask)
@@ -26,12 +26,9 @@ try {
   showStatusMessage('Could not load tasks. Check console for details')
 }
 
-//Not API
-function updateOverdueMessageDisplay() {
-  const overduedTasks = document.querySelectorAll('.due-date--past-due')
-  overdueMsg.classList.toggle('hidden', overduedTasks.length === 0)
-}
 updateOverdueMessageDisplay()
+
+//Not API
 
 async function addToList(): Promise<void> {
   const selectedDate = dateInput.value
@@ -77,5 +74,8 @@ const EVENT_KEY = 'Enter'
 toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === EVENT_KEY) addToList()
 })
-clearAllBtn.addEventListener('click', deleteAllTask)
+clearAllBtn.addEventListener('click', async () => {
+  await deleteAllTask()
+  updateOverdueMessageDisplay()
+})
 addButton.addEventListener('click', () => addToList())

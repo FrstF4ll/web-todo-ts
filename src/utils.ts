@@ -1,3 +1,4 @@
+import { overdueMsg } from './dom'
 //To midnight normalization
 export function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
@@ -43,4 +44,10 @@ export function dateColorSetUp(dueDate: HTMLTimeElement): void {
   if (verifiedTime) {
     dueDate.classList.add(verifiedTime)
   }
+}
+
+export function updateOverdueMessageDisplay() {
+  const overduedTasks = document.querySelectorAll('.due-date--past-due')
+  const noOverdueTasks = overduedTasks.length === 0
+  overdueMsg.classList.toggle('hidden', noOverdueTasks)
 }
