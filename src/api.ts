@@ -66,7 +66,7 @@ export async function postData<T>(
       )
     }
 
-    const responseArr = (await response.json()) as T[]
+    const responseArr = await response.json()
     if (!Array.isArray(responseArr)) {
       throw new Error('POST-ERROR: Returned data is not an Array')
     }
