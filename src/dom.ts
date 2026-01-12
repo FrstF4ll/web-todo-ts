@@ -8,19 +8,20 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
   return el
 }
 
-
-
 // DOM
 export const toDoInput = getRequiredElement<HTMLInputElement>(SEL.TODO_INPUT)
-export const addButton =
-  getRequiredElement<HTMLButtonElement>(SEL.ADD_BUTTON)
-export const toDoList = getRequiredElement<HTMLUListElement>(SEL.TODO_LIST_ELEMENTS)
-export const errorMsg = getRequiredElement<HTMLParagraphElement>(SEL.ERROR_MESSAGE)
+export const addButton = getRequiredElement<HTMLButtonElement>(SEL.ADD_BUTTON)
+export const toDoList = getRequiredElement<HTMLUListElement>(
+  SEL.TODO_LIST_ELEMENTS,
+)
+export const errorMsg = getRequiredElement<HTMLParagraphElement>(
+  SEL.ERROR_MESSAGE,
+)
 export const clearAllBtn = getRequiredElement<HTMLButtonElement>(SEL.DELETE_ALL)
-export const dateInput =
-  getRequiredElement<HTMLInputElement>(SEL.DATE_INPUT)
-export const overdueMsg =
-  getRequiredElement<HTMLHeadingElement>(SEL.OVERDUE_MESSAGE)
+export const dateInput = getRequiredElement<HTMLInputElement>(SEL.DATE_INPUT)
+export const overdueMsg = getRequiredElement<HTMLHeadingElement>(
+  SEL.OVERDUE_MESSAGE,
+)
 // Show or hide error message
 export const showStatusMessage = (message: string) => {
   errorMsg.classList.remove('hidden')

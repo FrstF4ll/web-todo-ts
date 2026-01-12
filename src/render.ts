@@ -1,10 +1,10 @@
 // Interface Import
 
 import { API_URL_TODOS, deleteData, patchData } from './api'
+import { CSS, EVENTS, SEL, TYPES } from './constants'
 import { showStatusMessage, toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
 import { dateColorSetUp, updateOverdueMessageDisplay } from './utils'
-import { CSS, SEL, TYPES, EVENTS } from './constants'
 
 export function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement(SEL.TODO_LIST)
@@ -79,9 +79,7 @@ function createTaskElements(task: Task): HTMLLIElement {
 // Event Listeners
 function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
   const deleteBtn = element.querySelector(SEL.DELETE_BTN) as HTMLButtonElement
-  const checkbox = element.querySelector(
-    SEL.TODO_CHECKBOX,
-  ) as HTMLInputElement
+  const checkbox = element.querySelector(SEL.TODO_CHECKBOX) as HTMLInputElement
   const label = element.querySelector(SEL.LABEL) as HTMLLabelElement
 
   deleteBtn.addEventListener(EVENTS.CLICK, async () => {

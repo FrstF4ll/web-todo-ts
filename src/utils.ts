@@ -1,5 +1,5 @@
+import { CSS, DATE } from './constants'
 import { overdueMsg } from './dom'
-import { DATE, CSS } from './constants'
 //To midnight normalization
 export function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()

@@ -1,6 +1,7 @@
 import './style.css'
 
 import { API_URL_TODOS, getData, postData } from './api'
+import { EVENTS, KEYS } from './constants'
 // DOM import
 import {
   addButton,
@@ -69,13 +70,11 @@ async function addToList(): Promise<void> {
 
 // Delete all
 
-const EVENT_KEY = 'Enter'
-
-toDoInput.addEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === EVENT_KEY) addToList()
+toDoInput.addEventListener(EVENTS.KEY_PRESS, (e: KeyboardEvent) => {
+  if (e.key === KEYS.SUBMIT) addToList()
 })
-clearAllBtn.addEventListener('click', async () => {
+clearAllBtn.addEventListener(EVENTS.CLICK, async () => {
   await deleteAllTask()
   updateOverdueMessageDisplay()
 })
-addButton.addEventListener('click', () => addToList())
+addButton.addEventListener(EVENTS.CLICK, () => addToList())
