@@ -1,5 +1,5 @@
 import './style.css'
-import { SELECTORS } from './constants'
+import { CSS_CLASSES, SELECTORS } from './constants'
 
 // Get only non-null element.
 function getRequiredElement<T extends HTMLElement>(selector: string): T {
@@ -32,10 +32,10 @@ export const overdueMsg = getRequiredElement<HTMLHeadingElement>(
 )
 // Show or hide error message
 export const showStatusMessage = (message: string) => {
-  errorMsg.classList.remove('hidden')
+  errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
   errorMsg.textContent = message
 }
 export const hideStatusMessage = () => {
-  errorMsg.classList.add('hidden')
+  errorMsg.classList.add(CSS_CLASSES.HIDDEN)
   errorMsg.textContent = ''
 }
