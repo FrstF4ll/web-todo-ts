@@ -14,7 +14,7 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 export const toDoInput = getRequiredElement<HTMLInputElement>(SEL.TODO_INPUT)
 export const addButton =
   getRequiredElement<HTMLButtonElement>(SEL.ADD_BUTTON)
-export const toDoList = getRequiredElement<HTMLUListElement>(SEL.TODO_LIST)
+export const toDoList = getRequiredElement<HTMLUListElement>(SEL.TODO_LIST_ELEMENTS)
 export const errorMsg = getRequiredElement<HTMLParagraphElement>(SEL.ERROR_MESSAGE)
 export const clearAllBtn = getRequiredElement<HTMLButtonElement>(SEL.DELETE_ALL)
 export const dateInput =

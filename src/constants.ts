@@ -1,9 +1,17 @@
 // constants.ts
 // use 'as const' to prevent adding and changing properties for these objects
 const SELECTORS = {
+    TODO_LIST: 'li',
+    TODO_LIST_ELEMENTS: 'ul',
+    LABEL: 'label',
+    BUTTON: 'button',
+    INPUT: 'input',
+    TIME: 'time',
+    PARAGRAPH: 'p',
+    DELETE_BTN: '.delete-btn',
+    TODO_CHECKBOX: '.todo-elements__checkbox',
     TODO_INPUT: '#todo-input',
     ADD_BUTTON: '#add-todo-button',
-    TODO_LIST: 'ul',
     DELETE_ALL: '#delete-all',
     ERROR_MESSAGE: '#error-msg',
     DATE_INPUT: '#todo-date-input',
@@ -11,14 +19,28 @@ const SELECTORS = {
 } as const
 export const SEL = SELECTORS
 
+const INPUT_TYPES = {
+    CHECKBOX: 'checkbox',
+    BUTTON: 'button',
+} as const
+export const TYPES = INPUT_TYPES
+
+const EVENT_TYPES = {
+    CHANGE: 'change',
+    CLICK: 'click'
+} as const
+export const EVENTS = EVENT_TYPES
+
 const CSS_CLASSES = {
-    CHECKBOX: 'todo-elements__checkbox',
+    HIDDEN: 'hidden',
+    COMPLETED: 'completed',
+    TODO_ELEMENT: 'todo-elements',
+    TODO_CHECKBOX: 'todo-elements__checkbox',
     DELETE_BTN: 'delete-btn',
     DUE_DATE: 'due-date',
-    TODO_ELEMENT: 'todo-elements',
     HIDE: 'hidden',
 } as const
-export const CLASS = CSS_CLASSES
+export const CSS = CSS_CLASSES
 
 export const KEYS = {
     SUBMIT: 'Enter',
@@ -28,5 +50,4 @@ const DUE_DATE_CONFIG = {
     SOON_THRESHOLD_DAYS: 4,
     MS_PER_DAY: 1000 * 60 * 60 * 24,
 } as const
-
 export const DATE = DUE_DATE_CONFIG
