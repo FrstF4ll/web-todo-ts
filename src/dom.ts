@@ -1,5 +1,5 @@
 import './style.css'
-import { SEL } from './constants'
+import { SELECTORS } from './constants'
 
 // Get only non-null element.
 function getRequiredElement<T extends HTMLElement>(selector: string): T {
@@ -9,18 +9,26 @@ function getRequiredElement<T extends HTMLElement>(selector: string): T {
 }
 
 // DOM
-export const toDoInput = getRequiredElement<HTMLInputElement>(SEL.TODO_INPUT)
-export const addButton = getRequiredElement<HTMLButtonElement>(SEL.ADD_BUTTON)
+export const toDoInput = getRequiredElement<HTMLInputElement>(
+  SELECTORS.TODO_INPUT,
+)
+export const addButton = getRequiredElement<HTMLButtonElement>(
+  SELECTORS.ADD_BUTTON,
+)
 export const toDoList = getRequiredElement<HTMLUListElement>(
-  SEL.TODO_LIST_ELEMENTS,
+  SELECTORS.TODO_LIST_ELEMENTS,
 )
 export const errorMsg = getRequiredElement<HTMLParagraphElement>(
-  SEL.ERROR_MESSAGE,
+  SELECTORS.ERROR_MESSAGE,
 )
-export const clearAllBtn = getRequiredElement<HTMLButtonElement>(SEL.DELETE_ALL)
-export const dateInput = getRequiredElement<HTMLInputElement>(SEL.DATE_INPUT)
+export const clearAllBtn = getRequiredElement<HTMLButtonElement>(
+  SELECTORS.DELETE_ALL,
+)
+export const dateInput = getRequiredElement<HTMLInputElement>(
+  SELECTORS.DATE_INPUT,
+)
 export const overdueMsg = getRequiredElement<HTMLHeadingElement>(
-  SEL.OVERDUE_MESSAGE,
+  SELECTORS.OVERDUE_MESSAGE,
 )
 // Show or hide error message
 export const showStatusMessage = (message: string) => {

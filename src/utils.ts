@@ -1,4 +1,4 @@
-import { CSS, DATE } from './constants'
+import { CSS_CLASSES, DATE_CONFIG } from './constants'
 import { overdueMsg } from './dom'
 //To midnight normalization
 export function toMidnight(date: Date): number {
@@ -16,7 +16,7 @@ const dueDateStatus = {
 function dueColor(dateString: string): string | null {
   const today = toMidnight(new Date())
   const selectedDate = toMidnight(new Date(dateString))
-  const dayDiff = (selectedDate - today) / DATE.MS_PER_DAY
+  const dayDiff = (selectedDate - today) / DATE_CONFIG.MS_PER_DAY
 
   if (Number.isNaN(dayDiff)) {
     return null
@@ -28,7 +28,7 @@ function dueColor(dateString: string): string | null {
   if (dayDiff === 0) {
     return dueDateStatus.DueToday
   }
-  if (dayDiff <= DATE.SOON_THRESHOLD_DAYS) {
+  if (dayDiff <= DATE_CONFIG.SOON_THRESHOLD_DAYS) {
     return dueDateStatus.DueSoon
   }
   return dueDateStatus.DueLater
@@ -48,5 +48,5 @@ export function dateColorSetUp(dueDate: HTMLTimeElement): void {
 export function updateOverdueMessageDisplay() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
   const noOverdueTasks = overduedTasks.length === 0
-  overdueMsg.classList.toggle(CSS.HIDE, noOverdueTasks)
+  overdueMsg.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
