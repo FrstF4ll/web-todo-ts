@@ -1,5 +1,6 @@
 // constants.ts
-// use 'as const' to prevent adding and changing properties for these objects
+// for easier re-use and modification
+// use 'as const' to prevent adding and changing properties out of its box
 const SELECTORS = {
     TODO_LIST: 'li',
     TODO_LIST_ELEMENTS: 'ul',
