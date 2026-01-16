@@ -1,8 +1,3 @@
-import type { ClientTask } from './interface'
-
-// API endpoints
-
-
 //API error handling
 async function handleApiError(response: Response): Promise<void> {
   if (!response.ok) {
@@ -43,10 +38,10 @@ export async function getData<T>(apiURL: string): Promise<T[]> {
 }
 
 //Post request
-export async function postData<T>(
+export async function postData<T, C>(
   apiURL: string,
-  newData: ClientTask,
-): Promise<T> {
+  newData: T,
+): Promise<C> {
   try {
     const response = await fetch(apiURL, {
       method: 'POST',
@@ -77,7 +72,7 @@ export async function postData<T>(
         responseArr,
       )
     }
-    return responseArr[0] as T
+    return responseArr[0] as C
   } catch (error) {
     console.error(`Data failed to post to ${apiURL}: `, error)
     throw error

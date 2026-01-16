@@ -1,7 +1,7 @@
 import './style.css'
 
 import { getData, postData } from './api'
-import { EVENT_TYPES, KEYS, API_URLS } from './constants'
+import { API_URLS, EVENT_TYPES, KEYS } from './constants'
 // DOM import
 import {
   addButton,
@@ -57,7 +57,10 @@ async function addTodoToList(): Promise<void> {
   }
 
   try {
-    const postResponse = await postData<Task>(API_URLS.TODOS, newTask)
+    const postResponse = await postData<ClientTask, Task>(
+      API_URLS.TODOS,
+      newTask,
+    )
     createTask(postResponse)
   } catch (error) {
     showStatusMessage('Data not posted as intended')

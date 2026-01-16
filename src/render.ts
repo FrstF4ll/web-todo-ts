@@ -1,7 +1,13 @@
 // Interface Import
 
 import { deleteData, patchData } from './api'
-import { API_URLS, CSS_CLASSES, EVENT_TYPES, INPUT_TYPES, SELECTORS } from './constants'
+import {
+  API_URLS,
+  CSS_CLASSES,
+  EVENT_TYPES,
+  INPUT_TYPES,
+  SELECTORS,
+} from './constants'
 import { showStatusMessage, toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
 import { dateColorSetUp, updateOverdueMessageDisplay } from './utils'
