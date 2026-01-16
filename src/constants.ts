@@ -47,3 +47,9 @@ export const DATE_CONFIG = {
   SOON_THRESHOLD_DAYS: 4,
   MS_PER_DAY: 1000 * 60 * 60 * 24,
 } as const
+
+export const API_URLS = {
+  TODOS: 'https://api.todos.in.jt-lab.ch/todos',
+  CATEGORIES: 'https://api.todos.in.jt-lab.ch/categories',
+  CATEGORIES_TODOS: 'https://api.todos.in.jt-lab.ch/categories_todos'
+} as const

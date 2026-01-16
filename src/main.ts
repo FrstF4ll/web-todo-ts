@@ -1,7 +1,7 @@
 import './style.css'
 
-import { API_URL_TODOS, getData, postData } from './api'
-import { EVENT_TYPES, KEYS } from './constants'
+import { getData, postData } from './api'
+import { EVENT_TYPES, KEYS, API_URLS } from './constants'
 // DOM import
 import {
   addButton,
@@ -20,7 +20,7 @@ import { toMidnight, updateOverdueMessageDisplay } from './utils'
 // Loading tasks
 
 try {
-  const tasks = await getData<Task>(API_URL_TODOS)
+  const tasks = await getData<Task>(API_URLS.TODOS)
   tasks.forEach(createTask)
 } catch (error) {
   console.error('Failed to load initial tasks:', error)
@@ -31,7 +31,7 @@ updateOverdueMessageDisplay()
 
 //Not API
 
-async function addToList(): Promise<void> {
+async function addTodoToList(): Promise<void> {
   const selectedDate = dateInput.value
 
   const selectedMidnight = toMidnight(new Date(selectedDate))
@@ -57,7 +57,7 @@ async function addToList(): Promise<void> {
   }
 
   try {
-    const postResponse = await postData<Task>(API_URL_TODOS, newTask)
+    const postResponse = await postData<Task>(API_URLS.TODOS, newTask)
     createTask(postResponse)
   } catch (error) {
     showStatusMessage('Data not posted as intended')
@@ -71,10 +71,10 @@ async function addToList(): Promise<void> {
 // Delete all
 
 toDoInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
-  if (e.key === KEYS.SUBMIT) addToList()
+  if (e.key === KEYS.SUBMIT) addTodoToList()
 })
 clearAllBtn.addEventListener(EVENT_TYPES.CLICK, async () => {
   await deleteAllTask()
   updateOverdueMessageDisplay()
 })
-addButton.addEventListener(EVENT_TYPES.CLICK, () => addToList())
+addButton.addEventListener(EVENT_TYPES.CLICK, () => addTodoToList())

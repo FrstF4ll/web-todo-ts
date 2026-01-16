@@ -1,5 +1,7 @@
-import { API_URL_TODOS, deleteAllData } from './api'
+import { deleteAllData } from './api'
 import { showStatusMessage, toDoList } from './dom'
+import { API_URLS } from './constants'
+
 export async function deleteAllTask() {
   try {
     if (toDoList.children.length === 0) {
@@ -9,7 +11,7 @@ export async function deleteAllTask() {
     if (!window.confirm('Are you sure you want to delete all tasks?')) {
       return
     }
-    await deleteAllData(API_URL_TODOS)
+    await deleteAllData(API_URLS.TODOS)
     toDoList.innerHTML = ''
     showStatusMessage('All tasks successfully deleted')
   } catch (error) {
