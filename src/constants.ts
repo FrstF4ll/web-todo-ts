@@ -3,7 +3,7 @@
 // use 'as const' to prevent adding and changing properties out of its box
 export const SELECTORS = {
   TODO_LIST: 'li',
-  TODO_LIST_ELEMENTS: 'ul',
+  TODO_LIST_ELEMENTS: '#todos-container',
   LABEL: 'label',
   BUTTON: 'button',
   INPUT: 'input',

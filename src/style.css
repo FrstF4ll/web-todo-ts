@@ -10,28 +10,22 @@ html {
 }
 
 :root {
-  /*body*/
   --body-text-color: whitesmoke;
   --body-bg-color: #117727e6;
 
-  /*header*/
   --header-max-height: 40vh;
 
-  /* list elements */
   --list-min-height: 50vh;
   --list-border-radius: 8px;
   --list-bg-color: #7eac87fa;
   --list-padding: 1.5rem 0.5rem;
   --list-gap: 0.5rem;
-  /* list layout */
   --list-row-gap: 0.25rem;
 
-  /*todo items*/
   --todo-item-bg-color: #627f28c7;
   --todo-item-border-radius: 0.5rem;
   --todo-item-padding: 0.5rem;
 
-  /*input containers*/
   --input-container-height: 9.375rem;
   --input-container-width: 14.125rem;
   --input-border-radius: 1.5rem;
@@ -39,96 +33,65 @@ html {
   --input-gap: 1rem;
   --input-padding: 1rem;
 
-  /*completed label*/
   --label-text-color: black;
 
-  /*delete all*/
   --spacing-sm: 0.75rem;
   --danger-color: #e74c3c;
-  --danger-hover-color: #c0392b; /* darker red on hover */
+  --danger-hover-color: #c0392b;
   --danger-text-color: white;
   --danger-padding-vertical: 0.25rem;
   --border-radius-sm: 0.25rem;
-  /* due-date*/
+
   --due-date-past-due: red;
   --due-date-due-today: orange;
   --due-date-due-soon: #ebdf07;
   --due-date-due-later: #bef500;
   --due-date-text-color: black;
 
-  /*overdue message */
   --overdue-msg-size: 1.3rem;
 }
+
 * {
   font-family: Helvetica, Arial, sans-serif;
   margin: 0;
+  text-decoration: none;
+}
+
+a {
+  color: inherit;
 }
 
 body {
-  padding: 0; /* It's safer to reset padding too */
+  padding: 0;
   height: 100%;
   background-color: var(--body-bg-color);
   color: var(--body-text-color);
 }
 
 #title {
-  /* grid layout */
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 2fr 2fr;
   justify-items: center;
   align-items: center;
   max-height: var(--header-max-height);
 }
 
-header {
+nav {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
   grid-row: 1;
+  grid-column: 2;
+}
+
+header {
+  grid-row: 2;
   grid-column: 2;
   text-align: center;
   background-color: var(--list-bg-color);
   border-radius: var(--input-border-radius);
   padding: var(--list-padding);
-}
-
-#overdue-message {
-  background-color: var(--danger-color);
-  color: var(--danger-text-color);
-  font-size: var(--overdue-msg-size);
-  margin-top: var(--spacing-sm);
-  padding-block: var(--danger-padding-vertical);
-  border-radius: var(--border-radius-sm);
-}
-button:active {
-  transform: scale(0.95);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.due-date {
-  color: var(--due-date-text-color);
-  padding: 0.2rem 0.5rem;
-  border-radius: var(--border-radius-sm);
-}
-
-.due-date--past-due {
-  background-color: var(--due-date-past-due);
-}
-.due-date--due-today {
-  background-color: var(--due-date-due-today);
-}
-.due-date--due-soon {
-  background-color: var(--due-date-due-soon);
-}
-.due-date--due-later {
-  background-color: var(--due-date-due-later);
-}
-
-.for-readers {
-  position: absolute;
-  left: -10000px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
 }
 
 .todo-list {
@@ -142,32 +105,16 @@ button:active {
   grid-column: 2;
 }
 
-ul {
+#todos-container,
+#categories-container {
   grid-row: 2;
-  /* flex layout */
   display: flex;
   flex-direction: column;
   background-color: var(--list-bg-color);
   min-height: var(--list-min-height);
-
-  /* border layout */
   border-radius: var(--list-border-radius);
-
   padding: var(--list-padding);
   gap: var(--list-gap);
-}
-
-.todo-elements label.completed {
-  text-decoration: line-through;
-  color: var(--label-text-color);
-  opacity: 0.7;
-}
-
-.hidden {
-  display: none;
-}
-.user-input-layout {
-  gap: var(--input-layout-gap);
 }
 
 .todo-elements {
@@ -185,36 +132,37 @@ ul {
   gap: 0.25rem;
 }
 
-#delete-all {
-  /*position*/
-  grid-row: 1;
-  justify-self: end;
-
-  /* padding and margin */
-  margin-top: var(--spacing-sm);
-  padding-block: var(--danger-padding-vertical);
-  /*color and global style*/
-  background-color: var(--danger-color);
-  color: var(--danger-text-color);
-  border: none;
-  border-radius: var(--border-radius-sm);
-  font-weight: bold;
-
-  /*animation*/
-  cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+.todo-elements label.completed {
+  text-decoration: line-through;
+  color: var(--label-text-color);
+  opacity: 0.7;
 }
 
-#delete-all:hover {
-  background-color: var(--danger-hover-color);
+.due-date {
+  color: var(--due-date-text-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+}
+
+.due-date--past-due {
+  background-color: var(--due-date-past-due);
+}
+
+.due-date--due-today {
+  background-color: var(--due-date-due-today);
+}
+
+.due-date--due-soon {
+  background-color: var(--due-date-due-soon);
+}
+
+.due-date--due-later {
+  background-color: var(--due-date-due-later);
 }
 
 #user-input {
-  grid-row: 2;
+  grid-row: 3;
   grid-column: 2;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -222,7 +170,6 @@ ul {
   gap: var(--input-gap);
   height: var(--input-container-height);
   width: var(--input-container-width);
-
   background-color: #47bf5f6d;
   border-radius: var(--input-border-radius);
   color: white;
@@ -236,7 +183,56 @@ ul {
   text-align: center;
 }
 
+.user-input-layout {
+  gap: var(--input-layout-gap);
+}
+
 #error-msg {
   white-space: nowrap;
   margin: var(--no-margin);
+}
+
+button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#delete-all {
+  grid-row: 1;
+  justify-self: end;
+  margin-top: var(--spacing-sm);
+  padding-block: var(--danger-padding-vertical);
+  background-color: var(--danger-color);
+  color: var(--danger-text-color);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#delete-all:hover {
+  background-color: var(--danger-hover-color);
+}
+
+#overdue-message {
+  background-color: var(--danger-color);
+  color: var(--danger-text-color);
+  font-size: var(--overdue-msg-size);
+  margin-top: var(--spacing-sm);
+  padding-block: var(--danger-padding-vertical);
+  border-radius: var(--border-radius-sm);
+}
+
+.hidden {
+  display: none;
+}
+
+.for-readers {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }

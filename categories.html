@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/todo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web todolist project</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+
+<body>
+    <main id="title">
+        <nav>
+            <div><a href="index.html">Todos</a></div>
+            <div><a href="categories.html">Categories</a></div>
+        </nav>
+        <header>
+            <h1>Web todolist app</h1>
+            <p id="overdue-message" class="hidden">You have overdued tasks !</p>
+        </header>
+        <section id="user-input">
+            <div class="test">
+                <label for="todo-input" id="todo-label">New Category</label>
+                <p id="error-msg" class="hidden" aria-live="polite">ERROR: Category cannot be empty</p>
+            </div>
+            <div class="user-input-layout">
+                <input id="todo-input" placeholder="Write here your category">
+                <input type="color" id="todo-color-input">
+                <button id="add-todo-button">Add to category list</button>
+                <label for="todo-color-input" class="for-readers">Category color</label>
+            </div>
+        </section>
+    </main>
+    <section class="todo-list">
+        <button id="delete-all">Clear tasks</button>
+        <ul id="categories-container">
+        </ul>
+    </section>
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
