@@ -94,14 +94,14 @@ header {
   padding: var(--list-padding);
 }
 
-.todo-list {
+.app-list {
   display: grid;
   grid-template-columns: 1fr minmax(0, 2fr) 1fr;
   grid-template-rows: auto 1fr;
   row-gap: var(--list-row-gap);
 }
 
-.todo-list > * {
+.app-list > * {
   grid-column: 2;
 }
 
@@ -208,7 +208,9 @@ button:active {
   border-radius: var(--border-radius-sm);
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 #delete-all:hover {
