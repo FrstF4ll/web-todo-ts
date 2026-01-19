@@ -8,6 +8,7 @@ import {
   SELECTORS,
 } from './constants'
 import type { Category, ClientCategory } from './interface'
+import { renderSettingsWindow } from './settings'
 import { hideStatusMessage, showStatusMessage } from './status-message'
 
 function getRequiredElement<T extends HTMLElement>(selector: string): T {
@@ -63,15 +64,25 @@ export function createDeleteBtn(category: ClientCategory): HTMLButtonElement {
   deleteBtn.ariaLabel = `Delete category: ${category.title}`
   return deleteBtn
 }
+function createModifyingButton(category: ClientCategory): HTMLButtonElement {
+  const modifyButton = document.createElement(SELECTORS.BUTTON)
+  modifyButton.type = INPUT_TYPES.BUTTON
+  modifyButton.className = CSS_CLASSES.MODIFY_BTN
+  modifyButton.textContent = 'Modiy'
+  modifyButton.ariaLabel = `Modify category${category.title}`
+  return modifyButton
+}
 
 function createCategoryElements(category: Category): HTMLLIElement {
   const newCategory = createNewCategoryElements()
   newCategory.id = category.id.toString()
+  newCategory.className = 'categories-elements'
   newCategory.style.backgroundColor = category.color
   const deleteBtn = createDeleteBtn(category)
   const categoryTitle = createCategoryTitle(category)
+  const modifyBtn = createModifyingButton(category)
 
-  newCategory.append(categoryTitle, deleteBtn)
+  newCategory.append(modifyBtn, categoryTitle, deleteBtn)
   return newCategory
 }
 
@@ -81,6 +92,12 @@ function attachCategoryEventListeners(
   category: Category,
   element: HTMLLIElement,
 ): void {
+  const modifyBtn = element.querySelector(
+    `.${CSS_CLASSES.MODIFY_BTN}`,
+  ) as HTMLButtonElement
+
+  modifyBtn.addEventListener(EVENT_TYPES.CLICK, () => renderSettingsWindow())
+
   const deleteBtn = element.querySelector(
     SELECTORS.DELETE_BTN,
   ) as HTMLButtonElement

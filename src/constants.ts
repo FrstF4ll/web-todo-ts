@@ -14,7 +14,7 @@ export const SELECTORS = {
   DELETE_BTN: '.delete-btn',
   TODO_CHECKBOX: '.todo-elements__checkbox',
   TODO_INPUT: '#todo-input',
-  CATEGORY_INPUT: '#category-input',
+  CATEGORY_INPUT: '#category-name-input',
   ADD_BUTTON: '#add-todo-button',
   CATEGORY_COLOR_INPUT: '#category-color-input',
   ADD_CATEGORY_BUTTON: '#add-category-button',
@@ -42,6 +42,7 @@ export const CSS_CLASSES = {
   CATEGORY_ELEMENT: 'category-element',
   TODO_CHECKBOX: 'todo-elements__checkbox',
   DELETE_BTN: 'delete-btn',
+  MODIFY_BTN: 'modify-btn',
   DUE_DATE: 'due-date',
 } as const
 

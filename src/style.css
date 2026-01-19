@@ -118,7 +118,7 @@ header {
 }
 
 .todo-element,
-.category-element {
+.categories-elements {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -129,7 +129,7 @@ header {
 }
 
 .todo-element p,
-.category-element div {
+.categories-elements div {
   display: flex;
   gap: 0.25rem;
 }
