@@ -38,10 +38,7 @@ export async function getData<T>(apiURL: string): Promise<T[]> {
 }
 
 //Post request
-export async function postData<T, C>(
-  apiURL: string,
-  newData: T,
-): Promise<C> {
+export async function postData<T, C>(apiURL: string, newData: T): Promise<C> {
   try {
     const response = await fetch(apiURL, {
       method: 'POST',
