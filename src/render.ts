@@ -13,7 +13,7 @@ import type { ClientTask, Task } from './interface'
 import { dateColorSetUp, updateOverdueMessageDisplay } from './utils'
 
 export function createNewTaskElements(): HTMLLIElement {
-  const newTask = document.createElement(SELECTORS.TODO_LIST)
+  const newTask = document.createElement(SELECTORS.LIST_ELEMENT)
   newTask.className = CSS_CLASSES.TODO_ELEMENT
   return newTask
 }

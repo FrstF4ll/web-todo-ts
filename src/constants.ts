@@ -2,19 +2,21 @@
 // for easier re-use and modification
 // use 'as const' to prevent adding and changing properties out of its box
 export const SELECTORS = {
-  TODO_LIST: 'li',
+  LIST_ELEMENT: 'li',
   TODO_LIST_ELEMENTS: '#todos-container',
   CATEGORY_LIST_ELEMENTS: '#categories-container',
   LABEL: 'label',
   BUTTON: 'button',
   INPUT: 'input',
   TIME: 'time',
+  DIV: 'div',
   PARAGRAPH: 'p',
   DELETE_BTN: '.delete-btn',
   TODO_CHECKBOX: '.todo-elements__checkbox',
   TODO_INPUT: '#todo-input',
   CATEGORY_INPUT: '#category-input',
   ADD_BUTTON: '#add-todo-button',
+  CATEGORY_COLOR_INPUT: '#category-color-input',
   ADD_CATEGORY_BUTTON: '#add-category-button',
   DELETE_ALL: '#delete-all',
   ERROR_MESSAGE: '#error-msg',
@@ -36,7 +38,8 @@ export const EVENT_TYPES = {
 export const CSS_CLASSES = {
   HIDDEN: 'hidden',
   COMPLETED: 'completed',
-  TODO_ELEMENT: 'todo-elements',
+  TODO_ELEMENT: 'todo-element',
+  CATEGORY_ELEMENT: 'category-element',
   TODO_CHECKBOX: 'todo-elements__checkbox',
   DELETE_BTN: 'delete-btn',
   DUE_DATE: 'due-date',

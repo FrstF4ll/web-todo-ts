@@ -117,7 +117,8 @@ header {
   gap: var(--list-gap);
 }
 
-.todo-elements {
+.todo-element,
+.category-element {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -127,12 +128,13 @@ header {
   border-radius: var(--todo-item-border-radius);
 }
 
-.todo-elements p {
+.todo-element p,
+.category-element div {
   display: flex;
   gap: 0.25rem;
 }
 
-.todo-elements label.completed {
+.todo-element label.completed {
   text-decoration: line-through;
   color: var(--label-text-color);
   opacity: 0.7;
