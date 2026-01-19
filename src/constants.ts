@@ -4,6 +4,7 @@
 export const SELECTORS = {
   TODO_LIST: 'li',
   TODO_LIST_ELEMENTS: '#todos-container',
+  CATEGORY_LIST_ELEMENTS: '#categories-container',
   LABEL: 'label',
   BUTTON: 'button',
   INPUT: 'input',
@@ -12,7 +13,9 @@ export const SELECTORS = {
   DELETE_BTN: '.delete-btn',
   TODO_CHECKBOX: '.todo-elements__checkbox',
   TODO_INPUT: '#todo-input',
+  CATEGORY_INPUT: '#category-input',
   ADD_BUTTON: '#add-todo-button',
+  ADD_CATEGORY_BUTTON: '#add-category-button',
   DELETE_ALL: '#delete-all',
   ERROR_MESSAGE: '#error-msg',
   DATE_INPUT: '#todo-date-input',
