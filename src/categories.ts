@@ -107,7 +107,7 @@ function attachCategoryEventListeners(
     if (!elementTitle) {
       return
     }
-    const elementTextContent = elementTitle.textContent
+    const elementTextContent = elementTitle.textContent ?? ''
     renderSettingsWindow(
       parentElement,
       elementBackgroundColor,
