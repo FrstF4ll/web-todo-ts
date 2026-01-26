@@ -104,35 +104,67 @@ export function renderSettingsWindow(
   parentElementBackgroundColors: string,
   parentElementTitleContent: string,
 ) {
-  modal.innerHTML = `
-        <h2>Settings</h2>
-        <main>
-            <div>
-                <label>Title</label>
-                <input type="text" id="new-title-input" value="${parentElementTitleContent}">
-            </div>
-            <div>
-                <label>Color</label>
-                <input type="color" id="color-input" value="${rgbToHex(parentElementBackgroundColors)}">
-            </div>
-        </main>
-        <div id="save-cancel-wrapper">
-        <button id="save-btn">Apply</button>
-        <button id="cancel-btn">Cancel</button>
-        </div>
-    `
+  // Clear modal
+  modal.innerHTML = ''
+
+  // Create h2
+  const h2 = document.createElement('h2')
+  h2.textContent = 'Settings'
+  modal.appendChild(h2)
+
+  // Create main section
+  const main = document.createElement('main')
+
+  // Title input group
+  const titleDiv = document.createElement('div')
+  const titleLabel = document.createElement('label')
+  titleLabel.textContent = 'Title'
+  const titleInput = document.createElement('input')
+  titleInput.type = 'text'
+  titleInput.id = 'new-title-input'
+  titleInput.value = parentElementTitleContent
+  titleDiv.appendChild(titleLabel)
+  titleDiv.appendChild(titleInput)
+
+  // Color input group
+  const colorDiv = document.createElement('div')
+  const colorLabel = document.createElement('label')
+  colorLabel.textContent = 'Color'
+  const colorInput = document.createElement('input')
+  colorInput.type = 'color'
+  colorInput.id = 'color-input'
+  colorInput.value = rgbToHex(parentElementBackgroundColors)
+  colorDiv.appendChild(colorLabel)
+  colorDiv.appendChild(colorInput)
+
+  main.appendChild(titleDiv)
+  main.appendChild(colorDiv)
+  modal.appendChild(main)
+
+  // Create buttons wrapper
+  const saveAndCancelWrapper = document.createElement('div')
+  saveAndCancelWrapper.id = 'save-cancel-wrapper'
+
+  const saveBtn = document.createElement('button')
+  saveBtn.id = 'save-btn'
+  saveBtn.textContent = 'Apply'
+
+  const cancelBtn = document.createElement('button')
+  cancelBtn.id = 'cancel-btn'
+  cancelBtn.textContent = 'Cancel'
+
+  saveAndCancelWrapper.appendChild(saveBtn)
+  saveAndCancelWrapper.appendChild(cancelBtn)
+  modal.appendChild(saveAndCancelWrapper)
+
   styleModalChildrenElements()
   overlay.appendChild(modal)
   document.body.appendChild(overlay)
 
-  const saveBtn = modal.querySelector('#save-btn') as HTMLButtonElement
-  const cancelBtn = modal.querySelector('#cancel-btn') as HTMLButtonElement
   cancelBtn.onclick = () => overlay.remove()
   saveBtn.onclick = async () => {
-    const color = (modal.querySelector('#color-input') as HTMLInputElement)
-      .value
-    const title = (modal.querySelector('#new-title-input') as HTMLInputElement)
-      .value
+    const color = colorInput.value
+    const title = titleInput.value
     await patchData(API_URLS.CATEGORIES, categoryElement.id, {
       title: title,
       color: color,
