@@ -79,7 +79,7 @@ export async function postData<T, C>(apiURL: string, newData: T): Promise<C> {
 //Patch request
 export async function patchData<C, R>(
   apiURL: string,
-  id: number,
+  id: number | string,
   updatedDatas: C,
 ): Promise<R | null> {
   const completeURL = `${apiURL}?id=eq.${id}`

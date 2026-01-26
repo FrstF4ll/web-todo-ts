@@ -52,6 +52,7 @@ export function createNewCategoryElements(): HTMLLIElement {
 }
 function createCategoryTitle(category: Category): HTMLParagraphElement {
   const categoryTitle = document.createElement(SELECTORS.PARAGRAPH)
+  categoryTitle.className = 'category-title'
   categoryTitle.textContent = category.title
   return categoryTitle
 }
@@ -68,7 +69,7 @@ function createModifyingButton(category: ClientCategory): HTMLButtonElement {
   const modifyButton = document.createElement(SELECTORS.BUTTON)
   modifyButton.type = INPUT_TYPES.BUTTON
   modifyButton.className = CSS_CLASSES.MODIFY_BTN
-  modifyButton.textContent = 'Modiy'
+  modifyButton.textContent = 'Modify'
   modifyButton.ariaLabel = `Modify category${category.title}`
   return modifyButton
 }
@@ -96,7 +97,23 @@ function attachCategoryEventListeners(
     `.${CSS_CLASSES.MODIFY_BTN}`,
   ) as HTMLButtonElement
 
-  modifyBtn.addEventListener(EVENT_TYPES.CLICK, () => renderSettingsWindow())
+  modifyBtn.addEventListener(EVENT_TYPES.CLICK, () => {
+    const parentElement = modifyBtn.parentElement as HTMLLIElement
+    if (!parentElement) {
+      return
+    }
+    const elementBackgroundColor = parentElement.style.backgroundColor
+    const elementTitle = parentElement.querySelector('p')
+    if (!elementTitle) {
+      return
+    }
+    const elementTextContent = elementTitle.textContent
+    renderSettingsWindow(
+      parentElement,
+      elementBackgroundColor,
+      elementTextContent,
+    )
+  })
 
   const deleteBtn = element.querySelector(
     SELECTORS.DELETE_BTN,

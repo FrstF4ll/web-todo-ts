@@ -22,6 +22,7 @@ export const SELECTORS = {
   ERROR_MESSAGE: '#error-msg',
   DATE_INPUT: '#todo-date-input',
   OVERDUE_MESSAGE: '#overdue-message',
+  CATEGORY_TITLE: '.category-title',
 } as const
 
 export const INPUT_TYPES = {
