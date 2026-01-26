@@ -64,7 +64,7 @@ function styleModalChildrenElements() {
     colorInput.forEach((inputEl) => {
       Object.assign(inputEl.style, {
         height: '25px',
-        cursor: 'pointer',
+        cursor: 'pointe r',
         padding: '0.2rem',
       })
     })
@@ -87,6 +87,18 @@ function styleModalChildrenElements() {
     })
 }
 
+const rgbToHex = (rgb: string): string => {
+  const matches = rgb.match(/\d+/g)
+
+  // If no numbers are found, return a default (like black) or an empty string
+  if (!matches) return '#000000'
+
+  return `#${matches
+    .slice(0, 3)
+    .map((x) => (+x).toString(16).padStart(2, '0'))
+    .join('')}`
+}
+
 export function renderSettingsWindow(
   categoryElement: HTMLLIElement,
   parentElementBackgroundColors: string,
@@ -101,7 +113,7 @@ export function renderSettingsWindow(
             </div>
             <div>
                 <label>Color</label>
-                <input type="color" id="color-input" value="${parentElementBackgroundColors}">
+                <input type="color" id="color-input" value="${rgbToHex(parentElementBackgroundColors)}">
             </div>
         </main>
         <div id="save-cancel-wrapper">
@@ -110,7 +122,6 @@ export function renderSettingsWindow(
         </div>
     `
   styleModalChildrenElements()
-
   overlay.appendChild(modal)
   document.body.appendChild(overlay)
 
