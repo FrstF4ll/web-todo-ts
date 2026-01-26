@@ -38,7 +38,7 @@ export async function getData<T>(apiURL: string): Promise<T[]> {
 }
 
 //Post request
-export async function postData<T, C>(apiURL: string, newData: T): Promise<C> {
+export async function postData<RequestBody, ResponseBody>(apiURL: string, newData: RequestBody): Promise<ResponseBody> {
   try {
     const response = await fetch(apiURL, {
       method: 'POST',
@@ -69,7 +69,7 @@ export async function postData<T, C>(apiURL: string, newData: T): Promise<C> {
         responseArr,
       )
     }
-    return responseArr[0] as C
+    return responseArr[0] as ResponseBody
   } catch (error) {
     console.error(`Data failed to post to ${apiURL}: `, error)
     throw error
