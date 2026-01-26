@@ -40,7 +40,7 @@ export const CSS_CLASSES = {
   HIDDEN: 'hidden',
   COMPLETED: 'completed',
   TODO_ELEMENT: 'todo-element',
-  CATEGORY_ELEMENT: 'category-element',
+  CATEGORY_ELEMENT: 'categories-elements',
   TODO_CHECKBOX: 'todo-elements__checkbox',
   DELETE_BTN: 'delete-btn',
   MODIFY_BTN: 'modify-btn',

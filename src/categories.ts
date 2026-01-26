@@ -77,7 +77,7 @@ function createModifyingButton(category: ClientCategory): HTMLButtonElement {
 function createCategoryElements(category: Category): HTMLLIElement {
   const newCategory = createNewCategoryElements()
   newCategory.id = category.id.toString()
-  newCategory.className = 'categories-elements'
+  newCategory.className = CSS_CLASSES.CATEGORY_ELEMENT
   newCategory.style.backgroundColor = category.color
   const deleteBtn = createDeleteBtn(category)
   const categoryTitle = createCategoryTitle(category)
@@ -103,7 +103,7 @@ function attachCategoryEventListeners(
       return
     }
     const elementBackgroundColor = parentElement.style.backgroundColor
-    const elementTitle = parentElement.querySelector('p')
+    const elementTitle = parentElement.querySelector<HTMLParagraphElement>(SELECTORS.CATEGORY_TITLE)
     if (!elementTitle) {
       return
     }
