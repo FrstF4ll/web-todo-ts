@@ -242,3 +242,59 @@ button:active {
   height: 1px;
   overflow: hidden;
 }
+
+/* Settings Modal Styles */
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.settings-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  background-color: #638519;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 300px;
+  min-height: 320px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: whitesmoke;
+}
+
+.settings-modal h2 {
+  text-align: center;
+}
+
+.settings-modal main {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 1.5rem;
+  align-items: center;
+}
+
+.settings-modal input {
+  height: 25px;
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
+.settings-modal button {
+  cursor: pointer;
+}
+
+.save-cancel-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 150px;
+}
