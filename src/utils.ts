@@ -50,3 +50,9 @@ export function updateOverdueMessageDisplay() {
   const noOverdueTasks = overduedTasks.length === 0
   overdueMsg.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
+
+export function getRequiredElement<T extends HTMLElement>(selector: string): T {
+  const el = document.querySelector<T>(selector)
+  if (!el) throw new Error(`Element ${selector} not found`)
+  return el
+}

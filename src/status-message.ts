@@ -1,10 +1,5 @@
 import { CSS_CLASSES, SELECTORS } from './constants'
-
-function getRequiredElement<T extends HTMLElement>(selector: string): T {
-  const el = document.querySelector<T>(selector)
-  if (!el) throw new Error(`Element ${selector} not found`)
-  return el
-}
+import { getRequiredElement } from './utils'
 
 export const errorMsg = getRequiredElement<HTMLParagraphElement>(
   SELECTORS.ERROR_MESSAGE,

@@ -1,12 +1,6 @@
 import './style.css'
 import { CSS_CLASSES, SELECTORS } from './constants'
-
-// Get only non-null element.
-function getRequiredElement<T extends HTMLElement>(selector: string): T {
-  const el = document.querySelector<T>(selector)
-  if (!el) throw new Error(`Element ${selector} not found`)
-  return el
-}
+import { getRequiredElement } from './utils'
 
 // DOM
 export const toDoInput = getRequiredElement<HTMLInputElement>(

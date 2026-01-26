@@ -10,12 +10,7 @@ import {
 import type { Category, ClientCategory } from './interface'
 import { renderSettingsWindow } from './settings'
 import { hideStatusMessage, showStatusMessage } from './status-message'
-
-function getRequiredElement<T extends HTMLElement>(selector: string): T {
-  const el = document.querySelector<T>(selector)
-  if (!el) throw new Error(`Element ${selector} not found`)
-  return el
-}
+import { getRequiredElement } from './utils'
 
 // DOM
 export const categoryInput = getRequiredElement<HTMLInputElement>(
