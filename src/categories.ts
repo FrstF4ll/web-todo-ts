@@ -98,7 +98,9 @@ function attachCategoryEventListeners(
       return
     }
     const elementBackgroundColor = parentElement.style.backgroundColor
-    const elementTitle = parentElement.querySelector<HTMLParagraphElement>(SELECTORS.CATEGORY_TITLE)
+    const elementTitle = parentElement.querySelector<HTMLParagraphElement>(
+      SELECTORS.CATEGORY_TITLE,
+    )
     if (!elementTitle) {
       return
     }
