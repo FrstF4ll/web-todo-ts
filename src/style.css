@@ -57,6 +57,10 @@ html {
   text-decoration: none;
 }
 
+li {
+  list-style: none;
+}
+
 a {
   color: inherit;
 }
@@ -210,9 +214,7 @@ button:active {
   border-radius: var(--border-radius-sm);
   font-weight: bold;
   cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #delete-all:hover {
