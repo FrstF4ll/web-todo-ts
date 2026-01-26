@@ -1,13 +1,19 @@
 // Interface Import
 
-import { API_URL_TODOS, deleteData, patchData } from './api'
-import { CSS_CLASSES, EVENT_TYPES, INPUT_TYPES, SELECTORS } from './constants'
+import { deleteData, patchData } from './api'
+import {
+  API_URLS,
+  CSS_CLASSES,
+  EVENT_TYPES,
+  INPUT_TYPES,
+  SELECTORS,
+} from './constants'
 import { showStatusMessage, toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
 import { dateColorSetUp, updateOverdueMessageDisplay } from './utils'
 
 export function createNewTaskElements(): HTMLLIElement {
-  const newTask = document.createElement(SELECTORS.TODO_LIST)
+  const newTask = document.createElement(SELECTORS.LIST_ELEMENT)
   newTask.className = CSS_CLASSES.TODO_ELEMENT
   return newTask
 }
@@ -88,7 +94,7 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
 
   deleteBtn.addEventListener(EVENT_TYPES.CLICK, async () => {
     try {
-      await deleteData(API_URL_TODOS, task.id)
+      await deleteData(API_URLS.TODOS, task.id)
       element.remove()
       updateOverdueMessageDisplay()
     } catch (error) {
@@ -102,7 +108,7 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
     task.done = checkbox.checked
     label.classList.toggle(CSS_CLASSES.COMPLETED, task.done)
     try {
-      await patchData(API_URL_TODOS, task.id, { done: task.done })
+      await patchData(API_URLS.TODOS, task.id, { done: task.done })
     } catch (error) {
       // Revert UI on failure to keep it consistent with the server state
       task.done = originalDoneState

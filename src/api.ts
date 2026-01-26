@@ -1,10 +1,3 @@
-import type { ClientTask } from './interface'
-
-// API endpoints
-export const API_URL_TODOS: string = 'https://api.todos.in.jt-lab.ch/todos'
-// const CATEGORIES_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories'
-// const CATEGORIES_TODO_API_ENDPOINT: string = 'https://api.todos.in.jt-lab.ch/categories_todos'
-
 //API error handling
 async function handleApiError(response: Response): Promise<void> {
   if (!response.ok) {
@@ -45,10 +38,10 @@ export async function getData<T>(apiURL: string): Promise<T[]> {
 }
 
 //Post request
-export async function postData<T>(
+export async function postData<RequestBody, ResponseBody>(
   apiURL: string,
-  newData: ClientTask,
-): Promise<T> {
+  newData: RequestBody,
+): Promise<ResponseBody> {
   try {
     const response = await fetch(apiURL, {
       method: 'POST',
@@ -79,7 +72,7 @@ export async function postData<T>(
         responseArr,
       )
     }
-    return responseArr[0] as T
+    return responseArr[0] as ResponseBody
   } catch (error) {
     console.error(`Data failed to post to ${apiURL}: `, error)
     throw error
@@ -89,7 +82,7 @@ export async function postData<T>(
 //Patch request
 export async function patchData<C, R>(
   apiURL: string,
-  id: number,
+  id: number | string,
   updatedDatas: C,
 ): Promise<R | null> {
   const completeURL = `${apiURL}?id=eq.${id}`

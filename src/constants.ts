@@ -2,21 +2,27 @@
 // for easier re-use and modification
 // use 'as const' to prevent adding and changing properties out of its box
 export const SELECTORS = {
-  TODO_LIST: 'li',
-  TODO_LIST_ELEMENTS: 'ul',
+  LIST_ELEMENT: 'li',
+  TODO_LIST_ELEMENTS: '#todos-container',
+  CATEGORY_LIST_ELEMENTS: '#categories-container',
   LABEL: 'label',
   BUTTON: 'button',
   INPUT: 'input',
   TIME: 'time',
+  DIV: 'div',
   PARAGRAPH: 'p',
   DELETE_BTN: '.delete-btn',
   TODO_CHECKBOX: '.todo-elements__checkbox',
   TODO_INPUT: '#todo-input',
+  CATEGORY_INPUT: '#category-name-input',
   ADD_BUTTON: '#add-todo-button',
+  CATEGORY_COLOR_INPUT: '#category-color-input',
+  ADD_CATEGORY_BUTTON: '#add-category-button',
   DELETE_ALL: '#delete-all',
   ERROR_MESSAGE: '#error-msg',
   DATE_INPUT: '#todo-date-input',
   OVERDUE_MESSAGE: '#overdue-message',
+  CATEGORY_TITLE: '.category-title',
 } as const
 
 export const INPUT_TYPES = {
@@ -33,9 +39,11 @@ export const EVENT_TYPES = {
 export const CSS_CLASSES = {
   HIDDEN: 'hidden',
   COMPLETED: 'completed',
-  TODO_ELEMENT: 'todo-elements',
+  TODO_ELEMENT: 'todo-element',
+  CATEGORY_ELEMENT: 'categories-elements',
   TODO_CHECKBOX: 'todo-elements__checkbox',
   DELETE_BTN: 'delete-btn',
+  MODIFY_BTN: 'modify-btn',
   DUE_DATE: 'due-date',
 } as const
 
@@ -46,4 +54,10 @@ export const KEYS = {
 export const DATE_CONFIG = {
   SOON_THRESHOLD_DAYS: 4,
   MS_PER_DAY: 1000 * 60 * 60 * 24,
+} as const
+
+export const API_URLS = {
+  TODOS: 'https://api.todos.in.jt-lab.ch/todos',
+  CATEGORIES: 'https://api.todos.in.jt-lab.ch/categories',
+  CATEGORIES_TODOS: 'https://api.todos.in.jt-lab.ch/categories_todos',
 } as const

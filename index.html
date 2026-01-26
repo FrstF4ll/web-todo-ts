@@ -11,6 +11,10 @@
 
 <body>
   <main id="title">
+    <nav>
+      <li><a href="index.html">Todos</a></li>
+      <li><a href="categories.html">Categories</a></li>
+    </nav>
     <header>
       <h1>Web todolist app</h1>
       <p id="overdue-message" class="hidden">You have overdued tasks !</p>
@@ -28,9 +32,9 @@
       </div>
     </section>
   </main>
-  <section class="todo-list">
+  <section class="app-list">
     <button id="delete-all">Clear tasks</button>
-    <ul>
+    <ul id="todos-container">
     </ul>
   </section>
   <script type="module" src="/src/main.ts"></script>
