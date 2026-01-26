@@ -48,7 +48,7 @@ export function dateColorSetUp(dueDate: HTMLTimeElement): void {
 export function updateOverdueMessageDisplay() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
   const noOverdueTasks = overduedTasks.length === 0
-  overdueMsg.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
+  overdueMsg?.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
 
 export function getRequiredElement<T extends HTMLElement>(selector: string): T {

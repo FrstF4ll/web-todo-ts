@@ -32,7 +32,7 @@ updateOverdueMessageDisplay()
 //Not API
 
 async function addTodoToList(): Promise<void> {
-  const selectedDate = dateInput.value
+  const selectedDate = dateInput!.value
 
   const selectedMidnight = toMidnight(new Date(selectedDate))
   const todayMidnight = toMidnight(new Date())
@@ -42,7 +42,7 @@ async function addTodoToList(): Promise<void> {
     return
   }
 
-  const trimmed = toDoInput.value.trim()
+  const trimmed = toDoInput!.value.trim()
   if (trimmed.length === 0) {
     showStatusMessage('Invalid task name: Empty name')
     return
@@ -67,17 +67,17 @@ async function addTodoToList(): Promise<void> {
     console.error('Failed to send data: ', error)
   }
 
-  toDoInput.value = ''
-  dateInput.value = ''
+  toDoInput!.value = ''
+  dateInput!.value = ''
 }
 
 // Delete all
 
-toDoInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
+toDoInput?.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
   if (e.key === KEYS.SUBMIT) addTodoToList()
 })
-clearAllBtn.addEventListener(EVENT_TYPES.CLICK, async () => {
+clearAllBtn?.addEventListener(EVENT_TYPES.CLICK, async () => {
   await deleteAllTask()
   updateOverdueMessageDisplay()
 })
-addButton.addEventListener(EVENT_TYPES.CLICK, () => addTodoToList())
+addButton?.addEventListener(EVENT_TYPES.CLICK, () => addTodoToList())
