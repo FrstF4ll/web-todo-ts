@@ -1,7 +1,7 @@
 import './style.css'
 
 import { getData, postData } from './api'
-import { API_URLS, EVENT_TYPES, KEYS } from './constants'
+import { API_URLS, EVENT_TYPES, KEYS, SELECTORS } from './constants'
 // DOM import
 import {
   addButton,
@@ -12,15 +12,26 @@ import {
   toDoInput,
 } from './dom'
 import { deleteAllTask } from './events'
-import type { ClientTask, Task } from './interface'
+import type { ClientTask, Task, Category } from './interface'
 import { createTask } from './render'
 // Time calculation
 import { toMidnight, updateOverdueMessageDisplay } from './utils'
 
 // Loading tasks
 
+
+const categorySelector = document.querySelector(SELECTORS.CATEGORY_SELECTOR) as HTMLSelectElement
+
 try {
   const tasks = await getData<Task>(API_URLS.TODOS)
+  const categories = await getData<Category>(API_URLS.CATEGORIES)
+
+  categories.forEach(category => {
+    const newOption = document.createElement('option') as HTMLOptionElement
+    newOption.value = category.id.toString()
+    newOption.textContent = category.title
+    categorySelector.appendChild(newOption)
+  })
   tasks.forEach(createTask)
 } catch (error) {
   console.error('Failed to load initial tasks:', error)
