@@ -18,3 +18,8 @@ export interface ClientCategory {
 export interface Category extends ClientCategory {
   id: number
 }
+
+export interface CategoryTodos {
+  category_id: number
+  todo_id: number
+}
