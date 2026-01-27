@@ -46,6 +46,22 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
   return deleteBtn
 }
 
+function renderSelectedCategory() {
+  const categorySelector = document.querySelector(SELECTORS.CATEGORY_SELECTOR) as HTMLSelectElement
+  const currentOption = categorySelector.options[categorySelector.selectedIndex]
+
+  const displayedCategory = document.createElement('div')
+
+  if (currentOption.value === "none") {
+    displayedCategory.textContent = "Uncategorized"
+    displayedCategory.className = "0"
+  } else {
+    displayedCategory.textContent = currentOption.textContent
+    displayedCategory.className = currentOption.value
+  }
+  return displayedCategory
+}
+
 // Generate due dates
 export function createDate(task: ClientTask): HTMLTimeElement {
   const taskDate = task.due_date
@@ -73,12 +89,14 @@ function createTaskElements(task: Task): HTMLLIElement {
   const checkboxLabelWrapper = document.createElement(SELECTORS.PARAGRAPH)
   checkboxLabelWrapper.append(checkbox, label)
 
+  const category = renderSelectedCategory()
+
   const dueDate = createDate(task)
   const deleteBtn = createDeleteBtn(task)
   const dueDateDeleteWrapper = document.createElement(SELECTORS.PARAGRAPH)
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
 
-  newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
+  newTask.append(checkboxLabelWrapper, category, dueDateDeleteWrapper)
   return newTask
 }
 
