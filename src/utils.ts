@@ -1,10 +1,17 @@
 import { CSS_CLASSES, DATE_CONFIG } from './constants'
-import { overdueMsg, dateInput, toDoInput, showStatusMessage } from './dom'
+import { overdueMsg, dateInput, toDoInput, errorMsg } from './dom'
 import { postData } from './api'
 
-//To midnight normalization
-export function toMidnight(date: Date): number {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+
+
+export const showStatusMessage = (message: string) => {
+  errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
+  errorMsg.textContent = message
+}
+
+export const hideStatusMessage = () => {
+  errorMsg.classList.add(CSS_CLASSES.HIDDEN)
+  errorMsg.textContent = ''
 }
 
 const dueDateStatus = {
@@ -12,6 +19,11 @@ const dueDateStatus = {
   DueToday: 'due-date--due-today',
   DueSoon: 'due-date--due-soon',
   DueLater: 'due-date--due-later',
+}
+
+//To midnight normalization
+export function toMidnight(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 
 //Dynamic color switch depending on due dates
@@ -59,8 +71,6 @@ export function getRequiredElement<T extends HTMLElement>(selector: string): T {
   return el
 }
 
-
-
 export function verifiedDate() {
   const selectedDate = dateInput!.value
   if (!selectedDate) return null;
@@ -96,4 +106,3 @@ export async function sendDataToAPI<T_Client, T_Server>(url: string, clientSideI
     console.error('Failed to send data: ', error)
   }
 }
-

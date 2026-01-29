@@ -1,5 +1,5 @@
 import './style.css'
-import { CSS_CLASSES, SELECTORS } from './constants'
+import { SELECTORS } from './constants'
 import { getRequiredElement } from './utils'
 
 // DOM
@@ -24,12 +24,3 @@ export const dateInput = document.querySelector<HTMLInputElement>(
 export const overdueMsg = document.querySelector<HTMLHeadingElement>(
   SELECTORS.OVERDUE_MESSAGE,
 )
-// Show or hide error message
-export const showStatusMessage = (message: string) => {
-  errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
-  errorMsg.textContent = message
-}
-export const hideStatusMessage = () => {
-  errorMsg.classList.add(CSS_CLASSES.HIDDEN)
-  errorMsg.textContent = ''
-}

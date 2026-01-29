@@ -1,6 +1,8 @@
 import { deleteAllData } from './api'
 import { API_URLS } from './constants'
-import { showStatusMessage, toDoList } from './dom'
+import { toDoList } from './dom'
+import { showStatusMessage } from './utils'
+
 
 export async function deleteAllTask() {
   try {

@@ -7,12 +7,12 @@ import {
   addButton,
   clearAllBtn,
   dateInput,
-  showStatusMessage,
   toDoInput,
 } from './dom'
 import { deleteAllTask } from './events'
 import type { ClientTask, Task, Category } from './interface'
 import { createTask } from './render'
+import { showStatusMessage } from './utils'
 // Time calculation
 import { sendDataToAPI, trimmedTitle, updateOverdueMessageDisplay, verifiedDate } from './utils'
 

@@ -8,9 +8,9 @@ import {
   INPUT_TYPES,
   SELECTORS,
 } from './constants'
-import { showStatusMessage, toDoList } from './dom'
+import { toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
-import { dateColorSetUp, updateOverdueMessageDisplay } from './utils'
+import { showStatusMessage, dateColorSetUp, updateOverdueMessageDisplay } from './utils'
 
 export function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement(SELECTORS.LIST_ELEMENT)

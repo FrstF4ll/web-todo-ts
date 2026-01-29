@@ -9,8 +9,8 @@ import {
 } from './constants'
 import type { Category, ClientCategory } from './interface'
 import { renderSettingsWindow } from './settings'
-import { hideStatusMessage, showStatusMessage } from './status-message'
 import { getRequiredElement } from './utils'
+import { showStatusMessage, hideStatusMessage } from './utils'
 
 // DOM
 export const categoryInput = getRequiredElement<HTMLInputElement>(
