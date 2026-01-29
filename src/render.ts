@@ -49,6 +49,8 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
 function renderSelectedCategory() {
   const categorySelector = document.querySelector(SELECTORS.CATEGORY_SELECTOR) as HTMLSelectElement
   const currentOption = categorySelector.options[categorySelector.selectedIndex]
+  const currentOptionValue = currentOption.value
+  const currentOptionCategoryTitle = currentOption.textContent
 
   const displayedCategory = document.createElement('div')
 
@@ -56,8 +58,8 @@ function renderSelectedCategory() {
     displayedCategory.textContent = "Uncategorized"
     displayedCategory.className = "0"
   } else {
-    displayedCategory.textContent = currentOption.textContent
-    displayedCategory.className = currentOption.value
+    displayedCategory.textContent = currentOptionCategoryTitle
+    displayedCategory.className = currentOptionValue
   }
   return displayedCategory
 }
