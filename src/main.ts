@@ -1,13 +1,12 @@
 import './style.css'
 
-import { getData, postData } from './api'
+import { getData } from './api'
 import { API_URLS, EVENT_TYPES, KEYS, SELECTORS } from './constants'
 // DOM import
 import {
   addButton,
   clearAllBtn,
   dateInput,
-  hideStatusMessage,
   showStatusMessage,
   toDoInput,
 } from './dom'
@@ -15,7 +14,7 @@ import { deleteAllTask } from './events'
 import type { ClientTask, Task, Category } from './interface'
 import { createTask } from './render'
 // Time calculation
-import { toMidnight, updateOverdueMessageDisplay } from './utils'
+import { sendDataToAPI, trimmedTitle, updateOverdueMessageDisplay, verifiedDate } from './utils'
 
 // Loading tasks
 
@@ -43,41 +42,7 @@ updateOverdueMessageDisplay()
 //Not API
 
 async function addTodoToList(): Promise<void> {
-  const selectedDate = dateInput!.value
-
-  const selectedMidnight = toMidnight(new Date(selectedDate))
-  const todayMidnight = toMidnight(new Date())
-
-  if (selectedDate && todayMidnight > selectedMidnight) {
-    showStatusMessage('Invalid date: date too early')
-    return
-  }
-
-  const trimmed = toDoInput!.value.trim()
-  if (trimmed.length === 0) {
-    showStatusMessage('Invalid task name: Empty name')
-    return
-  }
-
-  hideStatusMessage()
-
-  const newTask: ClientTask = {
-    title: trimmed,
-    due_date: selectedDate || null,
-    done: false,
-  }
-
-  try {
-    const postResponse = await postData<ClientTask, Task>(
-      API_URLS.TODOS,
-      newTask,
-    )
-    createTask(postResponse)
-  } catch (error) {
-    showStatusMessage('Data not posted as intended')
-    console.error('Failed to send data: ', error)
-  }
-
+  sendDataToAPI<ClientTask, Task>(API_URLS.TODOS, { title: trimmedTitle(), due_date: verifiedDate(), done: false }, createTask)
   toDoInput!.value = ''
   dateInput!.value = ''
 }

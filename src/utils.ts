@@ -1,5 +1,7 @@
 import { CSS_CLASSES, DATE_CONFIG } from './constants'
-import { overdueMsg } from './dom'
+import { overdueMsg, dateInput, toDoInput, showStatusMessage } from './dom'
+import { postData } from './api'
+
 //To midnight normalization
 export function toMidnight(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
@@ -56,3 +58,42 @@ export function getRequiredElement<T extends HTMLElement>(selector: string): T {
   if (!el) throw new Error(`Element ${selector} not found`)
   return el
 }
+
+
+
+export function verifiedDate() {
+  const selectedDate = dateInput!.value
+  if (!selectedDate) return null;
+  const selectedMidnight = toMidnight(new Date(selectedDate))
+  const todayMidnight = toMidnight(new Date())
+  if (todayMidnight > selectedMidnight) {
+    showStatusMessage('Invalid date: date too early')
+    throw new Error("DATE_TOO_EARLY")
+  }
+  return selectedDate
+}
+
+
+export function trimmedTitle() {
+  const trimmed = toDoInput!.value.trim()
+  if (trimmed.length === 0) {
+    showStatusMessage('Invalid task name: Empty name')
+    throw new Error("TITLE_EMPTY")
+  }
+  return trimmed
+}
+
+
+export async function sendDataToAPI<T_Client, T_Server>(url: string, clientSideItem: T_Client, elementGeneration: (data: T_Server) => void) {
+  try {
+    const postResponse = await postData<T_Client, T_Server>(
+      url,
+      clientSideItem,
+    )
+    elementGeneration(postResponse)
+  } catch (error) {
+    showStatusMessage('Data not posted as intended')
+    console.error('Failed to send data: ', error)
+  }
+}
+
