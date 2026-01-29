@@ -13,3 +13,5 @@ categories.forEach(category => {
     newOption.textContent = category.title
     categorySelector.appendChild(newOption)
 })
+
+

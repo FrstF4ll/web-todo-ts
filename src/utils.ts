@@ -94,13 +94,13 @@ export function trimmedTitle(userInput: HTMLInputElement) {
 }
 
 
-export async function sendDataToAPI<T_Client, T_Server>(url: string, clientSideItem: T_Client, elementGeneration: (data: T_Server) => void) {
+export async function sendDataToAPI<T_Client, T_Server>(url: string, clientSideItem: T_Client) {
   try {
     const postResponse = await postData<T_Client, T_Server>(
       url,
       clientSideItem,
     )
-    elementGeneration(postResponse)
+    return postResponse
   } catch (error) {
     showStatusMessage('Data not posted as intended')
     console.error('Failed to send data: ', error)

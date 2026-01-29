@@ -140,7 +140,10 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
   })
 }
 
-export function createTask(task: Task): void {
+export function createTask(task: Task | undefined): void {
+  if (typeof task === 'undefined') {
+    throw new Error('Type of task is undefined, cannot create task')
+  }
   const element = createTaskElements(task)
   attachTaskEventListeners(task, element)
   toDoList?.appendChild(element)

@@ -44,11 +44,12 @@ updateOverdueMessageDisplay()
 import { trimmedTitle, verifiedDate } from './utils'
 
 async function addTodoToList(): Promise<void> {
-  sendDataToAPI<ClientTask, Task>(API_URLS.TODOS, {
+  const postResponse = await sendDataToAPI<ClientTask, Task>(API_URLS.TODOS, {
     title: trimmedTitle(toDoInput!),
     due_date: verifiedDate(),
     done: false
-  }, createTask)
+  })
+  createTask(postResponse)
   toDoInput!.value = ''
   dateInput!.value = ''
 }

@@ -130,7 +130,10 @@ function attachCategoryEventListeners(
   })
 }
 
-export function createCategory(category: Category): void {
+export function createCategory(category: Category | undefined): void {
+  if (typeof category === 'undefined') {
+    throw new Error('Type of category is undefined, cannot create category')
+  }
   const element = createCategoryElements(category)
   attachCategoryEventListeners(category, element)
   categoryList.appendChild(element)
@@ -141,11 +144,11 @@ import { trimmedTitle } from './utils'
 
 
 async function addCategoryToList(): Promise<void> {
-  sendDataToAPI<ClientCategory, Category>(API_URLS.CATEGORIES, {
+  const postResponse = await sendDataToAPI<ClientCategory, Category>(API_URLS.CATEGORIES, {
     title: trimmedTitle(categoryInput),
     color: colorSelector.value,
-  }, createCategory)
-
+  })
+  createCategory(postResponse)
   categoryInput.value = ''
 }
 
