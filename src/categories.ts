@@ -1,4 +1,4 @@
-import { deleteData, getData, postData } from './api'
+import { deleteData, getData } from './api'
 import {
   API_URLS,
   CSS_CLASSES,
@@ -9,8 +9,11 @@ import {
 } from './constants'
 import type { Category, ClientCategory } from './interface'
 import { renderSettingsWindow } from './settings'
-import { getRequiredElement } from './utils'
-import { showStatusMessage, hideStatusMessage } from './utils'
+import { getRequiredElement, sendDataToAPI } from './utils'
+import { showStatusMessage } from './utils'
+
+
+
 
 // DOM
 export const categoryInput = getRequiredElement<HTMLInputElement>(
@@ -29,8 +32,6 @@ export const colorSelector = getRequiredElement<HTMLInputElement>(
   SELECTORS.CATEGORY_COLOR_INPUT,
 )
 
-// Load from database
-
 try {
   const tasks = await getData<Category>(API_URLS.CATEGORIES)
   tasks.forEach(createCategory)
@@ -38,6 +39,9 @@ try {
   console.error('Failed to load initial tasks:', error)
   showStatusMessage('Could not load tasks. Check console for details')
 }
+// Load from database
+
+
 
 // Render
 export function createNewCategoryElements(): HTMLLIElement {
@@ -51,7 +55,7 @@ function createCategoryTitle(category: Category): HTMLParagraphElement {
   categoryTitle.textContent = category.title
   return categoryTitle
 }
-//Generate delete button
+// Generate delete button
 export function createDeleteBtn(category: ClientCategory): HTMLButtonElement {
   const deleteBtn = document.createElement(SELECTORS.BUTTON)
   deleteBtn.type = INPUT_TYPES.BUTTON
@@ -132,32 +136,15 @@ export function createCategory(category: Category): void {
   categoryList.appendChild(element)
 }
 
+import { trimmedTitle } from './utils'
 //Add to database
 
+
 async function addCategoryToList(): Promise<void> {
-  const trimmed = categoryInput.value.trim()
-  if (trimmed.length === 0) {
-    showStatusMessage('Invalid category name: Empty name')
-    return
-  }
-
-  hideStatusMessage()
-
-  const newCategory: ClientCategory = {
-    title: trimmed,
+  sendDataToAPI<ClientCategory, Category>(API_URLS.CATEGORIES, {
+    title: trimmedTitle(categoryInput),
     color: colorSelector.value,
-  }
-
-  try {
-    const postResponse = await postData<ClientCategory, Category>(
-      API_URLS.CATEGORIES,
-      newCategory,
-    )
-    createCategory(postResponse)
-  } catch (error) {
-    showStatusMessage('Data not posted as intended')
-    console.error('Failed to send data: ', error)
-  }
+  }, createCategory)
 
   categoryInput.value = ''
 }

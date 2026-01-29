@@ -14,7 +14,7 @@ import type { ClientTask, Task, Category } from './interface'
 import { createTask } from './render'
 import { showStatusMessage } from './utils'
 // Time calculation
-import { sendDataToAPI, trimmedTitle, updateOverdueMessageDisplay, verifiedDate } from './utils'
+import { sendDataToAPI, updateOverdueMessageDisplay, } from './utils'
 
 // Loading tasks
 
@@ -41,8 +41,14 @@ updateOverdueMessageDisplay()
 
 //Not API
 
+import { trimmedTitle, verifiedDate } from './utils'
+
 async function addTodoToList(): Promise<void> {
-  sendDataToAPI<ClientTask, Task>(API_URLS.TODOS, { title: trimmedTitle(), due_date: verifiedDate(), done: false }, createTask)
+  sendDataToAPI<ClientTask, Task>(API_URLS.TODOS, {
+    title: trimmedTitle(toDoInput!),
+    due_date: verifiedDate(),
+    done: false
+  }, createTask)
   toDoInput!.value = ''
   dateInput!.value = ''
 }

@@ -1,5 +1,5 @@
 import { CSS_CLASSES, DATE_CONFIG } from './constants'
-import { overdueMsg, dateInput, toDoInput, errorMsg } from './dom'
+import { overdueMsg, dateInput, errorMsg } from './dom'
 import { postData } from './api'
 
 
@@ -84,8 +84,8 @@ export function verifiedDate() {
 }
 
 
-export function trimmedTitle() {
-  const trimmed = toDoInput!.value.trim()
+export function trimmedTitle(userInput: HTMLInputElement) {
+  const trimmed = userInput.value.trim()
   if (trimmed.length === 0) {
     showStatusMessage('Invalid task name: Empty name')
     throw new Error("TITLE_EMPTY")
