@@ -9,11 +9,7 @@ import {
 } from './constants'
 import type { Category, ClientCategory } from './interface'
 import { renderSettingsWindow } from './settings'
-import { getRequiredElement, sendDataToAPI } from './utils'
-import { showStatusMessage } from './utils'
-
-
-
+import { getRequiredElement, sendDataToAPI, showStatusMessage } from './utils'
 
 // DOM
 export const categoryInput = getRequiredElement<HTMLInputElement>(
@@ -40,8 +36,6 @@ try {
   showStatusMessage('Could not load tasks. Check console for details')
 }
 // Load from database
-
-
 
 // Render
 export function createNewCategoryElements(): HTMLLIElement {
@@ -140,14 +134,17 @@ export function createCategory(category: Category | undefined): void {
 }
 
 import { trimmedTitle } from './utils'
+
 //Add to database
 
-
 async function addCategoryToList(): Promise<void> {
-  const postResponse = await sendDataToAPI<ClientCategory, Category>(API_URLS.CATEGORIES, {
-    title: trimmedTitle(categoryInput),
-    color: colorSelector.value,
-  })
+  const postResponse = await sendDataToAPI<ClientCategory, Category>(
+    API_URLS.CATEGORIES,
+    {
+      title: trimmedTitle(categoryInput),
+      color: colorSelector.value,
+    },
+  )
   createCategory(postResponse)
   categoryInput.value = ''
 }

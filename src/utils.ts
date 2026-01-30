@@ -1,8 +1,6 @@
-import { CSS_CLASSES, DATE_CONFIG } from './constants'
-import { overdueMsg, dateInput, errorMsg } from './dom'
 import { postData } from './api'
-
-
+import { CSS_CLASSES, DATE_CONFIG } from './constants'
+import { dateInput, errorMsg, overdueMsg } from './dom'
 
 export const showStatusMessage = (message: string) => {
   errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
@@ -73,33 +71,31 @@ export function getRequiredElement<T extends HTMLElement>(selector: string): T {
 
 export function verifiedDate() {
   const selectedDate = dateInput!.value
-  if (!selectedDate) return null;
+  if (!selectedDate) return null
   const selectedMidnight = toMidnight(new Date(selectedDate))
   const todayMidnight = toMidnight(new Date())
   if (todayMidnight > selectedMidnight) {
     showStatusMessage('Invalid date: date too early')
-    throw new Error("DATE_TOO_EARLY")
+    throw new Error('DATE_TOO_EARLY')
   }
   return selectedDate
 }
-
 
 export function trimmedTitle(userInput: HTMLInputElement) {
   const trimmed = userInput.value.trim()
   if (trimmed.length === 0) {
     showStatusMessage('Invalid task name: Empty name')
-    throw new Error("TITLE_EMPTY")
+    throw new Error('TITLE_EMPTY')
   }
   return trimmed
 }
 
-
-export async function sendDataToAPI<T_Client, T_Server>(url: string, clientSideItem: T_Client) {
+export async function sendDataToAPI<T_Client, T_Server>(
+  url: string,
+  clientSideItem: T_Client,
+) {
   try {
-    const postResponse = await postData<T_Client, T_Server>(
-      url,
-      clientSideItem,
-    )
+    const postResponse = await postData<T_Client, T_Server>(url, clientSideItem)
     return postResponse
   } catch (error) {
     showStatusMessage('Data not posted as intended')

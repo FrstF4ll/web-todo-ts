@@ -3,7 +3,6 @@ import { API_URLS } from './constants'
 import { toDoList } from './dom'
 import { showStatusMessage } from './utils'
 
-
 export async function deleteAllTask() {
   try {
     if (toDoList?.children.length === 0) {
@@ -14,8 +13,7 @@ export async function deleteAllTask() {
       return
     }
     await deleteAllData(API_URLS.TODOS)
-    if (toDoList)
-      toDoList.innerHTML = ''
+    if (toDoList) toDoList.innerHTML = ''
     showStatusMessage('All tasks successfully deleted')
   } catch (error) {
     console.error('Failed to delete Tasks : ', error)

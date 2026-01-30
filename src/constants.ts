@@ -23,7 +23,7 @@ export const SELECTORS = {
   DATE_INPUT: '#todo-date-input',
   OVERDUE_MESSAGE: '#overdue-message',
   CATEGORY_TITLE: '.category-title',
-  CATEGORY_SELECTOR: '#category-selector'
+  CATEGORY_SELECTOR: '#category-selector',
 } as const
 
 export const INPUT_TYPES = {
@@ -64,5 +64,5 @@ export const API_URLS = {
 } as const
 
 export const CUSTOM_PROPERTIES = {
-  COLOR: 'category-color'
+  COLOR: 'category-color',
 } as const
