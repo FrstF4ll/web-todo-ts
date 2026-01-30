@@ -1,6 +1,6 @@
 // Interface Import
 
-import { deleteData, patchData } from './api'
+import { deleteData, patchData, postData } from './api'
 import {
   API_URLS,
   CSS_CLASSES,
@@ -9,8 +9,12 @@ import {
   SELECTORS,
 } from './constants'
 import { toDoList } from './dom'
-import type { ClientTask, Task } from './interface'
-import { showStatusMessage, dateColorSetUp, updateOverdueMessageDisplay } from './utils'
+import type { Category, ClientTask, Task } from './interface'
+import {
+  dateColorSetUp,
+  showStatusMessage,
+  updateOverdueMessageDisplay,
+} from './utils'
 
 export function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement(SELECTORS.LIST_ELEMENT)
@@ -46,20 +50,21 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
   return deleteBtn
 }
 
-function renderSelectedCategory() {
-  const categorySelector = document.querySelector(SELECTORS.CATEGORY_SELECTOR) as HTMLSelectElement
-  const currentOption = categorySelector.options[categorySelector.selectedIndex]
-  const currentOptionValue = currentOption.value
-  const currentOptionCategoryTitle = currentOption.textContent
+import { categorySelector } from './dom'
 
+export const categoriesCache: Record<number, Category> = {}
+
+function renderSelectedCategory(task: Task): HTMLDivElement {
   const displayedCategory = document.createElement('div')
-
-  if (currentOption.value === "none") {
-    displayedCategory.textContent = "Uncategorized"
-    displayedCategory.className = "0"
+  const selectedId = Number.parseInt(categorySelector.value)
+  if (isNaN(selectedId)) {
+    displayedCategory.className = "none"
+    displayedCategory.textContent = "No categories"
   } else {
-    displayedCategory.textContent = currentOptionCategoryTitle
-    displayedCategory.className = currentOptionValue
+    const selectedCategory = categoriesCache[selectedId]
+    task.categories_todos = [selectedCategory]
+    displayedCategory.className = selectedCategory.id.toString()
+    displayedCategory.textContent = selectedCategory.title
   }
   return displayedCategory
 }
@@ -91,13 +96,13 @@ function createTaskElements(task: Task): HTMLLIElement {
   const checkboxLabelWrapper = document.createElement(SELECTORS.PARAGRAPH)
   checkboxLabelWrapper.append(checkbox, label)
 
-  const category = renderSelectedCategory()
+  const category = renderSelectedCategory(task)
 
   const dueDate = createDate(task)
   const deleteBtn = createDeleteBtn(task)
   const dueDateDeleteWrapper = document.createElement(SELECTORS.PARAGRAPH)
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
-
+  postData(API_URLS.CATEGORIES_TODOS, { category_id: Number(category.className), todo_id: task.id })
   newTask.append(checkboxLabelWrapper, category, dueDateDeleteWrapper)
   return newTask
 }

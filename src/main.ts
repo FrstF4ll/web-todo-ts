@@ -1,37 +1,39 @@
 import './style.css'
 
-import { getData } from './api'
-import { API_URLS, CUSTOM_PROPERTIES, EVENT_TYPES, KEYS } from './constants'
+import { getData, postData } from './api'
+import { API_URLS, EVENT_TYPES, KEYS } from './constants'
 // DOM import
 import {
   addButton,
+  categorySelector,
   clearAllBtn,
   dateInput,
   toDoInput,
-  categorySelector
 } from './dom'
 import { deleteAllTask } from './events'
-import type { ClientTask, Task, Category } from './interface'
-import { createTask } from './render'
-import { showStatusMessage } from './utils'
+import type { Category, ClientTask, Task } from './interface'
+import { categoriesCache, createTask } from './render'
 // Time calculation
-import { sendDataToAPI, updateOverdueMessageDisplay, } from './utils'
+import {
+  showStatusMessage,
+  updateOverdueMessageDisplay,
+} from './utils'
 
 // Loading tasks
 
-
-
 try {
   const tasks = await getData<Task>(API_URLS.TODOS)
-  const categories = await getData<Category>(API_URLS.CATEGORIES)
+  async function loadCategories() {
+    const categories = await getData<Category>(API_URLS.CATEGORIES)
+    categories.forEach((cat) => {
+      categoriesCache[cat.id] = cat
 
-  categories.forEach(category => {
-    const newOption = document.createElement('option') as HTMLOptionElement
-    newOption.value = category.id.toString()
-    newOption.textContent = category.title
-    newOption.setAttribute(CUSTOM_PROPERTIES.COLOR, category.color)
-    categorySelector.appendChild(newOption)
-  })
+      const opt = new Option(cat.title, cat.id.toString())
+      categorySelector.appendChild(opt)
+    })
+  }
+  loadCategories()
+
   tasks.forEach(createTask)
 } catch (error) {
   console.error('Failed to load initial tasks:', error)
@@ -45,11 +47,16 @@ updateOverdueMessageDisplay()
 import { trimmedTitle, verifiedDate } from './utils'
 
 async function addTodoToList(): Promise<void> {
-  const postResponse = await sendDataToAPI<ClientTask, Task>(API_URLS.TODOS, {
+  const newTask: ClientTask = {
     title: trimmedTitle(toDoInput!),
     due_date: verifiedDate(),
-    done: false
-  })
+    done: false,
+  }
+  const postResponse = await postData<ClientTask, Task>(
+    API_URLS.TODOS,
+    newTask,
+  )
+
   createTask(postResponse)
   toDoInput!.value = ''
   dateInput!.value = ''
