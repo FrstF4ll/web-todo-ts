@@ -1,7 +1,7 @@
 import './style.css'
 
 import { getData } from './api'
-import { API_URLS, EVENT_TYPES, KEYS } from './constants'
+import { API_URLS, CUSTOM_PROPERTIES, EVENT_TYPES, KEYS } from './constants'
 // DOM import
 import {
   addButton,
@@ -29,6 +29,7 @@ try {
     const newOption = document.createElement('option') as HTMLOptionElement
     newOption.value = category.id.toString()
     newOption.textContent = category.title
+    newOption.setAttribute(CUSTOM_PROPERTIES.COLOR, category.color)
     categorySelector.appendChild(newOption)
   })
   tasks.forEach(createTask)

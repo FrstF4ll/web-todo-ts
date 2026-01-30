@@ -62,3 +62,7 @@ export const API_URLS = {
   CATEGORIES: 'https://api.todos.in.jt-lab.ch/categories',
   CATEGORIES_TODOS: 'https://api.todos.in.jt-lab.ch/categories_todos',
 } as const
+
+export const CUSTOM_PROPERTIES = {
+  COLOR: 'category-color'
+} as const
