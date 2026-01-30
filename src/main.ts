@@ -1,13 +1,14 @@
 import './style.css'
 
 import { getData } from './api'
-import { API_URLS, EVENT_TYPES, KEYS, SELECTORS } from './constants'
+import { API_URLS, EVENT_TYPES, KEYS } from './constants'
 // DOM import
 import {
   addButton,
   clearAllBtn,
   dateInput,
   toDoInput,
+  categorySelector
 } from './dom'
 import { deleteAllTask } from './events'
 import type { ClientTask, Task, Category } from './interface'
@@ -19,7 +20,6 @@ import { sendDataToAPI, updateOverdueMessageDisplay, } from './utils'
 // Loading tasks
 
 
-const categorySelector = document.querySelector(SELECTORS.CATEGORY_SELECTOR) as HTMLSelectElement
 
 try {
   const tasks = await getData<Task>(API_URLS.TODOS)

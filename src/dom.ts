@@ -3,6 +3,9 @@ import { SELECTORS } from './constants'
 import { getRequiredElement } from './utils'
 
 // DOM
+
+export const categorySelector = document.querySelector(SELECTORS.CATEGORY_SELECTOR) as HTMLSelectElement
+
 export const toDoInput = document.querySelector<HTMLInputElement>(
   SELECTORS.TODO_INPUT,
 )
