@@ -1,11 +1,10 @@
 import { getRequiredElement } from '../utils'
 import { SELECTORS, API_URLS } from '../constants'
 import { showStatusMessage } from '../utils'
-import { getData, postData, deleteData } from '../api'
+import { getData, postData } from '../api'
 import { Category, ClientCategory } from '../interface'
-import { CSS_CLASSES, EVENT_TYPES, INPUT_TYPES, KEYS } from '../constants'
+import { EVENT_TYPES, KEYS } from '../constants'
 import { trimmedTitle } from '../utils'
-import { renderSettingsWindow } from '../settings'
 import { createCategory } from '../categories'
 
 let addButton: HTMLButtonElement
