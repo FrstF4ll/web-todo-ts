@@ -1,5 +1,5 @@
 import { patchData } from '../api'
-import { API_URLS, SELECTORS } from '../constants'
+import { API_URLS, SELECTORS } from '../global-variables/constants'
 
 function createModal() {
   const modal = document.createElement('div')

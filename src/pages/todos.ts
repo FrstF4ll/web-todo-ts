@@ -1,6 +1,6 @@
 import { getData, postData, deleteAllData } from '../api'
-import { API_URLS, EVENT_TYPES, KEYS, SELECTORS, CSS_CLASSES } from '../constants'
-import type { Category, ClientTask, Task } from '../interface'
+import { API_URLS, EVENT_TYPES, KEYS, SELECTORS, CSS_CLASSES } from '../global-variables/constants'
+import type { Category, ClientTask, Task } from '../global-variables/interface'
 import {
   getRequiredElement,
   showStatusMessage,

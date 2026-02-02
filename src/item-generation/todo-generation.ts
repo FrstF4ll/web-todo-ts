@@ -8,8 +8,8 @@ import {
   INPUT_TYPES,
   SELECTORS,
   COLORS
-} from '../constants'
-import type { ClientTask, Task } from '../interface'
+} from '../global-variables/constants'
+import type { ClientTask, Task } from '../global-variables/interface'
 import {
   dateColorSetUp,
   showStatusMessage,

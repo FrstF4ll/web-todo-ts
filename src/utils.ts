@@ -1,4 +1,4 @@
-import { CSS_CLASSES, DATE_CONFIG, SELECTORS } from './constants'
+import { CSS_CLASSES, DATE_CONFIG, SELECTORS } from './global-variables/constants'
 
 export const showStatusMessage = (message: string) => {
   const errorMsg = document.querySelector<HTMLParagraphElement>(SELECTORS.ERROR_MESSAGE)
@@ -94,6 +94,6 @@ export function trimmedTitle(userInput: HTMLInputElement) {
   }
   return trimmed
 }
-import { Category } from './interface'
+import { Category } from './global-variables/interface'
 
 export const categoriesCache: Record<number, Category> = {}

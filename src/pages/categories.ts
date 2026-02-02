@@ -1,9 +1,9 @@
 import { getRequiredElement } from '../utils'
-import { SELECTORS, API_URLS } from '../constants'
+import { SELECTORS, API_URLS } from '../global-variables/constants'
 import { showStatusMessage } from '../utils'
 import { getData, postData } from '../api'
-import { Category, ClientCategory } from '../interface'
-import { EVENT_TYPES, KEYS } from '../constants'
+import { Category, ClientCategory } from '../global-variables/interface'
+import { EVENT_TYPES, KEYS } from '../global-variables/constants'
 import { trimmedTitle } from '../utils'
 import { createCategory } from '../item-generation/categorie-generation'
 

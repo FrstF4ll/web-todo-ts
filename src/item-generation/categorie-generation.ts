@@ -5,8 +5,8 @@ import {
   EVENT_TYPES,
   INPUT_TYPES,
   SELECTORS,
-} from '../constants'
-import type { Category, ClientCategory } from '../interface'
+} from '../global-variables/constants'
+import type { Category, ClientCategory } from '../global-variables/interface'
 import { renderSettingsWindow } from './settings'
 import { getRequiredElement, showStatusMessage, } from '../utils'
 import { categoriesCache } from '../utils'
