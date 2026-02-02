@@ -68,3 +68,8 @@ export const API_URLS = {
 export const CUSTOM_PROPERTIES = {
   COLOR: 'category-color',
 } as const
+
+
+export const COLORS = {
+  DEFAULT: 'white',
+} as const

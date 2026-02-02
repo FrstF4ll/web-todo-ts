@@ -7,6 +7,7 @@ import {
   EVENT_TYPES,
   INPUT_TYPES,
   SELECTORS,
+  COLORS
 } from './constants'
 import { toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
@@ -94,7 +95,7 @@ function createTaskElements(task: Task): HTMLLIElement {
   checkboxLabelWrapper.append(checkbox, label)
 
   const category = renderSelectedCategory(task)
-  const categoryColor = task.categories?.[0]?.color || '#defaultColor'
+  const categoryColor = task.categories?.[0]?.color || COLORS.DEFAULT
   newTask.style.borderStyle = 'solid'
   newTask.style.borderColor = categoryColor
 
