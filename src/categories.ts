@@ -138,15 +138,19 @@ import { trimmedTitle } from './utils'
 //Add to database
 
 async function addCategoryToList(): Promise<void> {
-  const postResponse = await postData<ClientCategory, Category>(
-    API_URLS.CATEGORIES,
-    {
-      title: trimmedTitle(categoryInput),
-      color: colorSelector.value,
-    },
-  )
-  createCategory(postResponse)
-  categoryInput.value = ''
+  try {
+    const postResponse = await postData<ClientCategory, Category>(
+      API_URLS.CATEGORIES,
+      {
+        title: trimmedTitle(categoryInput),
+        color: colorSelector.value,
+      },
+    )
+    createCategory(postResponse)
+    categoryInput.value = ''
+  } catch (error) {
+    console.error('Failed to add category', error)
+  }
 }
 
 categoryInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
