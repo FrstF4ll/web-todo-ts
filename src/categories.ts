@@ -1,41 +1,15 @@
-import { deleteData, getData, postData } from './api'
+import { deleteData } from './api'
 import {
   API_URLS,
   CSS_CLASSES,
   EVENT_TYPES,
   INPUT_TYPES,
-  KEYS,
   SELECTORS,
 } from './constants'
 import type { Category, ClientCategory } from './interface'
 import { renderSettingsWindow } from './settings'
-import { getRequiredElement, showStatusMessage, trimmedTitle } from './utils'
-
-// DOM
-export const categoryInput = getRequiredElement<HTMLInputElement>(
-  SELECTORS.CATEGORY_INPUT,
-)
-export const addCategoryButton = getRequiredElement<HTMLButtonElement>(
-  SELECTORS.ADD_CATEGORY_BUTTON,
-)
-export const categoryList = getRequiredElement<HTMLUListElement>(
-  SELECTORS.CATEGORY_LIST_ELEMENTS,
-)
-export const errorMsg = getRequiredElement<HTMLParagraphElement>(
-  SELECTORS.ERROR_MESSAGE,
-)
-export const colorSelector = getRequiredElement<HTMLInputElement>(
-  SELECTORS.CATEGORY_COLOR_INPUT,
-)
-
-try {
-  const tasks = await getData<Category>(API_URLS.CATEGORIES)
-  tasks.forEach(createCategory)
-} catch (error) {
-  console.error('Failed to load initial tasks:', error)
-  showStatusMessage('Could not load tasks. Check console for details')
-}
-// Load from database
+import { getRequiredElement, showStatusMessage, } from './utils'
+import { categoriesCache } from './store'
 
 // Render
 export function createNewCategoryElements(): HTMLLIElement {
@@ -128,30 +102,11 @@ export function createCategory(category: Category | undefined): void {
   if (typeof category === 'undefined') {
     throw new Error('Type of category is undefined, cannot create category')
   }
+  const container = getRequiredElement<HTMLUListElement>(
+    SELECTORS.CATEGORY_LIST_ELEMENTS,
+  )
   const element = createCategoryElements(category)
   attachCategoryEventListeners(category, element)
-  categoryList.appendChild(element)
+  categoriesCache[category.id] = category
+  container.appendChild(element)
 }
-
-//Add to database
-
-async function addCategoryToList(): Promise<void> {
-  try {
-    const postResponse = await postData<ClientCategory, Category>(
-      API_URLS.CATEGORIES,
-      {
-        title: trimmedTitle(categoryInput),
-        color: colorSelector.value,
-      },
-    )
-    createCategory(postResponse)
-    categoryInput.value = ''
-  } catch (error) {
-    console.error('Failed to add category', error)
-  }
-}
-
-categoryInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
-  if (e.key === KEYS.SUBMIT) addCategoryToList()
-})
-addCategoryButton.addEventListener(EVENT_TYPES.CLICK, () => addCategoryToList())

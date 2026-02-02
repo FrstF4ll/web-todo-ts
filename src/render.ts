@@ -9,7 +9,6 @@ import {
   SELECTORS,
   COLORS
 } from './constants'
-import { toDoList } from './dom'
 import type { ClientTask, Task } from './interface'
 import {
   dateColorSetUp,
@@ -144,11 +143,11 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
   })
 }
 
-export function createTask(task: Task | undefined): void {
+export function createTask(task: Task | undefined, container: HTMLUListElement): void {
   if (typeof task === 'undefined') {
     throw new Error('Type of task is undefined, cannot create task')
   }
   const element = createTaskElements(task)
   attachTaskEventListeners(task, element)
-  toDoList?.appendChild(element)
+  container.appendChild(element)
 }

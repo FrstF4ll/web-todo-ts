@@ -1,14 +1,19 @@
-import { CSS_CLASSES, DATE_CONFIG } from './constants'
-import { dateInput, errorMsg, overdueMsg } from './dom'
+import { CSS_CLASSES, DATE_CONFIG, SELECTORS } from './constants'
 
 export const showStatusMessage = (message: string) => {
-  errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
-  errorMsg.textContent = message
+  const errorMsg = document.querySelector<HTMLParagraphElement>(SELECTORS.ERROR_MESSAGE)
+  if (errorMsg) {
+    errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
+    errorMsg.textContent = message
+  }
 }
 
 export const hideStatusMessage = () => {
-  errorMsg.classList.add(CSS_CLASSES.HIDDEN)
-  errorMsg.textContent = ''
+  const errorMsg = document.querySelector<HTMLParagraphElement>(SELECTORS.ERROR_MESSAGE)
+  if (errorMsg) {
+    errorMsg.classList.add(CSS_CLASSES.HIDDEN)
+    errorMsg.textContent = ''
+  }
 }
 
 const dueDateStatus = {
@@ -59,6 +64,7 @@ export function dateColorSetUp(dueDate: HTMLTimeElement): void {
 export function updateOverdueMessageDisplay() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
   const noOverdueTasks = overduedTasks.length === 0
+  const overdueMsg = document.querySelector<HTMLParagraphElement>(SELECTORS.OVERDUE_MESSAGE)
   overdueMsg?.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
 
@@ -68,7 +74,7 @@ export function getRequiredElement<T extends HTMLElement>(selector: string): T {
   return el
 }
 
-export function verifiedDate() {
+export function verifiedDate(dateInput: HTMLInputElement) {
   const selectedDate = dateInput?.value
   if (!selectedDate) return null
   const selectedMidnight = toMidnight(new Date(selectedDate))
