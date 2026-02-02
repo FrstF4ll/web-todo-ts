@@ -12,17 +12,22 @@ import {
 } from './dom'
 import { deleteAllTask } from './events'
 import type { Category, ClientTask, Task } from './interface'
-import { categoriesCache, createTask } from './render'
+import { createTask } from './render'
 // Time calculation
 import {
   showStatusMessage,
   updateOverdueMessageDisplay,
+  trimmedTitle,
+  verifiedDate
 } from './utils'
 
 // Loading tasks
 
+export const categoriesCache: Record<number, Category> = {}
+
 try {
   const tasks = await getData<Task>(API_URLS.SELECTED_CATEGORY)
+  console.log
   async function loadCategories() {
     const categories = await getData<Category>(API_URLS.CATEGORIES)
     categories.forEach((cat) => {
@@ -44,9 +49,9 @@ updateOverdueMessageDisplay()
 
 //Not API
 
-import { trimmedTitle, verifiedDate } from './utils'
-
 async function addTodoToList(): Promise<void> {
+  const selectedId = Number.parseInt(categorySelector.value)
+
   const newTask: ClientTask = {
     title: trimmedTitle(toDoInput!),
     due_date: verifiedDate(),
@@ -56,11 +61,18 @@ async function addTodoToList(): Promise<void> {
     API_URLS.TODOS,
     newTask,
   )
-
+  if (!isNaN(selectedId)) {
+    await postData(API_URLS.CATEGORIES_TODOS, {
+      category_id: selectedId,
+      todo_id: postResponse.id
+    });
+    postResponse.categories = [categoriesCache[selectedId]]
+  }
   createTask(postResponse)
   toDoInput!.value = ''
   dateInput!.value = ''
 }
+
 
 // Delete all
 

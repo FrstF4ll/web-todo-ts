@@ -1,6 +1,6 @@
 // Interface Import
 
-import { deleteData, patchData, postData } from './api'
+import { deleteData, patchData } from './api'
 import {
   API_URLS,
   CSS_CLASSES,
@@ -9,7 +9,7 @@ import {
   SELECTORS,
 } from './constants'
 import { toDoList } from './dom'
-import type { Category, ClientTask, Task } from './interface'
+import type { ClientTask, Task } from './interface'
 import {
   dateColorSetUp,
   showStatusMessage,
@@ -50,23 +50,21 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
   return deleteBtn
 }
 
-import { categorySelector } from './dom'
-
-export const categoriesCache: Record<number, Category> = {}
 
 function renderSelectedCategory(task: Task): HTMLDivElement {
-  const displayedCategory = document.createElement('div')
-  const selectedId = Number.parseInt(categorySelector.value)
-  if (isNaN(selectedId)) {
-    displayedCategory.className = "none"
-    displayedCategory.textContent = "No categories"
+  const displayedCategory = document.createElement('div');
+
+  if (task.categories && task.categories.length > 0) {
+    const cat = task.categories[0];
+    displayedCategory.className = "category-tag"; // Use a consistent class
+    displayedCategory.dataset.id = cat.id.toString();
+    displayedCategory.textContent = cat.title;
   } else {
-    const selectedCategory = categoriesCache[selectedId]
-    task.categories_todos = [selectedCategory]
-    displayedCategory.className = selectedCategory.id.toString()
-    displayedCategory.textContent = selectedCategory.title
+    displayedCategory.className = "none";
+    displayedCategory.textContent = "No categories";
   }
-  return displayedCategory
+
+  return displayedCategory;
 }
 
 // Generate due dates
@@ -97,12 +95,14 @@ function createTaskElements(task: Task): HTMLLIElement {
   checkboxLabelWrapper.append(checkbox, label)
 
   const category = renderSelectedCategory(task)
-
+  if (task.categories) {
+    newTask.style.borderStyle = 'solid'
+    newTask.style.borderColor = task.categories[0].color
+  }
   const dueDate = createDate(task)
   const deleteBtn = createDeleteBtn(task)
   const dueDateDeleteWrapper = document.createElement(SELECTORS.PARAGRAPH)
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
-  postData(API_URLS.CATEGORIES_TODOS, { category_id: Number(category.className), todo_id: task.id })
   newTask.append(checkboxLabelWrapper, category, dueDateDeleteWrapper)
   return newTask
 }
@@ -135,7 +135,6 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
     try {
       await patchData(API_URLS.TODOS, task.id, { done: task.done })
     } catch (error) {
-      // Revert UI on failure to keep it consistent with the server state
       task.done = originalDoneState
       checkbox.checked = originalDoneState
       label.classList.toggle(CSS_CLASSES.COMPLETED, task.done)
