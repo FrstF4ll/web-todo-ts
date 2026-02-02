@@ -22,7 +22,7 @@ import {
 // Loading tasks
 
 try {
-  const tasks = await getData<Task>(API_URLS.TODOS)
+  const tasks = await getData<Task>(API_URLS.SELECTED_CATEGORY)
   async function loadCategories() {
     const categories = await getData<Category>(API_URLS.CATEGORIES)
     categories.forEach((cat) => {
