@@ -1,15 +1,15 @@
-import { deleteData } from './api'
+import { deleteData } from '../api'
 import {
   API_URLS,
   CSS_CLASSES,
   EVENT_TYPES,
   INPUT_TYPES,
   SELECTORS,
-} from './constants'
-import type { Category, ClientCategory } from './interface'
-import { renderSettingsWindow } from './settings'
-import { getRequiredElement, showStatusMessage, } from './utils'
-import { categoriesCache } from './store'
+} from '../constants'
+import type { Category, ClientCategory } from '../interface'
+import { renderSettingsWindow } from '../settings'
+import { getRequiredElement, showStatusMessage, } from '../utils'
+import { categoriesCache } from '../utils'
 
 // Render
 export function createNewCategoryElements(): HTMLLIElement {

@@ -7,10 +7,8 @@ import {
   trimmedTitle,
   verifiedDate,
 } from '../utils'
-import { categoriesCache } from '../store'
-import { createTask } from '../render'
-
-
+import { categoriesCache } from '../utils'
+import { createTask } from '../item-generation/todo-generation'
 
 let toDoInput: HTMLInputElement
 let dateInput: HTMLInputElement

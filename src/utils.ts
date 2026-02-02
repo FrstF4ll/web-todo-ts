@@ -94,3 +94,6 @@ export function trimmedTitle(userInput: HTMLInputElement) {
   }
   return trimmed
 }
+import { Category } from './interface'
+
+export const categoriesCache: Record<number, Category> = {}

@@ -1,6 +1,6 @@
 // Interface Import
 
-import { deleteData, patchData } from './api'
+import { deleteData, patchData } from '../api'
 import {
   API_URLS,
   CSS_CLASSES,
@@ -8,13 +8,13 @@ import {
   INPUT_TYPES,
   SELECTORS,
   COLORS
-} from './constants'
-import type { ClientTask, Task } from './interface'
+} from '../constants'
+import type { ClientTask, Task } from '../interface'
 import {
   dateColorSetUp,
   showStatusMessage,
   updateOverdueMessageDisplay,
-} from './utils'
+} from '../utils'
 
 export function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement(SELECTORS.LIST_ELEMENT)

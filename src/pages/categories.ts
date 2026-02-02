@@ -5,7 +5,7 @@ import { getData, postData } from '../api'
 import { Category, ClientCategory } from '../interface'
 import { EVENT_TYPES, KEYS } from '../constants'
 import { trimmedTitle } from '../utils'
-import { createCategory } from '../categories'
+import { createCategory } from '../item-generation/categorie-generation'
 
 let addButton: HTMLButtonElement
 let titleInput: HTMLInputElement
