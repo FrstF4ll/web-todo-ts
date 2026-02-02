@@ -3,11 +3,11 @@
 import { deleteData, patchData } from '../api'
 import {
   API_URLS,
+  COLORS,
   CSS_CLASSES,
   EVENT_TYPES,
   INPUT_TYPES,
   SELECTORS,
-  COLORS
 } from '../global-variables/constants'
 import type { ClientTask, Task } from '../global-variables/interface'
 import {
@@ -143,7 +143,10 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
   })
 }
 
-export function createTask(task: Task | undefined, container: HTMLUListElement): void {
+export function createTask(
+  task: Task | undefined,
+  container: HTMLUListElement,
+): void {
   if (typeof task === 'undefined') {
     throw new Error('Type of task is undefined, cannot create task')
   }

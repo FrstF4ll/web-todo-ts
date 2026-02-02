@@ -1,7 +1,13 @@
-import { CSS_CLASSES, DATE_CONFIG, SELECTORS } from './global-variables/constants'
+import {
+  CSS_CLASSES,
+  DATE_CONFIG,
+  SELECTORS,
+} from './global-variables/constants'
 
 export const showStatusMessage = (message: string) => {
-  const errorMsg = document.querySelector<HTMLParagraphElement>(SELECTORS.ERROR_MESSAGE)
+  const errorMsg = document.querySelector<HTMLParagraphElement>(
+    SELECTORS.ERROR_MESSAGE,
+  )
   if (errorMsg) {
     errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
     errorMsg.textContent = message
@@ -9,7 +15,9 @@ export const showStatusMessage = (message: string) => {
 }
 
 export const hideStatusMessage = () => {
-  const errorMsg = document.querySelector<HTMLParagraphElement>(SELECTORS.ERROR_MESSAGE)
+  const errorMsg = document.querySelector<HTMLParagraphElement>(
+    SELECTORS.ERROR_MESSAGE,
+  )
   if (errorMsg) {
     errorMsg.classList.add(CSS_CLASSES.HIDDEN)
     errorMsg.textContent = ''
@@ -64,7 +72,9 @@ export function dateColorSetUp(dueDate: HTMLTimeElement): void {
 export function updateOverdueMessageDisplay() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
   const noOverdueTasks = overduedTasks.length === 0
-  const overdueMsg = document.querySelector<HTMLParagraphElement>(SELECTORS.OVERDUE_MESSAGE)
+  const overdueMsg = document.querySelector<HTMLParagraphElement>(
+    SELECTORS.OVERDUE_MESSAGE,
+  )
   overdueMsg?.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
 
@@ -94,6 +104,7 @@ export function trimmedTitle(userInput: HTMLInputElement) {
   }
   return trimmed
 }
-import { Category } from './global-variables/interface'
+
+import type { Category } from './global-variables/interface'
 
 export const categoriesCache: Record<number, Category> = {}

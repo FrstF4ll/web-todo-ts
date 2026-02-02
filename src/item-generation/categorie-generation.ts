@@ -7,9 +7,12 @@ import {
   SELECTORS,
 } from '../global-variables/constants'
 import type { Category, ClientCategory } from '../global-variables/interface'
+import {
+  categoriesCache,
+  getRequiredElement,
+  showStatusMessage,
+} from '../utils'
 import { renderSettingsWindow } from './settings'
-import { getRequiredElement, showStatusMessage, } from '../utils'
-import { categoriesCache } from '../utils'
 
 // Render
 export function createNewCategoryElements(): HTMLLIElement {

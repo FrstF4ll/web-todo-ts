@@ -1,8 +1,12 @@
 import './style.css'
 
-import { TodosPage } from './pages/todos'
 import { CategoriesPage } from './pages/categories'
-import { getRequiredElement, showStatusMessage } from './utils'
+import { TodosPage } from './pages/todos'
+import {
+  getRequiredElement,
+  hideStatusMessage,
+  showStatusMessage,
+} from './utils'
 
 type Page = {
   render: () => string
@@ -37,6 +41,7 @@ async function loadPage(route: string): Promise<void> {
 
     // Remove fade effect
     appContent.classList.remove('is-switching')
+    hideStatusMessage()
   } catch (error) {
     console.error(`Failed to load page ${route}:`, error)
     showStatusMessage('Failed to load page. Check console for details.')

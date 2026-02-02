@@ -1,16 +1,17 @@
-import { getRequiredElement } from '../utils'
-import { SELECTORS, API_URLS } from '../global-variables/constants'
-import { showStatusMessage } from '../utils'
 import { getData, postData } from '../api'
-import { Category, ClientCategory } from '../global-variables/interface'
-import { EVENT_TYPES, KEYS } from '../global-variables/constants'
-import { trimmedTitle } from '../utils'
+import {
+  API_URLS,
+  EVENT_TYPES,
+  KEYS,
+  SELECTORS,
+} from '../global-variables/constants'
+import type { Category, ClientCategory } from '../global-variables/interface'
 import { createCategory } from '../item-generation/categorie-generation'
+import { getRequiredElement, showStatusMessage, trimmedTitle } from '../utils'
 
 let addButton: HTMLButtonElement
 let titleInput: HTMLInputElement
 let colorInput: HTMLInputElement
-let errorMessage: HTMLParagraphElement
 let container: HTMLUListElement
 
 export const CategoriesPage = {
@@ -37,15 +38,11 @@ export const CategoriesPage = {
     addButton = getRequiredElement<HTMLButtonElement>(
       SELECTORS.ADD_CATEGORY_BUTTON,
     )
-    titleInput = getRequiredElement<HTMLInputElement>(
-      SELECTORS.CATEGORY_INPUT,
-    )
+    titleInput = getRequiredElement<HTMLInputElement>(SELECTORS.CATEGORY_INPUT)
     colorInput = getRequiredElement<HTMLInputElement>(
       SELECTORS.CATEGORY_COLOR_INPUT,
     )
-    errorMessage = getRequiredElement<HTMLParagraphElement>(
-      SELECTORS.ERROR_MESSAGE,
-    )
+
     container = getRequiredElement<HTMLUListElement>(
       SELECTORS.CATEGORY_LIST_ELEMENTS,
     )

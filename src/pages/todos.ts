@@ -1,14 +1,20 @@
-import { getData, postData, deleteAllData } from '../api'
-import { API_URLS, EVENT_TYPES, KEYS, SELECTORS, CSS_CLASSES } from '../global-variables/constants'
-import type { Category, ClientTask, Task } from '../global-variables/interface'
+import { deleteAllData, getData, postData } from '../api'
 import {
+  API_URLS,
+  CSS_CLASSES,
+  EVENT_TYPES,
+  KEYS,
+  SELECTORS,
+} from '../global-variables/constants'
+import type { Category, ClientTask, Task } from '../global-variables/interface'
+import { createTask } from '../item-generation/todo-generation'
+import {
+  categoriesCache,
   getRequiredElement,
   showStatusMessage,
   trimmedTitle,
   verifiedDate,
 } from '../utils'
-import { categoriesCache } from '../utils'
-import { createTask } from '../item-generation/todo-generation'
 
 let toDoInput: HTMLInputElement
 let dateInput: HTMLInputElement
@@ -49,7 +55,9 @@ export const TodosPage = {
     const clearAllBtn = getRequiredElement<HTMLButtonElement>(
       SELECTORS.DELETE_ALL,
     )
-    overdueMessage = getRequiredElement<HTMLParagraphElement>(SELECTORS.OVERDUE_MESSAGE)
+    overdueMessage = getRequiredElement<HTMLParagraphElement>(
+      SELECTORS.OVERDUE_MESSAGE,
+    )
     categorySelector = getRequiredElement<HTMLSelectElement>(
       SELECTORS.CATEGORY_SELECTOR,
     )
@@ -64,7 +72,6 @@ export const TodosPage = {
 
     addButton.addEventListener(EVENT_TYPES.CLICK, () => addTodoToList())
 
-
     try {
       const tasks = await getData<Task>(API_URLS.SELECTED_CATEGORY)
       async function loadCategories() {
@@ -76,7 +83,9 @@ export const TodosPage = {
         })
       }
       await loadCategories()
-      tasks.forEach((task) => createTask(task, toDoList))
+      tasks.forEach((task) => {
+        createTask(task, toDoList)
+      })
     } catch (error) {
       console.error('Failed to load initial tasks:', error)
       showStatusMessage('Could not load tasks. Check console for details')

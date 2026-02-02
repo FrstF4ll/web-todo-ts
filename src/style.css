@@ -100,16 +100,14 @@ nav button {
   font-weight: bold;
   cursor: pointer;
   padding: 5px 10px;
-  transition: opacity 0.2s, transform 0.1s;
+  transition:
+    opacity 0.2s,
+    transform 0.1s;
   text-decoration: underline;
 }
 
 nav button:hover {
   opacity: 0.8;
-}
-
-nav button:active {
-  transform: scale(0.95);
 }
 
 header {
@@ -272,7 +270,9 @@ button:active {
   border-radius: var(--border-radius-sm);
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 #delete-all:hover {
