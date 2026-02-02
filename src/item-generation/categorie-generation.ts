@@ -7,7 +7,7 @@ import {
   SELECTORS,
 } from '../constants'
 import type { Category, ClientCategory } from '../interface'
-import { renderSettingsWindow } from '../settings'
+import { renderSettingsWindow } from './settings'
 import { getRequiredElement, showStatusMessage, } from '../utils'
 import { categoriesCache } from '../utils'
 
