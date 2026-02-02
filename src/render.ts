@@ -50,21 +50,20 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
   return deleteBtn
 }
 
-
 function renderSelectedCategory(task: Task): HTMLDivElement {
-  const displayedCategory = document.createElement('div');
+  const displayedCategory = document.createElement('div')
 
   if (task.categories && task.categories.length > 0) {
-    const cat = task.categories[0];
-    displayedCategory.className = "category-tag"; // Use a consistent class
-    displayedCategory.dataset.id = cat.id.toString();
-    displayedCategory.textContent = cat.title;
+    const cat = task.categories[0]
+    displayedCategory.className = 'category-tag' // Use a consistent class
+    displayedCategory.dataset.id = cat.id.toString()
+    displayedCategory.textContent = cat.title
   } else {
-    displayedCategory.className = "none";
-    displayedCategory.textContent = "No categories";
+    displayedCategory.className = 'none'
+    displayedCategory.textContent = 'No categories'
   }
 
-  return displayedCategory;
+  return displayedCategory
 }
 
 // Generate due dates
@@ -95,7 +94,7 @@ function createTaskElements(task: Task): HTMLLIElement {
   checkboxLabelWrapper.append(checkbox, label)
 
   const category = renderSelectedCategory(task)
-  const categoryColor = task.categories?.[0]?.color || '#defaultColor';
+  const categoryColor = task.categories?.[0]?.color || '#defaultColor'
   newTask.style.borderStyle = 'solid'
   newTask.style.borderColor = categoryColor
 

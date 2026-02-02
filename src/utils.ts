@@ -69,7 +69,7 @@ export function getRequiredElement<T extends HTMLElement>(selector: string): T {
 }
 
 export function verifiedDate() {
-  const selectedDate = dateInput!.value
+  const selectedDate = dateInput?.value
   if (!selectedDate) return null
   const selectedMidnight = toMidnight(new Date(selectedDate))
   const todayMidnight = toMidnight(new Date())

@@ -61,7 +61,8 @@ export const API_URLS = {
   TODOS: 'https://api.todos.in.jt-lab.ch/todos',
   CATEGORIES: 'https://api.todos.in.jt-lab.ch/categories',
   CATEGORIES_TODOS: 'https://api.todos.in.jt-lab.ch/categories_todos',
-  SELECTED_CATEGORY: 'https://api.todos.in.jt-lab.ch/todos?select=id, title, done,categories(*)'
+  SELECTED_CATEGORY:
+    'https://api.todos.in.jt-lab.ch/todos?select=id, title, done,categories(*)',
 } as const
 
 export const CUSTOM_PROPERTIES = {

@@ -16,9 +16,9 @@ import { createTask } from './render'
 // Time calculation
 import {
   showStatusMessage,
-  updateOverdueMessageDisplay,
   trimmedTitle,
-  verifiedDate
+  updateOverdueMessageDisplay,
+  verifiedDate,
 } from './utils'
 
 // Loading tasks
@@ -50,29 +50,27 @@ updateOverdueMessageDisplay()
 //Not API
 
 async function addTodoToList(): Promise<void> {
-  const selectedId = Number.parseInt(categorySelector.value)
-
+  const selectedId = Number.parseInt(categorySelector.value, 10)
+  if (!toDoInput || !dateInput) {
+    return
+  }
   const newTask: ClientTask = {
-    title: trimmedTitle(toDoInput!),
+    title: trimmedTitle(toDoInput),
     due_date: verifiedDate(),
     done: false,
   }
-  const postResponse = await postData<ClientTask, Task>(
-    API_URLS.TODOS,
-    newTask,
-  )
-  if (!isNaN(selectedId)) {
+  const postResponse = await postData<ClientTask, Task>(API_URLS.TODOS, newTask)
+  if (!Number.isNaN(selectedId)) {
     await postData(API_URLS.CATEGORIES_TODOS, {
       category_id: selectedId,
-      todo_id: postResponse.id
-    });
+      todo_id: postResponse.id,
+    })
     postResponse.categories = [categoriesCache[selectedId]]
   }
   createTask(postResponse)
-  toDoInput!.value = ''
-  dateInput!.value = ''
+  toDoInput.value = ''
+  dateInput.value = ''
 }
-
 
 // Delete all
 
