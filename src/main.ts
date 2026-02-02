@@ -27,7 +27,6 @@ export const categoriesCache: Record<number, Category> = {}
 
 try {
   const tasks = await getData<Task>(API_URLS.SELECTED_CATEGORY)
-  console.log
   async function loadCategories() {
     const categories = await getData<Category>(API_URLS.CATEGORIES)
     categories.forEach((cat) => {
@@ -37,7 +36,7 @@ try {
       categorySelector.appendChild(opt)
     })
   }
-  loadCategories()
+  await loadCategories()
 
   tasks.forEach(createTask)
 } catch (error) {
