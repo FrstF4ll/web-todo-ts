@@ -95,10 +95,10 @@ function createTaskElements(task: Task): HTMLLIElement {
   checkboxLabelWrapper.append(checkbox, label)
 
   const category = renderSelectedCategory(task)
-  if (task.categories) {
-    newTask.style.borderStyle = 'solid'
-    newTask.style.borderColor = task.categories[0].color
-  }
+  const categoryColor = task.categories?.[0]?.color || '#defaultColor';
+  newTask.style.borderStyle = 'solid'
+  newTask.style.borderColor = categoryColor
+
   const dueDate = createDate(task)
   const deleteBtn = createDeleteBtn(task)
   const dueDateDeleteWrapper = document.createElement(SELECTORS.PARAGRAPH)
