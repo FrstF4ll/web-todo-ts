@@ -1,4 +1,4 @@
-import { deleteData, getData } from './api'
+import { deleteData, getData, postData } from './api'
 import {
   API_URLS,
   CSS_CLASSES,
@@ -9,7 +9,7 @@ import {
 } from './constants'
 import type { Category, ClientCategory } from './interface'
 import { renderSettingsWindow } from './settings'
-import { getRequiredElement, sendDataToAPI, showStatusMessage } from './utils'
+import { getRequiredElement, showStatusMessage } from './utils'
 
 // DOM
 export const categoryInput = getRequiredElement<HTMLInputElement>(
@@ -138,7 +138,7 @@ import { trimmedTitle } from './utils'
 //Add to database
 
 async function addCategoryToList(): Promise<void> {
-  const postResponse = await sendDataToAPI<ClientCategory, Category>(
+  const postResponse = await postData<ClientCategory, Category>(
     API_URLS.CATEGORIES,
     {
       title: trimmedTitle(categoryInput),
