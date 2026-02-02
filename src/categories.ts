@@ -9,7 +9,7 @@ import {
 } from './constants'
 import type { Category, ClientCategory } from './interface'
 import { renderSettingsWindow } from './settings'
-import { getRequiredElement, showStatusMessage } from './utils'
+import { getRequiredElement, showStatusMessage, trimmedTitle } from './utils'
 
 // DOM
 export const categoryInput = getRequiredElement<HTMLInputElement>(
@@ -132,8 +132,6 @@ export function createCategory(category: Category | undefined): void {
   attachCategoryEventListeners(category, element)
   categoryList.appendChild(element)
 }
-
-import { trimmedTitle } from './utils'
 
 //Add to database
 
