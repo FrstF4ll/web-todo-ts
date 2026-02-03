@@ -52,14 +52,14 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
 
 function renderSelectedCategory(task: Task): HTMLDivElement {
   const displayedCategory = document.createElement('div')
+  displayedCategory.className = 'category-tag' // Use a consistent class
 
   if (task.categories && task.categories.length > 0) {
     const cat = task.categories[0]
-    displayedCategory.className = 'category-tag' // Use a consistent class
     displayedCategory.dataset.id = cat.id.toString()
     displayedCategory.textContent = cat.title
   } else {
-    displayedCategory.className = 'none'
+    displayedCategory.dataset.id = '0'
     displayedCategory.textContent = 'No categories'
   }
 
