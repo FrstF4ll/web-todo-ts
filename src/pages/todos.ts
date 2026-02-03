@@ -73,8 +73,7 @@ export const TodosPage = {
     addButton.addEventListener(EVENT_TYPES.CLICK, () => addTodoToList())
 
     try {
-      const tasks = await getData<Task>(API_URLS.SELECTED_CATEGORY)
-      async function loadCategories() {
+      const loadCategories = async () => {
         const categories = await getData<Category>(API_URLS.CATEGORIES)
         categories.forEach((cat) => {
           categoriesCache[cat.id] = cat
@@ -82,7 +81,12 @@ export const TodosPage = {
           categorySelector.appendChild(opt)
         })
       }
-      await loadCategories()
+
+      const [tasks] = await Promise.all([
+        await getData<Task>(API_URLS.SELECTED_CATEGORY),
+        loadCategories(),
+      ])
+
       tasks.forEach((task) => {
         createTask(task, toDoList)
       })
@@ -95,7 +99,7 @@ export const TodosPage = {
 
 async function addTodoToList(): Promise<void> {
   try {
-    const selectedId = Number.parseInt(categorySelector.value, 10)
+    const selectedCategoryId = categorySelector.value
     const newTask: ClientTask = {
       title: trimmedTitle(toDoInput),
       due_date: verifiedDate(dateInput),
@@ -106,12 +110,13 @@ async function addTodoToList(): Promise<void> {
       API_URLS.TODOS,
       newTask,
     )
-    if (!Number.isNaN(selectedId)) {
+    if (selectedCategoryId !== 'none') {
+      const categoryId = Number.parseInt(categorySelector.value, 10)
       await postData(API_URLS.CATEGORIES_TODOS, {
-        category_id: selectedId,
+        category_id: categoryId,
         todo_id: postResponse.id,
       })
-      postResponse.categories = [categoriesCache[selectedId]]
+      postResponse.categories = [categoriesCache[categoryId]]
     }
     createTask(postResponse, toDoList)
 

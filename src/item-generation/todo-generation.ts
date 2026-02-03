@@ -95,6 +95,8 @@ function createTaskElements(task: Task): HTMLLIElement {
 
   const category = renderSelectedCategory(task)
   const categoryColor = task.categories?.[0]?.color || COLORS.DEFAULT
+  newTask.classList.add('task-with-category-border')
+  newTask.style.setProperty('--category-border-color', categoryColor)
   newTask.style.borderStyle = 'solid'
   newTask.style.borderColor = categoryColor
 

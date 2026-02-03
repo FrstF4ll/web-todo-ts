@@ -51,7 +51,7 @@ export const CategoriesPage = {
     titleInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
       if (e.key === KEYS.SUBMIT) addCategoryToList()
     })
-    container.innerHTML
+    container.innerHTML = ''
     await loadInitialCategories()
   },
 }

@@ -361,3 +361,8 @@ button:active {
   flex-direction: row;
   gap: 150px;
 }
+
+.task-with-category-border {
+  border-style: solid;
+  border-color: var(--category-border-color);
+}
