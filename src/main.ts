@@ -1,83 +1,61 @@
 import './style.css'
 
-import { getData, postData } from './api'
-import { API_URLS, EVENT_TYPES, KEYS } from './constants'
-// DOM import
+import { CategoriesPage } from './pages/categories'
+import { TodosPage } from './pages/todos'
 import {
-  addButton,
-  clearAllBtn,
-  dateInput,
+  getRequiredElement,
   hideStatusMessage,
   showStatusMessage,
-  toDoInput,
-} from './dom'
-import { deleteAllTask } from './events'
-import type { ClientTask, Task } from './interface'
-import { createTask } from './render'
-// Time calculation
-import { toMidnight, updateOverdueMessageDisplay } from './utils'
+} from './utils'
 
-// Loading tasks
-
-try {
-  const tasks = await getData<Task>(API_URLS.TODOS)
-  tasks.forEach(createTask)
-} catch (error) {
-  console.error('Failed to load initial tasks:', error)
-  showStatusMessage('Could not load tasks. Check console for details')
+type Page = {
+  render: () => string
+  init: () => Promise<void>
 }
 
-updateOverdueMessageDisplay()
+const pages: Record<string, Page> = {
+  '/': TodosPage,
+  '/categories': CategoriesPage,
+}
 
-//Not API
+const appContent = getRequiredElement<HTMLDivElement>('#app-content')
+const navButtons = document.querySelectorAll<HTMLButtonElement>('.nav-link')
 
-async function addTodoToList(): Promise<void> {
-  const selectedDate = dateInput.value
+async function loadPage(route: string): Promise<void> {
+  const page = pages[route]
 
-  const selectedMidnight = toMidnight(new Date(selectedDate))
-  const todayMidnight = toMidnight(new Date())
-
-  if (selectedDate && todayMidnight > selectedMidnight) {
-    showStatusMessage('Invalid date: date too early')
+  if (!page) {
+    console.error(`Page not found: ${route}`)
     return
-  }
-
-  const trimmed = toDoInput.value.trim()
-  if (trimmed.length === 0) {
-    showStatusMessage('Invalid task name: Empty name')
-    return
-  }
-
-  hideStatusMessage()
-
-  const newTask: ClientTask = {
-    title: trimmed,
-    due_date: selectedDate || null,
-    done: false,
   }
 
   try {
-    const postResponse = await postData<ClientTask, Task>(
-      API_URLS.TODOS,
-      newTask,
-    )
-    createTask(postResponse)
-  } catch (error) {
-    showStatusMessage('Data not posted as intended')
-    console.error('Failed to send data: ', error)
-  }
+    // Add fade effect
+    appContent.classList.add('is-switching')
 
-  toDoInput.value = ''
-  dateInput.value = ''
+    // Clear and render new page
+    appContent.innerHTML = page.render()
+
+    // Initialize page
+    await page.init()
+
+    // Remove fade effect
+    appContent.classList.remove('is-switching')
+    hideStatusMessage()
+  } catch (error) {
+    console.error(`Failed to load page ${route}:`, error)
+    showStatusMessage('Failed to load page. Check console for details.')
+    appContent.classList.remove('is-switching')
+  }
 }
 
-// Delete all
+// Setup navigation
+navButtons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const route = btn.getAttribute('data-route') || '/'
+    loadPage(route)
+  })
+})
 
-toDoInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
-  if (e.key === KEYS.SUBMIT) addTodoToList()
-})
-clearAllBtn.addEventListener(EVENT_TYPES.CLICK, async () => {
-  await deleteAllTask()
-  updateOverdueMessageDisplay()
-})
-addButton.addEventListener(EVENT_TYPES.CLICK, () => addTodoToList())
+// Load initial page
+loadPage('/')

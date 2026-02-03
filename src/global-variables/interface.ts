@@ -8,6 +8,7 @@ export interface ClientTask {
 
 export interface Task extends ClientTask {
   id: number
+  categories?: Category[]
 }
 
 export interface ClientCategory {
@@ -17,4 +18,9 @@ export interface ClientCategory {
 
 export interface Category extends ClientCategory {
   id: number
+}
+
+export interface CategoryTodos {
+  category_id: number
+  todo_id: number
 }

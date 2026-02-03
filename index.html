@@ -12,31 +12,20 @@
 <body>
   <main id="title">
     <nav>
-      <li><a href="index.html">Todos</a></li>
-      <li><a href="categories.html">Categories</a></li>
+      <ul class="nav-list">
+        <li><button class="nav-link" data-route="/">Todos</button></li>
+        <li><button class="nav-link" data-route="/categories">Categories</button></li>
+      </ul>
     </nav>
     <header>
       <h1>Web todolist app</h1>
-      <p id="overdue-message" class="hidden">You have overdued tasks !</p>
+      <p id="overdue-message" class="hidden">You have overdued tasks!</p>
+      <p id="error-msg" class="hidden" aria-live="polite">ERROR: Task cannot be empty</p>
     </header>
-    <section id="user-input">
-      <div class="test">
-        <label for="todo-input" id="todo-label">New Task</label>
-        <p id="error-msg" class="hidden" aria-live="polite">ERROR: Task cannot be empty</p>
-      </div>
-      <div class="user-input-layout">
-        <input id="todo-input" placeholder="Write here your task">
-        <input type="date" id="todo-date-input">
-        <button id="add-todo-button">Add to list</button>
-        <label for="todo-date-input" class="for-readers">Due date</label>
-      </div>
-    </section>
+
+    <div id="app-content">
+    </div>
   </main>
-  <section class="app-list">
-    <button id="delete-all">Clear tasks</button>
-    <ul id="todos-container">
-    </ul>
-  </section>
   <script type="module" src="/src/main.ts"></script>
 </body>
 

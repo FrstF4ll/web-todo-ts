@@ -23,6 +23,7 @@ export const SELECTORS = {
   DATE_INPUT: '#todo-date-input',
   OVERDUE_MESSAGE: '#overdue-message',
   CATEGORY_TITLE: '.category-title',
+  CATEGORY_SELECTOR: '#category-selector',
 } as const
 
 export const INPUT_TYPES = {
@@ -60,4 +61,14 @@ export const API_URLS = {
   TODOS: 'https://api.todos.in.jt-lab.ch/todos',
   CATEGORIES: 'https://api.todos.in.jt-lab.ch/categories',
   CATEGORIES_TODOS: 'https://api.todos.in.jt-lab.ch/categories_todos',
+  SELECTED_CATEGORY:
+    'https://api.todos.in.jt-lab.ch/todos?select=id, title, done,categories(*)',
+} as const
+
+export const CUSTOM_PROPERTIES = {
+  COLOR: 'category-color',
+} as const
+
+export const COLORS = {
+  DEFAULT: 'white',
 } as const

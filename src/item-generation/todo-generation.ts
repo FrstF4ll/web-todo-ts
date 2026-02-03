@@ -1,16 +1,20 @@
 // Interface Import
 
-import { deleteData, patchData } from './api'
+import { deleteData, patchData } from '../api'
 import {
   API_URLS,
+  COLORS,
   CSS_CLASSES,
   EVENT_TYPES,
   INPUT_TYPES,
   SELECTORS,
-} from './constants'
-import { showStatusMessage, toDoList } from './dom'
-import type { ClientTask, Task } from './interface'
-import { dateColorSetUp, updateOverdueMessageDisplay } from './utils'
+} from '../global-variables/constants'
+import type { ClientTask, Task } from '../global-variables/interface'
+import {
+  dateColorSetUp,
+  showStatusMessage,
+  updateOverdueMessageDisplay,
+} from '../utils'
 
 export function createNewTaskElements(): HTMLLIElement {
   const newTask = document.createElement(SELECTORS.LIST_ELEMENT)
@@ -46,6 +50,22 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
   return deleteBtn
 }
 
+function renderSelectedCategory(task: Task): HTMLDivElement {
+  const displayedCategory = document.createElement('div')
+
+  if (task.categories && task.categories.length > 0) {
+    const cat = task.categories[0]
+    displayedCategory.className = 'category-tag' // Use a consistent class
+    displayedCategory.dataset.id = cat.id.toString()
+    displayedCategory.textContent = cat.title
+  } else {
+    displayedCategory.className = 'none'
+    displayedCategory.textContent = 'No categories'
+  }
+
+  return displayedCategory
+}
+
 // Generate due dates
 export function createDate(task: ClientTask): HTMLTimeElement {
   const taskDate = task.due_date
@@ -73,12 +93,18 @@ function createTaskElements(task: Task): HTMLLIElement {
   const checkboxLabelWrapper = document.createElement(SELECTORS.PARAGRAPH)
   checkboxLabelWrapper.append(checkbox, label)
 
+  const category = renderSelectedCategory(task)
+  const categoryColor = task.categories?.[0]?.color || COLORS.DEFAULT
+  newTask.classList.add('task-with-category-border')
+  newTask.style.setProperty('--category-border-color', categoryColor)
+  newTask.style.borderStyle = 'solid'
+  newTask.style.borderColor = categoryColor
+
   const dueDate = createDate(task)
   const deleteBtn = createDeleteBtn(task)
   const dueDateDeleteWrapper = document.createElement(SELECTORS.PARAGRAPH)
   dueDateDeleteWrapper.append(dueDate, deleteBtn)
-
-  newTask.append(checkboxLabelWrapper, dueDateDeleteWrapper)
+  newTask.append(checkboxLabelWrapper, category, dueDateDeleteWrapper)
   return newTask
 }
 
@@ -110,7 +136,6 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
     try {
       await patchData(API_URLS.TODOS, task.id, { done: task.done })
     } catch (error) {
-      // Revert UI on failure to keep it consistent with the server state
       task.done = originalDoneState
       checkbox.checked = originalDoneState
       label.classList.toggle(CSS_CLASSES.COMPLETED, task.done)
@@ -120,8 +145,14 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
   })
 }
 
-export function createTask(task: Task): void {
+export function createTask(
+  task: Task | undefined,
+  container: HTMLUListElement,
+): void {
+  if (typeof task === 'undefined') {
+    throw new Error('Type of task is undefined, cannot create task')
+  }
   const element = createTaskElements(task)
   attachTaskEventListeners(task, element)
-  toDoList.appendChild(element)
+  container.appendChild(element)
 }

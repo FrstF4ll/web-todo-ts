@@ -1,8 +1,27 @@
-import { CSS_CLASSES, DATE_CONFIG } from './constants'
-import { overdueMsg } from './dom'
-//To midnight normalization
-export function toMidnight(date: Date): number {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+import {
+  CSS_CLASSES,
+  DATE_CONFIG,
+  SELECTORS,
+} from './global-variables/constants'
+
+export const showStatusMessage = (message: string) => {
+  const errorMsg = document.querySelector<HTMLParagraphElement>(
+    SELECTORS.ERROR_MESSAGE,
+  )
+  if (errorMsg) {
+    errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
+    errorMsg.textContent = message
+  }
+}
+
+export const hideStatusMessage = () => {
+  const errorMsg = document.querySelector<HTMLParagraphElement>(
+    SELECTORS.ERROR_MESSAGE,
+  )
+  if (errorMsg) {
+    errorMsg.classList.add(CSS_CLASSES.HIDDEN)
+    errorMsg.textContent = ''
+  }
 }
 
 const dueDateStatus = {
@@ -10,6 +29,11 @@ const dueDateStatus = {
   DueToday: 'due-date--due-today',
   DueSoon: 'due-date--due-soon',
   DueLater: 'due-date--due-later',
+}
+
+//To midnight normalization
+export function toMidnight(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 
 //Dynamic color switch depending on due dates
@@ -48,7 +72,10 @@ export function dateColorSetUp(dueDate: HTMLTimeElement): void {
 export function updateOverdueMessageDisplay() {
   const overduedTasks = document.querySelectorAll('.due-date--past-due')
   const noOverdueTasks = overduedTasks.length === 0
-  overdueMsg.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
+  const overdueMsg = document.querySelector<HTMLParagraphElement>(
+    SELECTORS.OVERDUE_MESSAGE,
+  )
+  overdueMsg?.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
 
 export function getRequiredElement<T extends HTMLElement>(selector: string): T {
@@ -56,3 +83,30 @@ export function getRequiredElement<T extends HTMLElement>(selector: string): T {
   if (!el) throw new Error(`Element ${selector} not found`)
   return el
 }
+
+export function verifiedDate(dateInput: HTMLInputElement) {
+  const selectedDate = dateInput?.value
+  if (!selectedDate) return null
+  const selectedMidnight = toMidnight(new Date(selectedDate))
+  const todayMidnight = toMidnight(new Date())
+  if (todayMidnight > selectedMidnight) {
+    showStatusMessage('Invalid date: date too early')
+    throw new Error('DATE_TOO_EARLY')
+  }
+  hideStatusMessage()
+  return selectedDate
+}
+
+export function trimmedTitle(userInput: HTMLInputElement) {
+  const trimmed = userInput.value.trim()
+  if (trimmed.length === 0) {
+    showStatusMessage('Invalid task name: Empty name')
+    throw new Error('TITLE_EMPTY')
+  }
+  hideStatusMessage()
+  return trimmed
+}
+
+import type { Category } from './global-variables/interface'
+
+export const categoriesCache: Record<number, Category> = {}

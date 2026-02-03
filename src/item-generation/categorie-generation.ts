@@ -1,43 +1,18 @@
-import { deleteData, getData, postData } from './api'
+import { deleteData } from '../api'
 import {
   API_URLS,
   CSS_CLASSES,
   EVENT_TYPES,
   INPUT_TYPES,
-  KEYS,
   SELECTORS,
-} from './constants'
-import type { Category, ClientCategory } from './interface'
+} from '../global-variables/constants'
+import type { Category, ClientCategory } from '../global-variables/interface'
+import {
+  categoriesCache,
+  getRequiredElement,
+  showStatusMessage,
+} from '../utils'
 import { renderSettingsWindow } from './settings'
-import { hideStatusMessage, showStatusMessage } from './status-message'
-import { getRequiredElement } from './utils'
-
-// DOM
-export const categoryInput = getRequiredElement<HTMLInputElement>(
-  SELECTORS.CATEGORY_INPUT,
-)
-export const addCategoryButton = getRequiredElement<HTMLButtonElement>(
-  SELECTORS.ADD_CATEGORY_BUTTON,
-)
-export const categoryList = getRequiredElement<HTMLUListElement>(
-  SELECTORS.CATEGORY_LIST_ELEMENTS,
-)
-export const errorMsg = getRequiredElement<HTMLParagraphElement>(
-  SELECTORS.ERROR_MESSAGE,
-)
-export const colorSelector = getRequiredElement<HTMLInputElement>(
-  SELECTORS.CATEGORY_COLOR_INPUT,
-)
-
-// Load from database
-
-try {
-  const tasks = await getData<Category>(API_URLS.CATEGORIES)
-  tasks.forEach(createCategory)
-} catch (error) {
-  console.error('Failed to load initial tasks:', error)
-  showStatusMessage('Could not load tasks. Check console for details')
-}
 
 // Render
 export function createNewCategoryElements(): HTMLLIElement {
@@ -51,7 +26,7 @@ function createCategoryTitle(category: Category): HTMLParagraphElement {
   categoryTitle.textContent = category.title
   return categoryTitle
 }
-//Generate delete button
+// Generate delete button
 export function createDeleteBtn(category: ClientCategory): HTMLButtonElement {
   const deleteBtn = document.createElement(SELECTORS.BUTTON)
   deleteBtn.type = INPUT_TYPES.BUTTON
@@ -126,43 +101,15 @@ function attachCategoryEventListeners(
   })
 }
 
-export function createCategory(category: Category): void {
+export function createCategory(category: Category | undefined): void {
+  if (typeof category === 'undefined') {
+    throw new Error('Type of category is undefined, cannot create category')
+  }
+  const container = getRequiredElement<HTMLUListElement>(
+    SELECTORS.CATEGORY_LIST_ELEMENTS,
+  )
   const element = createCategoryElements(category)
   attachCategoryEventListeners(category, element)
-  categoryList.appendChild(element)
+  categoriesCache[category.id] = category
+  container.appendChild(element)
 }
-
-//Add to database
-
-async function addCategoryToList(): Promise<void> {
-  const trimmed = categoryInput.value.trim()
-  if (trimmed.length === 0) {
-    showStatusMessage('Invalid category name: Empty name')
-    return
-  }
-
-  hideStatusMessage()
-
-  const newCategory: ClientCategory = {
-    title: trimmed,
-    color: colorSelector.value,
-  }
-
-  try {
-    const postResponse = await postData<ClientCategory, Category>(
-      API_URLS.CATEGORIES,
-      newCategory,
-    )
-    createCategory(postResponse)
-  } catch (error) {
-    showStatusMessage('Data not posted as intended')
-    console.error('Failed to send data: ', error)
-  }
-
-  categoryInput.value = ''
-}
-
-categoryInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
-  if (e.key === KEYS.SUBMIT) addCategoryToList()
-})
-addCategoryButton.addEventListener(EVENT_TYPES.CLICK, () => addCategoryToList())

@@ -26,7 +26,7 @@ html {
   --todo-item-border-radius: 0.5rem;
   --todo-item-padding: 0.5rem;
 
-  --input-container-height: 9.375rem;
+  --input-container-height: 12.375rem;
   --input-container-width: 14.125rem;
   --input-border-radius: 1.5rem;
   --input-layout-gap: 0.5rem;
@@ -74,19 +74,45 @@ body {
 
 #title {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 2fr 2fr;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: repeat(3, auto);
+  row-gap: 1rem;
   justify-items: center;
   align-items: center;
   max-height: var(--header-max-height);
 }
 
 nav {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+nav > .nav-list {
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  grid-row: 1;
-  grid-column: 2;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  color: var(--body-text-color);
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition:
+    opacity 0.2s,
+    transform 0.1s;
+  text-decoration: underline;
+}
+
+.nav-link:hover,
+.nav-link:active {
+  opacity: 0.8;
 }
 
 header {
@@ -98,11 +124,46 @@ header {
   padding: var(--list-padding);
 }
 
+#app-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 0.2s ease-in-out;
+  width: 100%;
+  grid-row: 3;
+  grid-column: 1 / -1;
+}
+
+.page-fade {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.is-switching {
+  filter: blur(2px);
+  opacity: 0.5;
+}
+
 .app-list {
   display: grid;
-  grid-template-columns: 1fr minmax(0, 2fr) 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: auto 1fr;
   row-gap: var(--list-row-gap);
+  width: 100%;
 }
 
 .app-list > * {
@@ -205,8 +266,8 @@ button:active {
 
 #delete-all {
   grid-row: 1;
+  grid-column: 2;
   justify-self: end;
-  margin-top: var(--spacing-sm);
   padding-block: var(--danger-padding-vertical);
   background-color: var(--danger-color);
   color: var(--danger-text-color);
@@ -299,4 +360,9 @@ button:active {
   display: flex;
   flex-direction: row;
   gap: 150px;
+}
+
+.task-with-category-border {
+  border-style: solid;
+  border-color: var(--category-border-color);
 }
