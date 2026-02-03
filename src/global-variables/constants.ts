@@ -13,6 +13,7 @@ export const SELECTORS = {
   PARAGRAPH: 'p',
   DELETE_BTN: '.delete-btn',
   TODO_CHECKBOX: '.todo-elements__checkbox',
+  TODOS: '.todo-element',
   TODO_INPUT: '#todo-input',
   CATEGORY_INPUT: '#category-name-input',
   ADD_BUTTON: '#add-todo-button',

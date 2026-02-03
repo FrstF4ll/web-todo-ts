@@ -23,7 +23,7 @@ let toDoList: HTMLUListElement
 let overdueMessage: HTMLParagraphElement
 let categorySelector: NodeListOf<HTMLSelectElement>
 let assignCategory: HTMLSelectElement
-let _filterCategory: HTMLSelectElement
+let filterCategory: HTMLSelectElement
 
 export const TodosPage = {
   render: () => `
@@ -68,7 +68,7 @@ export const TodosPage = {
       SELECTORS.CATEGORY_SELECTOR,
     )
 
-    _filterCategory = getSingleRequiredElement<HTMLSelectElement>(
+    filterCategory = getSingleRequiredElement<HTMLSelectElement>(
       SELECTORS.CATEGORY_FILTER,
     )
 
@@ -109,11 +109,14 @@ export const TodosPage = {
       tasks.forEach((task) => {
         createTask(task, toDoList)
       })
+
+      filterCategory.addEventListener(EVENT_TYPES.CHANGE, () => sortTodosByCategories(filterCategory.value))
+
     } catch (error) {
       console.error('Failed to load initial tasks:', error)
       showStatusMessage('Could not load tasks. Check console for details')
     }
-  },
+  }
 }
 
 async function addTodoToList(): Promise<void> {
@@ -170,3 +173,16 @@ export function updateOverdueMessageDisplay() {
   const noOverdueTasks = overduedTasks.length === 0
   overdueMessage.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
+
+function sortTodosByCategories(filter: string) {
+  const todos = getManyRequiredElements(SELECTORS.TODOS)
+  todos.forEach((todo) => {
+    const category = todo.querySelector('.category-tag') as HTMLDivElement
+    if (category?.dataset.id !== filter) {
+      todo.classList.add('hidden')
+    } else {
+      todo.classList.remove('hidden')
+    }
+  })
+}
+
