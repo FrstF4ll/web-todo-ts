@@ -258,7 +258,7 @@ header {
   gap: var(--input-layout-gap);
 }
 
-#error-msg {
+#status-message {
   white-space: nowrap;
   margin: var(--no-margin);
 }

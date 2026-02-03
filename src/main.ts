@@ -3,9 +3,9 @@ import './style.css'
 import { CategoriesPage } from './pages/categories'
 import { TodosPage } from './pages/todos'
 import {
+  customStatusMessage,
+  defaultStatusMessage,
   getSingleRequiredElement,
-  hideStatusMessage,
-  showStatusMessage,
 } from './utils'
 
 type Page = {
@@ -41,10 +41,10 @@ async function loadPage(route: string): Promise<void> {
 
     // Remove fade effect
     appContent.classList.remove('is-switching')
-    hideStatusMessage()
+    defaultStatusMessage()
   } catch (error) {
     console.error(`Failed to load page ${route}:`, error)
-    showStatusMessage('Failed to load page. Check console for details.')
+    customStatusMessage('Failed to load page. Check console for details.')
     appContent.classList.remove('is-switching')
   }
 }

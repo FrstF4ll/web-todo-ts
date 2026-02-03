@@ -4,23 +4,19 @@ import {
   SELECTORS,
 } from './global-variables/constants'
 
-export const showStatusMessage = (message: string) => {
-  const errorMsg = document.querySelector<HTMLParagraphElement>(
-    SELECTORS.ERROR_MESSAGE,
-  )
+const errorMsg = document.querySelector<HTMLParagraphElement>(
+  SELECTORS.STATUS_MESSAGE,
+)
+
+export const customStatusMessage = (message: string) => {
   if (errorMsg) {
-    errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
     errorMsg.textContent = message
   }
 }
 
-export const hideStatusMessage = () => {
-  const errorMsg = document.querySelector<HTMLParagraphElement>(
-    SELECTORS.ERROR_MESSAGE,
-  )
+export const defaultStatusMessage = () => {
   if (errorMsg) {
-    errorMsg.classList.add(CSS_CLASSES.HIDDEN)
-    errorMsg.textContent = ''
+    errorMsg.textContent = 'Welcome to your todo list !'
   }
 }
 
@@ -99,20 +95,20 @@ export function verifiedDate(dateInput: HTMLInputElement) {
   const selectedMidnight = toMidnight(new Date(selectedDate))
   const todayMidnight = toMidnight(new Date())
   if (todayMidnight > selectedMidnight) {
-    showStatusMessage('Invalid date: date too early')
+    customStatusMessage('Invalid date: date too early')
     throw new Error('DATE_TOO_EARLY')
   }
-  hideStatusMessage()
+  defaultStatusMessage()
   return selectedDate
 }
 
 export function trimmedTitle(userInput: HTMLInputElement) {
   const trimmed = userInput.value.trim()
   if (trimmed.length === 0) {
-    showStatusMessage('Invalid task name: Empty name')
+    customStatusMessage('Invalid task name: Empty name')
     throw new Error('TITLE_EMPTY')
   }
-  hideStatusMessage()
+  defaultStatusMessage()
   return trimmed
 }
 

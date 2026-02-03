@@ -12,9 +12,9 @@ import {
 import type { ClientTask, Task } from '../global-variables/interface'
 import { filterElement } from '../pages/todos'
 import {
+  customStatusMessage,
   dateColorSetUp,
   getSingleRequiredElement,
-  showStatusMessage,
   updateOverdueMessageDisplay,
 } from '../utils'
 
@@ -127,7 +127,7 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
       updateOverdueMessageDisplay()
     } catch (error) {
       console.error(`Failed to delete task ${task.id}:`, error)
-      showStatusMessage('Failed to delete task. Please try again.')
+      customStatusMessage('Failed to delete task. Please try again.')
     }
   })
 
@@ -142,7 +142,7 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
       checkbox.checked = originalDoneState
       label.classList.toggle(CSS_CLASSES.COMPLETED, task.done)
       console.error(`Failed to update task ${task.id}:`, error)
-      showStatusMessage('Failed to update task. Please try again.')
+      customStatusMessage('Failed to update task. Please try again.')
     }
   })
 }
@@ -154,9 +154,9 @@ const invisbleTaskOnCreation = async (element: HTMLElement, task: Task) => {
   await filterElement(element, filterCategory.value)
   if (task.categories) {
     const categoryTitle = task.categories[0].title
-    showStatusMessage(`Task created on category ${categoryTitle} `)
+    customStatusMessage(`Task created on category ${categoryTitle} `)
   } else {
-    showStatusMessage('Task created without categories.')
+    customStatusMessage('Task created without categories.')
   }
 }
 

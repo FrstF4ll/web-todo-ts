@@ -8,8 +8,8 @@ import {
 import type { Category, ClientCategory } from '../global-variables/interface'
 import { createCategory } from '../item-generation/categorie-generation'
 import {
+  customStatusMessage,
   getSingleRequiredElement,
-  showStatusMessage,
   trimmedTitle,
 } from '../utils'
 
@@ -23,7 +23,7 @@ export const CategoriesPage = {
     <section id="user-input" class="page-fade">
         <div class="test">
             <label for="category-name-input" id="category-label">New Category</label>
-            <p id="error-msg" class="hidden" aria-live="polite">ERROR: Category cannot be empty</p>
+            <p id="status-message" class="hidden" aria-live="polite">ERROR: Category cannot be empty</p>
         </div>
         <div class="user-input-layout">
         <input aria-labelledby="category-label" id="category-name-input" placeholder="Write here your category">
@@ -68,7 +68,7 @@ async function loadInitialCategories() {
     categories.forEach(createCategory)
   } catch (error) {
     console.error('Failed to load initial categories:', error)
-    showStatusMessage('Could not load categories. Check console for details')
+    customStatusMessage('Could not load categories. Check console for details')
   }
 }
 

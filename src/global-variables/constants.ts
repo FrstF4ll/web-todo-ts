@@ -20,7 +20,7 @@ export const SELECTORS = {
   CATEGORY_COLOR_INPUT: '#category-color-input',
   ADD_CATEGORY_BUTTON: '#add-category-button',
   DELETE_ALL: '#delete-all',
-  ERROR_MESSAGE: '#error-msg',
+  STATUS_MESSAGE: '#status-message',
   DATE_INPUT: '#todo-date-input',
   OVERDUE_MESSAGE: '#overdue-message',
   CATEGORY_TITLE: '.category-title',

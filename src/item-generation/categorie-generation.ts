@@ -9,8 +9,8 @@ import {
 import type { Category, ClientCategory } from '../global-variables/interface'
 import {
   categoriesCache,
+  customStatusMessage,
   getSingleRequiredElement,
-  showStatusMessage,
 } from '../utils'
 import { renderSettingsWindow } from './settings'
 
@@ -96,7 +96,7 @@ function attachCategoryEventListeners(
       element.remove()
     } catch (error) {
       console.error(`Failed to delete category ${category.id}:`, error)
-      showStatusMessage('Failed to delete category. Please try again.')
+      customStatusMessage('Failed to delete category. Please try again.')
     }
   })
 }

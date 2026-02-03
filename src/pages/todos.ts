@@ -10,9 +10,9 @@ import type { Category, ClientTask, Task } from '../global-variables/interface'
 import { createTask } from '../item-generation/todo-generation'
 import {
   categoriesCache,
+  customStatusMessage,
   getManyRequiredElements,
   getSingleRequiredElement,
-  showStatusMessage,
   trimmedTitle,
   verifiedDate,
 } from '../utils'
@@ -30,7 +30,7 @@ export const TodosPage = {
     <section id="user-input" class="page-fade">
       <div class="test">
         <label for="todo-input" id="todo-label">New Task</label>
-        <p id="error-msg" class="hidden" aria-live="polite">ERROR: Task cannot be empty</p>
+        <p id="status-message" class="hidden" aria-live="polite">ERROR: Task cannot be empty</p>
       </div>
       <div class="user-input-layout">
         <input aria-labelledby="todo-label" id="todo-input" placeholder="Write here your task">
@@ -116,7 +116,7 @@ export const TodosPage = {
       )
     } catch (error) {
       console.error('Failed to load initial tasks:', error)
-      showStatusMessage('Could not load tasks. Check console for details')
+      customStatusMessage('Could not load tasks. Check console for details')
     }
   },
 }
@@ -154,10 +154,11 @@ async function addTodoToList(): Promise<void> {
 async function deleteAllTask(filter: string) {
   try {
     const todos = document.querySelectorAll(SELECTORS.TODOS)
-    const categoryTitle = filterCategory.options[filterCategory.selectedIndex].textContent
+    const categoryTitle =
+      filterCategory.options[filterCategory.selectedIndex].textContent
 
     if (todos.length === 0) {
-      showStatusMessage('Todo-list already clean.')
+      customStatusMessage('Todo-list already clean.')
       return
     }
     if (!window.confirm('Are you sure you want to delete all tasks?')) {
@@ -172,13 +173,15 @@ async function deleteAllTask(filter: string) {
         await deleteData(API_URLS.TODOS, Number(todo.id))
         todo.remove()
         isGenericCategory
-          ? showStatusMessage("All your tasks have been deleted succesfully")
-          : showStatusMessage(`Tasks from ${categoryTitle} deleted.`)
+          ? customStatusMessage('All your tasks have been deleted succesfully')
+          : customStatusMessage(`Tasks from ${categoryTitle} deleted.`)
       }
     })
   } catch (error) {
     console.error('Failed to delete Tasks : ', error)
-    showStatusMessage('Failed to delete all Tasks, check console for details.')
+    customStatusMessage(
+      'Failed to delete all Tasks, check console for details.',
+    )
   }
 }
 
