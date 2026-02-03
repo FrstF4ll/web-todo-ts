@@ -33,20 +33,20 @@ export const TodosPage = {
         <p id="error-msg" class="hidden" aria-live="polite">ERROR: Task cannot be empty</p>
       </div>
       <div class="user-input-layout">
-        <input id="todo-input" placeholder="Write here your task">
-        <input type="date" id="todo-date-input">
-        <select id="add-category-select" class="category-selector">
+        <input aria-labelledby="todo-label" id="todo-input" placeholder="Write here your task">
+        <input aria-label="Due date" type="date" id="todo-date-input">
+        <select aria-label="Assign category for task creation" id="add-category-select" class="category-selector">
           <option value="none">Select a category</option>
         </select>
         <button id="add-todo-button">Add to list</button>
       </div>
     </section>
     <section class="app-list page-fade">
-      <select id="filter-category-select" class="category-selector">
+      <select aria-label="Filter task by category" id="filter-category-select" class="category-selector">
         <option value="all">All</option>
       </select>
       <button id="delete-all">Clear tasks</button>
-      <ul id="todos-container"></ul>
+      <ul aria-label="Tasks list" id="todos-container"></ul>
     </section>
   `,
   init: async () => {
