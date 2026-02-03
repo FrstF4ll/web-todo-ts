@@ -1,4 +1,4 @@
-import { deleteAllData, getData, postData } from '../api'
+import { deleteData, getData, postData } from '../api'
 import {
   API_URLS,
   CSS_CLASSES,
@@ -80,8 +80,9 @@ export const TodosPage = {
     toDoInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
       if (e.key === KEYS.SUBMIT) addTodoToList()
     })
+
     clearAllBtn.addEventListener(EVENT_TYPES.CLICK, async () => {
-      await deleteAllTask()
+      await deleteAllTask(filterCategory.value)
       updateOverdueMessageDisplay()
     })
 
@@ -110,7 +111,6 @@ export const TodosPage = {
       tasks.forEach((task) => {
         createTask(task, toDoList)
       })
-
       filterCategory.addEventListener(EVENT_TYPES.CHANGE, () =>
         sortTodosByCategories(filterCategory.value),
       )
@@ -151,8 +151,10 @@ async function addTodoToList(): Promise<void> {
   }
 }
 
-async function deleteAllTask() {
+async function deleteAllTask(filter: string) {
   try {
+    const todos = getManyRequiredElements(SELECTORS.TODOS)
+
     if (toDoList?.children.length === 0) {
       showStatusMessage('Todo-list already clean.')
       return
@@ -160,9 +162,16 @@ async function deleteAllTask() {
     if (!window.confirm('Are you sure you want to delete all tasks?')) {
       return
     }
-    await deleteAllData(API_URLS.TODOS)
-    if (toDoList) toDoList.innerHTML = ''
-    showStatusMessage('All tasks successfully deleted')
+
+    todos.forEach(async (todo) => {
+      const category = todo.querySelector('.category-tag') as HTMLDivElement
+      const isMatch = category.dataset.id === filter || filter === 'all'
+      if (isMatch) {
+        await deleteData(API_URLS.TODOS, Number(todo.id))
+        todo.remove()
+        showStatusMessage('All tasks of this category successfully deleted')
+      }
+    })
   } catch (error) {
     console.error('Failed to delete Tasks : ', error)
     showStatusMessage('Failed to delete all Tasks, check console for details.')
@@ -184,5 +193,3 @@ function sortTodosByCategories(filter: string) {
     todo.classList.toggle('hidden', !isMatch)
   })
 }
-
-
