@@ -110,13 +110,14 @@ export const TodosPage = {
         createTask(task, toDoList)
       })
 
-      filterCategory.addEventListener(EVENT_TYPES.CHANGE, () => sortTodosByCategories(filterCategory.value))
-
+      filterCategory.addEventListener(EVENT_TYPES.CHANGE, () =>
+        sortTodosByCategories(filterCategory.value),
+      )
     } catch (error) {
       console.error('Failed to load initial tasks:', error)
       showStatusMessage('Could not load tasks. Check console for details')
     }
-  }
+  },
 }
 
 async function addTodoToList(): Promise<void> {
@@ -178,11 +179,7 @@ function sortTodosByCategories(filter: string) {
   const todos = getManyRequiredElements(SELECTORS.TODOS)
   todos.forEach((todo) => {
     const category = todo.querySelector('.category-tag') as HTMLDivElement
-    if (category?.dataset.id !== filter) {
-      todo.classList.add('hidden')
-    } else {
-      todo.classList.remove('hidden')
-    }
+    const isMatch = category.dataset.id === filter || filter === 'all'
+    todo.classList.toggle('hidden', !isMatch)
   })
 }
-
