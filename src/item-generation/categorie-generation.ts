@@ -9,7 +9,7 @@ import {
 import type { Category, ClientCategory } from '../global-variables/interface'
 import {
   categoriesCache,
-  getRequiredElement,
+  getSingleRequiredElement,
   showStatusMessage,
 } from '../utils'
 import { renderSettingsWindow } from './settings'
@@ -105,7 +105,7 @@ export function createCategory(category: Category | undefined): void {
   if (typeof category === 'undefined') {
     throw new Error('Type of category is undefined, cannot create category')
   }
-  const container = getRequiredElement<HTMLUListElement>(
+  const container = getSingleRequiredElement<HTMLUListElement>(
     SELECTORS.CATEGORY_LIST_ELEMENTS,
   )
   const element = createCategoryElements(category)

@@ -23,8 +23,9 @@ export const SELECTORS = {
   DATE_INPUT: '#todo-date-input',
   OVERDUE_MESSAGE: '#overdue-message',
   CATEGORY_TITLE: '.category-title',
-  CATEGORY_SELECTOR: '#category-selector',
-  CATEGORY_FILTER: '#category-filter',
+  CATEGORY_SELECTOR: '.category-selector',
+  CATEGORY_FILTER: '#filter-category-select',
+  CATEGORY_ADD: '#add-category-select',
 } as const
 
 export const INPUT_TYPES = {

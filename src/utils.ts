@@ -78,12 +78,21 @@ export function updateOverdueMessageDisplay() {
   overdueMsg?.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
 
-export function getRequiredElement<T extends HTMLElement>(selector: string): T {
-  const el = document.querySelector<T>(selector)
-  if (!el) throw new Error(`Element ${selector} not found`)
-  return el
+export function getSingleRequiredElement<T extends HTMLElement>(
+  selector: string,
+): T {
+  const element = document.querySelector<T>(selector)
+  if (!element) throw new Error(`Element ${selector} not found`)
+  return element
 }
 
+export function getManyRequiredElements<T extends HTMLElement>(
+  selector: string,
+): NodeListOf<T> {
+  const elements = document.querySelectorAll<T>(selector)
+  if (elements.length === 0) throw new Error(`Element ${selector} not found`)
+  return elements
+}
 export function verifiedDate(dateInput: HTMLInputElement) {
   const selectedDate = dateInput?.value
   if (!selectedDate) return null

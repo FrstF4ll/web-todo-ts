@@ -10,7 +10,8 @@ import type { Category, ClientTask, Task } from '../global-variables/interface'
 import { createTask } from '../item-generation/todo-generation'
 import {
   categoriesCache,
-  getRequiredElement,
+  getManyRequiredElements,
+  getSingleRequiredElement,
   showStatusMessage,
   trimmedTitle,
   verifiedDate,
@@ -20,8 +21,9 @@ let toDoInput: HTMLInputElement
 let dateInput: HTMLInputElement
 let toDoList: HTMLUListElement
 let overdueMessage: HTMLParagraphElement
-let categorySelector: HTMLSelectElement
-let categoryFilter: HTMLSelectElement
+let categorySelector: NodeListOf<HTMLSelectElement>
+let assignCategory: HTMLSelectElement
+let _filterCategory: HTMLSelectElement
 
 export const TodosPage = {
   render: () => `
@@ -33,14 +35,14 @@ export const TodosPage = {
       <div class="user-input-layout">
         <input id="todo-input" placeholder="Write here your task">
         <input type="date" id="todo-date-input">
-        <select id="category-selector">
+        <select id="add-category-select" class="category-selector">
           <option value="none">Select a category</option>
         </select>
         <button id="add-todo-button">Add to list</button>
       </div>
     </section>
     <section class="app-list page-fade">
-      <select id="category-filter">
+      <select id="filter-category-select" class="category-selector">
         <option value="all">All</option>
       </select>
       <button id="delete-all">Clear tasks</button>
@@ -48,25 +50,30 @@ export const TodosPage = {
     </section>
   `,
   init: async () => {
-    toDoInput = getRequiredElement<HTMLInputElement>(SELECTORS.TODO_INPUT)
-    dateInput = getRequiredElement<HTMLInputElement>(SELECTORS.DATE_INPUT)
-    toDoList = getRequiredElement<HTMLUListElement>(
+    toDoInput = getSingleRequiredElement<HTMLInputElement>(SELECTORS.TODO_INPUT)
+    dateInput = getSingleRequiredElement<HTMLInputElement>(SELECTORS.DATE_INPUT)
+    toDoList = getSingleRequiredElement<HTMLUListElement>(
       SELECTORS.TODO_LIST_ELEMENTS,
     )
-    const addButton = getRequiredElement<HTMLButtonElement>(
+    const addButton = getSingleRequiredElement<HTMLButtonElement>(
       SELECTORS.ADD_BUTTON,
     )
-    const clearAllBtn = getRequiredElement<HTMLButtonElement>(
+    const clearAllBtn = getSingleRequiredElement<HTMLButtonElement>(
       SELECTORS.DELETE_ALL,
     )
-    overdueMessage = getRequiredElement<HTMLParagraphElement>(
+    overdueMessage = getSingleRequiredElement<HTMLParagraphElement>(
       SELECTORS.OVERDUE_MESSAGE,
     )
-    categorySelector = getRequiredElement<HTMLSelectElement>(
+    categorySelector = getManyRequiredElements<HTMLSelectElement>(
       SELECTORS.CATEGORY_SELECTOR,
     )
-    categoryFilter = getRequiredElement<HTMLSelectElement>(
+
+    _filterCategory = getSingleRequiredElement<HTMLSelectElement>(
       SELECTORS.CATEGORY_FILTER,
+    )
+
+    assignCategory = getSingleRequiredElement<HTMLSelectElement>(
+      SELECTORS.CATEGORY_ADD,
     )
 
     toDoInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
@@ -80,20 +87,25 @@ export const TodosPage = {
     addButton.addEventListener(EVENT_TYPES.CLICK, () => addTodoToList())
 
     try {
-      const loadCategories = async () => {
-        const categories = await getData<Category>(API_URLS.CATEGORIES)
+      const populateSelectElements = (
+        selector: HTMLSelectElement,
+        categories: Category[],
+      ) => {
         categories.forEach((cat) => {
           categoriesCache[cat.id] = cat
           const opt = new Option(cat.title, cat.id.toString())
-          categorySelector.appendChild(opt)
+          selector.appendChild(opt)
         })
       }
 
-      const [tasks] = await Promise.all([
-        await getData<Task>(API_URLS.SELECTED_CATEGORY),
-        loadCategories(),
+      const [categories, tasks] = await Promise.all([
+        getData<Category>(API_URLS.CATEGORIES),
+        getData<Task>(API_URLS.SELECTED_CATEGORY),
       ])
 
+      categorySelector.forEach((sel) => {
+        populateSelectElements(sel, categories)
+      })
       tasks.forEach((task) => {
         createTask(task, toDoList)
       })
@@ -106,7 +118,7 @@ export const TodosPage = {
 
 async function addTodoToList(): Promise<void> {
   try {
-    const selectedCategoryId = categorySelector.value
+    const selectedCategoryId = assignCategory.value
     const newTask: ClientTask = {
       title: trimmedTitle(toDoInput),
       due_date: verifiedDate(dateInput),
@@ -118,7 +130,7 @@ async function addTodoToList(): Promise<void> {
       newTask,
     )
     if (selectedCategoryId !== 'none') {
-      const categoryId = Number.parseInt(categorySelector.value, 10)
+      const categoryId = Number.parseInt(assignCategory.value, 10)
       await postData(API_URLS.CATEGORIES_TODOS, {
         category_id: categoryId,
         todo_id: postResponse.id,

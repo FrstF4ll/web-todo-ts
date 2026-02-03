@@ -7,7 +7,11 @@ import {
 } from '../global-variables/constants'
 import type { Category, ClientCategory } from '../global-variables/interface'
 import { createCategory } from '../item-generation/categorie-generation'
-import { getRequiredElement, showStatusMessage, trimmedTitle } from '../utils'
+import {
+  getSingleRequiredElement,
+  showStatusMessage,
+  trimmedTitle,
+} from '../utils'
 
 let addButton: HTMLButtonElement
 let titleInput: HTMLInputElement
@@ -35,15 +39,17 @@ export const CategoriesPage = {
   `,
 
   init: async () => {
-    addButton = getRequiredElement<HTMLButtonElement>(
+    addButton = getSingleRequiredElement<HTMLButtonElement>(
       SELECTORS.ADD_CATEGORY_BUTTON,
     )
-    titleInput = getRequiredElement<HTMLInputElement>(SELECTORS.CATEGORY_INPUT)
-    colorInput = getRequiredElement<HTMLInputElement>(
+    titleInput = getSingleRequiredElement<HTMLInputElement>(
+      SELECTORS.CATEGORY_INPUT,
+    )
+    colorInput = getSingleRequiredElement<HTMLInputElement>(
       SELECTORS.CATEGORY_COLOR_INPUT,
     )
 
-    container = getRequiredElement<HTMLUListElement>(
+    container = getSingleRequiredElement<HTMLUListElement>(
       SELECTORS.CATEGORY_LIST_ELEMENTS,
     )
 

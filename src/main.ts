@@ -3,7 +3,7 @@ import './style.css'
 import { CategoriesPage } from './pages/categories'
 import { TodosPage } from './pages/todos'
 import {
-  getRequiredElement,
+  getSingleRequiredElement,
   hideStatusMessage,
   showStatusMessage,
 } from './utils'
@@ -18,7 +18,7 @@ const pages: Record<string, Page> = {
   '/categories': CategoriesPage,
 }
 
-const appContent = getRequiredElement<HTMLDivElement>('#app-content')
+const appContent = getSingleRequiredElement<HTMLDivElement>('#app-content')
 const navButtons = document.querySelectorAll<HTMLButtonElement>('.nav-link')
 
 async function loadPage(route: string): Promise<void> {
