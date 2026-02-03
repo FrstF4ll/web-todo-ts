@@ -188,8 +188,12 @@ export function updateOverdueMessageDisplay() {
 function sortTodosByCategories(filter: string) {
   const todos = getManyRequiredElements(SELECTORS.TODOS)
   todos.forEach((todo) => {
-    const category = todo.querySelector('.category-tag') as HTMLDivElement
-    const isMatch = category.dataset.id === filter || filter === 'all'
-    todo.classList.toggle('hidden', !isMatch)
+    filterElement(todo, filter)
   })
+}
+
+export function filterElement(element: HTMLElement, filter: string) {
+  const category = element.querySelector('.category-tag') as HTMLDivElement
+  const isMatch = category.dataset.id === filter || filter === 'all'
+  element.classList.toggle('hidden', !isMatch)
 }

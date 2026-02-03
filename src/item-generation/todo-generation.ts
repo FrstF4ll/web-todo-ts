@@ -10,8 +10,10 @@ import {
   SELECTORS,
 } from '../global-variables/constants'
 import type { ClientTask, Task } from '../global-variables/interface'
+import { filterElement } from '../pages/todos'
 import {
   dateColorSetUp,
+  getSingleRequiredElement,
   showStatusMessage,
   updateOverdueMessageDisplay,
 } from '../utils'
@@ -145,6 +147,19 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
   })
 }
 
+const invisbleTaskOnCreation = async (element: HTMLElement, task: Task) => {
+  const filterCategory = getSingleRequiredElement<HTMLSelectElement>(
+    SELECTORS.CATEGORY_FILTER,
+  )
+  await filterElement(element, filterCategory.value)
+  if (task.categories) {
+    const categoryTitle = task.categories[0].title
+    showStatusMessage(`Task created on category ${categoryTitle} `)
+  } else {
+    showStatusMessage('Task created without categories.')
+  }
+}
+
 export function createTask(
   task: Task | undefined,
   container: HTMLUListElement,
@@ -152,7 +167,9 @@ export function createTask(
   if (typeof task === 'undefined') {
     throw new Error('Type of task is undefined, cannot create task')
   }
+
   const element = createTaskElements(task)
+  invisbleTaskOnCreation(element, task)
   attachTaskEventListeners(task, element)
   container.appendChild(element)
 }
