@@ -7,6 +7,7 @@ import {
   CSS_CLASSES,
   EVENT_TYPES,
   INPUT_TYPES,
+  NO_CATEGORY_ID,
   SELECTORS,
 } from '../global-variables/constants'
 import type { ClientTask, Task } from '../global-variables/interface'
@@ -61,7 +62,7 @@ function renderSelectedCategory(task: Task): HTMLDivElement {
     displayedCategory.dataset.id = cat.id.toString()
     displayedCategory.textContent = cat.title
   } else {
-    displayedCategory.dataset.id = '0'
+    displayedCategory.dataset.id = NO_CATEGORY_ID
     displayedCategory.textContent = 'No categories'
   }
 

@@ -167,8 +167,8 @@ async function deleteAllTask(filter: string) {
     const isGenericCategory = categoryTitle === 'All'
 
     todos.forEach(async (todo) => {
-      const category = todo.querySelector('.category-tag') as HTMLDivElement
-      const isMatch = category.dataset.id === filter || filter === 'all'
+      const category = todo.querySelector<HTMLDivElement>('.category-tag')
+      const isMatch = category?.dataset.id === filter || filter === 'all'
       if (isMatch) {
         await deleteData(API_URLS.TODOS, Number(todo.id))
         todo.remove()

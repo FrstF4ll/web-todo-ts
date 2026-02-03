@@ -75,3 +75,5 @@ export const CUSTOM_PROPERTIES = {
 export const COLORS = {
   DEFAULT: 'white',
 } as const
+
+export const NO_CATEGORY_ID = '0'
