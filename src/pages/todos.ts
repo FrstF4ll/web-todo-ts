@@ -21,6 +21,7 @@ let dateInput: HTMLInputElement
 let toDoList: HTMLUListElement
 let overdueMessage: HTMLParagraphElement
 let categorySelector: HTMLSelectElement
+let categoryFilter: HTMLSelectElement
 
 export const TodosPage = {
   render: () => `
@@ -39,6 +40,9 @@ export const TodosPage = {
       </div>
     </section>
     <section class="app-list page-fade">
+      <select id="category-filter">
+        <option value="all">All</option>
+      </select>
       <button id="delete-all">Clear tasks</button>
       <ul id="todos-container"></ul>
     </section>
@@ -60,6 +64,9 @@ export const TodosPage = {
     )
     categorySelector = getRequiredElement<HTMLSelectElement>(
       SELECTORS.CATEGORY_SELECTOR,
+    )
+    categoryFilter = getRequiredElement<HTMLSelectElement>(
+      SELECTORS.CATEGORY_FILTER,
     )
 
     toDoInput.addEventListener(EVENT_TYPES.KEY_PRESS, (e: KeyboardEvent) => {
