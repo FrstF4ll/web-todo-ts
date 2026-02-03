@@ -93,6 +93,7 @@ export function verifiedDate(dateInput: HTMLInputElement) {
     showStatusMessage('Invalid date: date too early')
     throw new Error('DATE_TOO_EARLY')
   }
+  hideStatusMessage()
   return selectedDate
 }
 
@@ -102,6 +103,7 @@ export function trimmedTitle(userInput: HTMLInputElement) {
     showStatusMessage('Invalid task name: Empty name')
     throw new Error('TITLE_EMPTY')
   }
+  hideStatusMessage()
   return trimmed
 }
 
