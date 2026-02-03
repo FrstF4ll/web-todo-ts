@@ -44,6 +44,7 @@ export const TodosPage = {
     <section class="app-list page-fade">
       <select aria-label="Filter task by category" id="filter-category-select" class="category-selector">
         <option value="all">All</option>
+        <option value="0">Uncategorized</option>
       </select>
       <button id="delete-all">Clear tasks</button>
       <ul aria-label="Tasks list" id="todos-container"></ul>
@@ -183,3 +184,5 @@ function sortTodosByCategories(filter: string) {
     todo.classList.toggle('hidden', !isMatch)
   })
 }
+
+
