@@ -153,15 +153,17 @@ async function addTodoToList(): Promise<void> {
 
 async function deleteAllTask(filter: string) {
   try {
-    const todos = getManyRequiredElements(SELECTORS.TODOS)
+    const todos = document.querySelectorAll(SELECTORS.TODOS)
+    const categoryTitle = filterCategory.options[filterCategory.selectedIndex].textContent
 
-    if (toDoList?.children.length === 0) {
+    if (todos.length === 0) {
       showStatusMessage('Todo-list already clean.')
       return
     }
     if (!window.confirm('Are you sure you want to delete all tasks?')) {
       return
     }
+    const isGenericCategory = categoryTitle === 'All'
 
     todos.forEach(async (todo) => {
       const category = todo.querySelector('.category-tag') as HTMLDivElement
@@ -169,7 +171,9 @@ async function deleteAllTask(filter: string) {
       if (isMatch) {
         await deleteData(API_URLS.TODOS, Number(todo.id))
         todo.remove()
-        showStatusMessage('All tasks of this category successfully deleted')
+        isGenericCategory
+          ? showStatusMessage("All your tasks have been deleted succesfully")
+          : showStatusMessage(`Tasks from ${categoryTitle} deleted.`)
       }
     })
   } catch (error) {
