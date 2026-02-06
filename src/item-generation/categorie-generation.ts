@@ -9,8 +9,8 @@ import {
 import type { Category, ClientCategory } from '../global-variables/interface'
 import {
   categoriesCache,
-  getRequiredElement,
-  showStatusMessage,
+  customStatusMessage,
+  getSingleRequiredElement,
 } from '../utils'
 import { renderSettingsWindow } from './settings'
 
@@ -96,7 +96,7 @@ function attachCategoryEventListeners(
       element.remove()
     } catch (error) {
       console.error(`Failed to delete category ${category.id}:`, error)
-      showStatusMessage('Failed to delete category. Please try again.')
+      customStatusMessage('Failed to delete category. Please try again.')
     }
   })
 }
@@ -105,7 +105,7 @@ export function createCategory(category: Category | undefined): void {
   if (typeof category === 'undefined') {
     throw new Error('Type of category is undefined, cannot create category')
   }
-  const container = getRequiredElement<HTMLUListElement>(
+  const container = getSingleRequiredElement<HTMLUListElement>(
     SELECTORS.CATEGORY_LIST_ELEMENTS,
   )
   const element = createCategoryElements(category)

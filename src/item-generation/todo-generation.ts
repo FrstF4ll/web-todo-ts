@@ -7,12 +7,15 @@ import {
   CSS_CLASSES,
   EVENT_TYPES,
   INPUT_TYPES,
+  NO_CATEGORY_ID,
   SELECTORS,
 } from '../global-variables/constants'
 import type { ClientTask, Task } from '../global-variables/interface'
+import { filterElement } from '../pages/todos'
 import {
+  customStatusMessage,
   dateColorSetUp,
-  showStatusMessage,
+  getSingleRequiredElement,
   updateOverdueMessageDisplay,
 } from '../utils'
 
@@ -52,14 +55,14 @@ export function createDeleteBtn(task: ClientTask): HTMLButtonElement {
 
 function renderSelectedCategory(task: Task): HTMLDivElement {
   const displayedCategory = document.createElement('div')
+  displayedCategory.className = 'category-tag' // Use a consistent class
 
   if (task.categories && task.categories.length > 0) {
     const cat = task.categories[0]
-    displayedCategory.className = 'category-tag' // Use a consistent class
     displayedCategory.dataset.id = cat.id.toString()
     displayedCategory.textContent = cat.title
   } else {
-    displayedCategory.className = 'none'
+    displayedCategory.dataset.id = NO_CATEGORY_ID
     displayedCategory.textContent = 'No categories'
   }
 
@@ -125,7 +128,7 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
       updateOverdueMessageDisplay()
     } catch (error) {
       console.error(`Failed to delete task ${task.id}:`, error)
-      showStatusMessage('Failed to delete task. Please try again.')
+      customStatusMessage('Failed to delete task. Please try again.')
     }
   })
 
@@ -140,9 +143,22 @@ function attachTaskEventListeners(task: Task, element: HTMLLIElement): void {
       checkbox.checked = originalDoneState
       label.classList.toggle(CSS_CLASSES.COMPLETED, task.done)
       console.error(`Failed to update task ${task.id}:`, error)
-      showStatusMessage('Failed to update task. Please try again.')
+      customStatusMessage('Failed to update task. Please try again.')
     }
   })
+}
+
+const invisbleTaskOnCreation = async (element: HTMLElement, task: Task) => {
+  const filterCategory = getSingleRequiredElement<HTMLSelectElement>(
+    SELECTORS.CATEGORY_FILTER,
+  )
+  await filterElement(element, filterCategory.value)
+  if (task.categories) {
+    const categoryTitle = task.categories[0].title
+    customStatusMessage(`Task created on category ${categoryTitle} `)
+  } else {
+    customStatusMessage('Task created without categories.')
+  }
 }
 
 export function createTask(
@@ -152,7 +168,9 @@ export function createTask(
   if (typeof task === 'undefined') {
     throw new Error('Type of task is undefined, cannot create task')
   }
+
   const element = createTaskElements(task)
+  invisbleTaskOnCreation(element, task)
   attachTaskEventListeners(task, element)
   container.appendChild(element)
 }

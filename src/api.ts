@@ -119,16 +119,3 @@ export async function deleteData(apiURL: string, id: number): Promise<void> {
     throw error
   }
 }
-
-// Delete all tasks
-export async function deleteAllData(apiURL: string): Promise<void> {
-  try {
-    const response = await fetch(apiURL, {
-      method: 'DELETE',
-    })
-    await handleApiError(response)
-  } catch (error) {
-    console.error(`Delete failed at ${apiURL}:`, error)
-    throw error
-  }
-}

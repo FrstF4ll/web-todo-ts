@@ -13,17 +13,20 @@ export const SELECTORS = {
   PARAGRAPH: 'p',
   DELETE_BTN: '.delete-btn',
   TODO_CHECKBOX: '.todo-elements__checkbox',
+  TODOS: '.todo-element',
   TODO_INPUT: '#todo-input',
   CATEGORY_INPUT: '#category-name-input',
   ADD_BUTTON: '#add-todo-button',
   CATEGORY_COLOR_INPUT: '#category-color-input',
   ADD_CATEGORY_BUTTON: '#add-category-button',
   DELETE_ALL: '#delete-all',
-  ERROR_MESSAGE: '#error-msg',
+  STATUS_MESSAGE: '#status-message',
   DATE_INPUT: '#todo-date-input',
   OVERDUE_MESSAGE: '#overdue-message',
   CATEGORY_TITLE: '.category-title',
-  CATEGORY_SELECTOR: '#category-selector',
+  CATEGORY_SELECTOR: '.category-selector',
+  CATEGORY_FILTER: '#filter-category-select',
+  CATEGORY_ADD: '#add-category-select',
 } as const
 
 export const INPUT_TYPES = {
@@ -72,3 +75,5 @@ export const CUSTOM_PROPERTIES = {
 export const COLORS = {
   DEFAULT: 'white',
 } as const
+
+export const NO_CATEGORY_ID = '0'

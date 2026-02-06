@@ -20,7 +20,7 @@ html {
   --list-bg-color: #7eac87fa;
   --list-padding: 1.5rem 0.5rem;
   --list-gap: 0.5rem;
-  --list-row-gap: 0.25rem;
+  --list-row-gap: 0.5rem;
 
   --todo-item-bg-color: #627f28c7;
   --todo-item-border-radius: 0.5rem;
@@ -74,7 +74,7 @@ body {
 
 #title {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 2fr 1fr 2fr 1fr 2fr;
   grid-template-rows: repeat(3, auto);
   row-gap: 1rem;
   justify-items: center;
@@ -82,9 +82,12 @@ body {
   max-height: var(--header-max-height);
 }
 
+header,
+nav {
+  grid-column: 3;
+}
 nav {
   grid-row: 1;
-  grid-column: 2;
 }
 
 nav > .nav-list {
@@ -117,7 +120,6 @@ nav > .nav-list {
 
 header {
   grid-row: 2;
-  grid-column: 2;
   text-align: center;
   background-color: var(--list-bg-color);
   border-radius: var(--input-border-radius);
@@ -160,14 +162,14 @@ header {
 
 .app-list {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 2fr 1fr 2fr 1fr 2fr;
   grid-template-rows: auto 1fr;
   row-gap: var(--list-row-gap);
   width: 100%;
 }
 
 .app-list > * {
-  grid-column: 2;
+  grid-column: 2 / 5;
 }
 
 #todos-container,
@@ -254,7 +256,7 @@ header {
   gap: var(--input-layout-gap);
 }
 
-#error-msg {
+#status-message {
   white-space: nowrap;
   margin: var(--no-margin);
 }
@@ -266,7 +268,7 @@ button:active {
 
 #delete-all {
   grid-row: 1;
-  grid-column: 2;
+  grid-column: 4;
   justify-self: end;
   padding-block: var(--danger-padding-vertical);
   background-color: var(--danger-color);
@@ -365,4 +367,9 @@ button:active {
 .task-with-category-border {
   border-style: solid;
   border-color: var(--category-border-color);
+}
+
+#filter-category-select {
+  grid-row: 1;
+  grid-column: 2;
 }

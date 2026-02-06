@@ -4,23 +4,19 @@ import {
   SELECTORS,
 } from './global-variables/constants'
 
-export const showStatusMessage = (message: string) => {
-  const errorMsg = document.querySelector<HTMLParagraphElement>(
-    SELECTORS.ERROR_MESSAGE,
-  )
+const errorMsg = document.querySelector<HTMLParagraphElement>(
+  SELECTORS.STATUS_MESSAGE,
+)
+
+export const customStatusMessage = (message: string) => {
   if (errorMsg) {
-    errorMsg.classList.remove(CSS_CLASSES.HIDDEN)
     errorMsg.textContent = message
   }
 }
 
-export const hideStatusMessage = () => {
-  const errorMsg = document.querySelector<HTMLParagraphElement>(
-    SELECTORS.ERROR_MESSAGE,
-  )
+export const defaultStatusMessage = () => {
   if (errorMsg) {
-    errorMsg.classList.add(CSS_CLASSES.HIDDEN)
-    errorMsg.textContent = ''
+    errorMsg.textContent = 'Welcome to your todo list !'
   }
 }
 
@@ -78,32 +74,41 @@ export function updateOverdueMessageDisplay() {
   overdueMsg?.classList.toggle(CSS_CLASSES.HIDDEN, noOverdueTasks)
 }
 
-export function getRequiredElement<T extends HTMLElement>(selector: string): T {
-  const el = document.querySelector<T>(selector)
-  if (!el) throw new Error(`Element ${selector} not found`)
-  return el
+export function getSingleRequiredElement<T extends HTMLElement>(
+  selector: string,
+): T {
+  const element = document.querySelector<T>(selector)
+  if (!element) throw new Error(`Element ${selector} not found`)
+  return element
 }
 
+export function getManyRequiredElements<T extends HTMLElement>(
+  selector: string,
+): NodeListOf<T> {
+  const elements = document.querySelectorAll<T>(selector)
+  if (elements.length === 0) throw new Error(`Element ${selector} not found`)
+  return elements
+}
 export function verifiedDate(dateInput: HTMLInputElement) {
   const selectedDate = dateInput?.value
   if (!selectedDate) return null
   const selectedMidnight = toMidnight(new Date(selectedDate))
   const todayMidnight = toMidnight(new Date())
   if (todayMidnight > selectedMidnight) {
-    showStatusMessage('Invalid date: date too early')
+    customStatusMessage('Invalid date: date too early')
     throw new Error('DATE_TOO_EARLY')
   }
-  hideStatusMessage()
+  defaultStatusMessage()
   return selectedDate
 }
 
 export function trimmedTitle(userInput: HTMLInputElement) {
   const trimmed = userInput.value.trim()
   if (trimmed.length === 0) {
-    showStatusMessage('Invalid task name: Empty name')
+    customStatusMessage('Invalid task name: Empty name')
     throw new Error('TITLE_EMPTY')
   }
-  hideStatusMessage()
+  defaultStatusMessage()
   return trimmed
 }
 
